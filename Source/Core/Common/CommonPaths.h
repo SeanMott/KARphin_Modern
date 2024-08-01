@@ -31,17 +31,21 @@
 #endif
 #endif
 
+
+
 // The portable user directory
-#ifdef _WIN32
-#define PORTABLE_USER_DIR "User"
-#elif defined(__APPLE__)
 #define PORTABLE_USER_DIR "User"
 #define EMBEDDED_USER_DIR "Contents/Resources/User"
-#else
-#define PORTABLE_USER_DIR "user"
-#define EMBEDDED_USER_DIR PORTABLE_USER_DIR
-#endif
-
+//#ifdef _WIN32
+//#define PORTABLE_USER_DIR "User"
+//#elif defined(__APPLE__)
+//#define PORTABLE_USER_DIR "User"
+//#define EMBEDDED_USER_DIR "Contents/Resources/User"
+//#else
+//#define PORTABLE_USER_DIR "user"
+//#define EMBEDDED_USER_DIR PORTABLE_USER_DIR
+//#endif
+//
 // Flag file to prevent media scanning from indexing a directory
 #define NOMEDIA_FILE ".nomedia"
 

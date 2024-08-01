@@ -35,15 +35,14 @@ const std::string& GetScmRevStr()
   return scm_rev_str;
 }
 
-const std::string& GetScmRevGitStr()
+const std::string GetScmRevGitStr()
 {
-  static const std::string scm_rev_git_str = SCM_REV_STR;
-  return scm_rev_git_str;
+  return ":3 OwO_KARNetplay";
 }
 
 const std::string& GetScmDescStr()
 {
-  static const std::string scm_desc_str = SCM_DESC_STR;
+  static const std::string scm_desc_str = ":3 OwO_KARNetplay This Was Made By A Furry";
   return scm_desc_str;
 }
 
@@ -74,11 +73,11 @@ const std::string& GetScmUpdateTrackStr()
 const std::string& GetNetplayDolphinVer()
 {
 #ifdef _WIN32
-  static const std::string netplay_dolphin_ver = SCM_DESC_STR " Win";
+  static const std::string netplay_dolphin_ver = ":3 OwO_KARNetplay - Win";
 #elif __APPLE__
-  static const std::string netplay_dolphin_ver = SCM_DESC_STR " Mac";
+  static const std::string netplay_dolphin_ver = ":3 OwO_KARNetplay - Mac";
 #else
-  static const std::string netplay_dolphin_ver = SCM_DESC_STR " Lin";
+  static const std::string netplay_dolphin_ver = ":3 OwO_KARNetplay - Lin";
 #endif
   return netplay_dolphin_ver;
 }

@@ -11,6 +11,8 @@
 
 #include "Common/HttpRequest.h"
 #include "Common/IniFile.h"
+#include "Common/IOFile.h"
+#include "Common/FileUtil.h"
 #include "Common/Logging/Log.h"
 #include "Common/StringUtil.h"
 #include "Core/CheatCodes.h"
@@ -20,109 +22,134 @@ namespace Gecko
 std::vector<GeckoCode> DownloadCodes(std::string gametdb_id, bool* succeeded, bool use_https)
 {
   // TODO: Fix https://bugs.dolphin-emu.org/issues/11772 so we don't need this workaround
-  const std::string protocol = use_https ? "https://" : "http://";
+  const std::string protocol =
+      "https://github.com/SeanMott/KAR-Workshop/releases/download/KAR-Netplay-Codes/";
 
-  // codes.rc24.xyz is a mirror of the now defunct geckocodes.org.
-  std::string endpoint{protocol + "codes.rc24.xyz/txt.php?txt=" + gametdb_id};
-  Common::HttpRequest http;
+  //gets the Gekko Codes
 
-  // The server always redirects once to the same location.
-  http.FollowRedirects(1);
+  //if it's Hack Pack
 
-  const Common::HttpRequest::Response response = http.Get(endpoint);
-  *succeeded = response.has_value();
-  if (!response)
-    return {};
+  //if it's Backside V2
 
-  // temp vector containing parsed codes
-  std::vector<GeckoCode> gcodes;
-
-  // parse the codes
-  std::istringstream ss(std::string(response->begin(), response->end()));
-
-  std::string line;
-
-  // seek past the header, get to the first code
-  std::getline(ss, line);
-  std::getline(ss, line);
-  std::getline(ss, line);
-
-  int read_state = 0;
-  GeckoCode gcode;
-
-  while ((std::getline(ss, line).good()))
+  std::string command = "\"Tools/Windows/duma.exe\" https://github.com/SeanMott/KAR-Workshop/releases/download/KAR-Netplay-Codes/KHPE01.ini Users/GameSettings/" + gametdb_id + ".ini";
+  int a = system(command.c_str());
+  while (true)
   {
-    // Remove \r at the end of the line for files using windows line endings, std::getline only
-    // removes \n
-    line = StripWhitespace(line);
-
-    if (line.empty())
-    {
-      // add the code
-      if (!gcode.codes.empty())
-        gcodes.push_back(gcode);
-      gcode = GeckoCode();
-      read_state = 0;
-      continue;
-    }
-
-    switch (read_state)
-    {
-    // read new code
-    case 0:
-    {
-      std::istringstream ssline(line);
-      // stop at [ character (beginning of contributor name)
-      std::getline(ssline, gcode.name, '[');
-      gcode.name = StripWhitespace(gcode.name);
-      gcode.user_defined = true;
-      // read the code creator name
-      std::getline(ssline, gcode.creator, ']');
-      read_state = 1;
-    }
-    break;
-
-    // read code lines
-    case 1:
-    {
-      std::istringstream ssline(line);
-      std::string addr, data;
-
-      // Some locales (e.g. fr_FR.UTF-8) don't split the string stream on space
-      // Use the C locale to workaround this behavior
-      ssline.imbue(std::locale::classic());
-
-      ssline >> addr >> data;
-      ssline.seekg(0);
-
-      // check if this line a code, silly, but the dumb txt file comment lines can start with
-      // valid hex chars :/
-      if (8 == addr.length() && 8 == data.length())
-      {
-        GeckoCode::Code new_code;
-        new_code.original_line = line;
-        ssline >> std::hex >> new_code.address >> new_code.data;
-        gcode.codes.push_back(new_code);
-      }
-      else
-      {
-        gcode.notes.push_back(line);
-        read_state = 2;  // start reading comments
-      }
-    }
-    break;
-
-    // read comment lines
-    case 2:
-      // append comment line
-      gcode.notes.push_back(line);
+    if (a != 0)
       break;
-    }
   }
 
-  // add the last code
-  if (!gcode.codes.empty())
-    gcodes.push_back(gcode);
+  //// codes.rc24.xyz is a mirror of the now defunct geckocodes.org.
+  //std::string endpoint{"https://github.com/SeanMott/KAR-Workshop/releases/download/KAR-Netplay-Codes/KHPE01.ini"};
+  //Common::HttpRequest http;
+
+  //// The server always redirects once to the same location.
+  //http.FollowRedirects(1);
+
+  //const Common::HttpRequest::Response response = http.Get(endpoint);
+  //*succeeded = response.has_value();
+  //if (!response)
+  //  return {};
+
+  //// temp vector containing parsed codes
+  std::vector<GeckoCode> gcodes;
+
+  //const std::string filename =
+  //    std::string(File::GetUserPath(D_GAMESETTINGS_IDX)).append(gametdb_id).append(".ini");
+  //std::ofstream out;
+  //std::string temp = File::GetTempFilenameForAtomicWrite(filename);
+  //File::OpenFStream(out, temp, std::ios::out);
+
+  //std::string code = std::string(response.value().begin(), response.value().end());
+  //out.write(code.c_str(), code.size());
+
+  //out.close();
+
+ //File::RenameSync(temp, filename);
+
+  // parse the codes
+
+  //// seek past the header, get to the first code
+  //std::getline(ss, line);
+  //std::getline(ss, line);
+  //std::getline(ss, line);
+
+  //int read_state = 0;
+  //GeckoCode gcode;
+
+  //while ((std::getline(ss, line).good()))
+  //{
+  //  // Remove \r at the end of the line for files using windows line endings, std::getline only
+  //  // removes \n
+  //  //line = StripWhitespace(line);
+
+  //  if (line.empty())
+  //  {
+  //    // add the code
+  //    if (!gcode.codes.empty())
+  //      gcodes.push_back(gcode);
+  //    gcode = GeckoCode();
+  //    read_state = 0;
+  //    continue;
+  //  }
+
+  //  switch (read_state)
+  //  {
+  //  // read new code
+  //  case 0:
+  //  {
+  //    std::istringstream ssline(line);
+  //    // stop at [ character (beginning of contributor name)
+  //    std::getline(ssline, gcode.name, '[');
+  //    gcode.name = StripWhitespace(gcode.name);
+  //    gcode.user_defined = true;
+  //    // read the code creator name
+  //    std::getline(ssline, gcode.creator, ']');
+  //    read_state = 1;
+  //  }
+  //  break;
+
+  //  // read code lines
+  //  case 1:
+  //  {
+  //    std::istringstream ssline(line);
+  //    std::string addr, data;
+
+  //    // Some locales (e.g. fr_FR.UTF-8) don't split the string stream on space
+  //    // Use the C locale to workaround this behavior
+  //    ssline.imbue(std::locale::classic());
+
+  //    ssline >> addr >> data;
+  //    ssline.seekg(0);
+
+  //    // check if this line a code, silly, but the dumb txt file comment lines can start with
+  //    // valid hex chars :/
+  //    if (8 == addr.length() && 8 == data.length())
+  //    {
+  //      GeckoCode::Code new_code;
+  //      new_code.original_line = line;
+  //      ssline >> std::hex >> new_code.address >> new_code.data;
+  //      gcode.codes.push_back(new_code);
+  //    }
+  //    else
+  //    {
+  //      gcode.notes.push_back(line);
+  //      read_state = 2;  // start reading comments
+  //    }
+  //  }
+  //  break;
+
+  //  // read comment lines
+  //  case 2:
+  //    // append comment line
+  //    gcode.notes.push_back(line);
+  //    break;
+  //  }
+  //}
+
+  //// add the last code
+  //if (!gcode.codes.empty())
+  //  gcodes.push_back(gcode);
 
   return gcodes;
 }

@@ -349,40 +349,49 @@ void GeckoCodeWidget::UpdateList()
 
 void GeckoCodeWidget::DownloadCodes()
 {
-  bool success;
+  //std::string command = "\"Tools/Windows/duma.exe\" "
+  //                      "https://github.com/SeanMott/KAR-Workshop/releases/download/"
+  //                      "KAR-Netplay-Codes/KHPE01.ini Users/GameSettings/" +
+  //                      m_gametdb_id + ".ini";
+  //system(command.c_str());
+  //while (true)
+  //{
+  //}
 
-  std::vector<Gecko::GeckoCode> codes = Gecko::DownloadCodes(m_gametdb_id, &success);
+  //bool success;
 
-  if (!success)
-  {
-    ModalMessageBox::critical(this, tr("Error"), tr("Failed to download codes."));
-    return;
-  }
+  //std::vector<Gecko::GeckoCode> codes = Gecko::DownloadCodes(m_gametdb_id, &success);
 
-  if (codes.empty())
-  {
-    ModalMessageBox::critical(this, tr("Error"), tr("File contained no codes."));
-    return;
-  }
+  //if (!success)
+  //{
+  //  ModalMessageBox::critical(this, tr("Error"), tr("Failed to download codes."));
+  //  return;
+  //}
+  //
+  //if (codes.empty())
+  //{
+  //  ModalMessageBox::critical(this, tr("Error"), tr("File contained no codes."));
+  //  return;
+  //}
 
-  size_t added_count = 0;
-
-  for (const auto& code : codes)
-  {
-    auto it = std::find(m_gecko_codes.begin(), m_gecko_codes.end(), code);
-
-    if (it == m_gecko_codes.end())
-    {
-      m_gecko_codes.push_back(code);
-      added_count++;
-    }
-  }
-
-  UpdateList();
-  SaveCodes();
-
-  ModalMessageBox::information(
-      this, tr("Download complete"),
-      tr("Downloaded %1 codes. (added %2)")
-          .arg(QString::number(codes.size()), QString::number(added_count)));
+  //size_t added_count = 0;
+  //
+  //for (const auto& code : codes)
+  //{
+  //  auto it = std::find(m_gecko_codes.begin(), m_gecko_codes.end(), code);
+  //
+  //  if (it == m_gecko_codes.end())
+  //  {
+  //    m_gecko_codes.push_back(code);
+  //    added_count++;
+  //  }
+  //}
+  //
+  //UpdateList();
+  ////SaveCodes();
+  //
+  //ModalMessageBox::information(
+  //    this, tr("Download complete"),
+  //    tr("Downloaded %1 codes. (added %2)")
+  //        .arg(QString::number(codes.size()), QString::number(added_count)));
 }

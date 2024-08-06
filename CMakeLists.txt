@@ -86,7 +86,7 @@ if(NOT ANDROID)
 endif()
 
 
-set(USE_SYSTEM_LIBS "AUTO" CACHE STRING "Use system libraries instead of bundled libraries.  ON - Always use system and fail if unavailable, OFF - Always use bundled, AUTO - Use system if available, otherwise use bundled.  Default is AUTO")
+set(USE_SYSTEM_LIBS "OFF" CACHE STRING "Use system libraries instead of bundled libraries.  ON - Always use system and fail if unavailable, OFF - Always use bundled, AUTO - Use system if available, otherwise use bundled.  Default is AUTO")
 if(APPROVED_VENDORED_DEPENDENCIES)
   message(WARNING "APPROVED_VENDORED_DEPENDENCIES is deprecated.  Please migrate to setting USE_SYSTEM_LIBS to ON and setting USE_SYSTEM_<dependency> to either AUTO or OFF to allow bundled libs.")
 endif()
@@ -102,10 +102,10 @@ option(ENABLE_LLVM "Enables LLVM support, for disassembly" ON)
 option(ENABLE_TESTS "Enables building the unit tests" ON)
 option(ENABLE_VULKAN "Enables vulkan video backend" ON)
 option(USE_DISCORD_PRESENCE "Enables Discord Rich Presence, show the current game on Discord" ON)
-option(USE_MGBA "Enables GBA controllers emulation using libmgba" ON)
+option(USE_MGBA "Enables GBA controllers emulation using libmgba" OFF)
 option(ENABLE_AUTOUPDATE "Enables support for automatic updates" ON)
-option(STEAM "Creates a build for Steam" OFF)
-option(USE_RETRO_ACHIEVEMENTS "Enables integration with retroachievements.org" ON)
+option(STEAM "Creates a build for Steam" ON)
+option(USE_RETRO_ACHIEVEMENTS "Enables integration with retroachievements.org" OFF)
 
 # Maintainers: if you consider blanket disabling this for your users, please
 # consider the following points:
@@ -113,7 +113,7 @@ option(USE_RETRO_ACHIEVEMENTS "Enables integration with retroachievements.org" O
 #    launch).
 #  * The Dolphin team relies on the data in order to understand the behavior
 #    of our software in the wild.
-option(ENABLE_ANALYTICS "Enables opt-in Analytics collection" ON)
+option(ENABLE_ANALYTICS "Enables opt-in Analytics collection" OFF)
 
 option(ENCODE_FRAMEDUMPS "Encode framedumps in AVI format" ON)
 
@@ -739,12 +739,12 @@ if(USE_DISCORD_PRESENCE)
   include_directories(Externals/discord-rpc/include)
 endif()
 
-if(NOT ENABLE_QT)
-  set(USE_MGBA 0)
-endif()
-if(USE_MGBA)
-  dolphin_find_optional_system_library(LIBMGBA Externals/mGBA)
-endif()
+#if(NOT ENABLE_QT)
+#  set(USE_MGBA 0)
+#endif()
+#if(USE_MGBA)
+#  dolphin_find_optional_system_library(LIBMGBA Externals/mGBA)
+#endif()
 
 find_package(SYSTEMD)
 if(SYSTEMD_FOUND)

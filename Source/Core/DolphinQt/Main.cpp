@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
   FreeConsole();
 #endif
 
-  UICommon::SetUserDirectory(static_cast<const char*>(options.get("user")));
+  UICommon::SetUserDirectory("User");// static_cast<const char*>(options.get("user")));
   UICommon::CreateDirectories();
   UICommon::Init();
   Resources::Init();

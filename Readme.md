@@ -1,4 +1,4 @@
-# Dolphin - A GameCube and Wii Emulator
+# KARphin - A ~~GameCube and Wii~~ Kirby Air Ride Netplay Emulator
 
 [KAR Online]() | [KAR Online Discord]()
 

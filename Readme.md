@@ -1,12 +1,12 @@
 # Dolphin - A GameCube and Wii Emulator
 
-[Homepage](https://dolphin-emu.org/) | [Project Site](https://github.com/dolphin-emu/dolphin) | [Buildbot](https://dolphin.ci/) | [Forums](https://forums.dolphin-emu.org/) | [Wiki](https://wiki.dolphin-emu.org/) | [GitHub Wiki](https://github.com/dolphin-emu/dolphin/wiki) | [Issue Tracker](https://bugs.dolphin-emu.org/projects/emulator/issues) | [Coding Style](https://github.com/dolphin-emu/dolphin/blob/master/Contributing.md) | [Transifex Page](https://app.transifex.com/dolphinemu/dolphin-emu/dashboard/)
+[KAR Online]() | [KAR Online Discord]()
 
-Dolphin is an emulator for running GameCube and Wii games on Windows,
-Linux, macOS, and recent Android devices. It's licensed under the terms
-of the GNU General Public License, version 2 or later (GPLv2+).
+KARphin is an custom [Dolphin]() fork for running Kirby Air Ride Netplay on Windows,
+Linux, macOS, and recent Android devices.
 
-Please read the [FAQ](https://dolphin-emu.org/docs/faq/) before using Dolphin.
+It is reccomanded to use the [KAR Botstrapper]() or [KAR Workshop]() to install KARphin and set up your system for Netplay. But you can grab individual KARphin builds in [Releases](https://github.com/SeanMott/KARphin_Modern/releases)
+
 
 ## System Requirements
 
@@ -34,7 +34,20 @@ Please read the [FAQ](https://dolphin-emu.org/docs/faq/) before using Dolphin.
     * A graphics processor that supports OpenGL ES 3.0 or higher. Performance varies heavily with [driver quality](https://dolphin-emu.org/blog/2013/09/26/dolphin-emulator-and-opengl-drivers-hall-fameshame/).
     * A graphics processor that supports standard desktop OpenGL features is recommended for best performance.
 
-Dolphin can only be installed on devices that satisfy the above requirements. Attempting to install on an unsupported device will fail and display an error message.
+### Steam Deck
+
+### Switch
+
+### PS4
+
+KARphin can only be installed on devices that satisfy the above requirements. Attempting to install on an unsupported device will fail and display an error message.
+
+## Building
+
+Make sure to pull submodules before building:
+```sh
+git submodule update --init --recursive
+```
 
 ## Building for Windows
 
@@ -44,10 +57,7 @@ Other compilers might be able to build Dolphin on Windows but have not been
 tested and are not recommended to be used. Git and latest Windows SDK must be
 installed when building.
 
-Make sure to pull submodules before building:
-```sh
-git submodule update --init --recursive
-```
+
 
 The "Release" solution configuration includes performance optimizations for the best user experience but complicates debugging Dolphin.
 The "Debug" solution configuration is significantly slower, more verbose and less permissive but makes debugging Dolphin easier.
@@ -147,7 +157,7 @@ to uninstall Dolphin from their system.
 
 macOS users can simply delete Dolphin.app to uninstall it.
 
-Additionally, you'll want to remove the global user directory if you don't plan on reinstalling Dolphin.
+Additionally, you'll want to remove the global user directory if you don't plan on reinstalling KARphin.
 
 ## Command Line Usage
 

@@ -32,6 +32,13 @@
 
 namespace Config
 {
+// custom KAR configs
+bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED = true;
+uint16_t FULL_SCREEN_INDEX = 0;
+
+
+
+
 // Main.Core
 
 const Info<bool> MAIN_SKIP_IPL{{System::Main, "Core", "SkipIPL"}, true};

@@ -50,6 +50,15 @@ enum class HSPDeviceType : int;
 
 namespace Config
 {
+  //custom KAR configs
+extern bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED;
+extern uint16_t FULL_SCREEN_INDEX;
+
+
+
+
+
+
 // Main.Core
 
 extern const Info<bool> MAIN_SKIP_IPL;

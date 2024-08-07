@@ -4,6 +4,9 @@
 #pragma once
 
 #include <QWidget>
+#include <QCheckBox>
+#include "DolphinQt/Config/ConfigControls/ConfigBool.h"
+#include "DolphinQt/Config/ConfigControls/ConfigChoice.h"
 
 #include <string>
 #include <vector>
@@ -19,6 +22,7 @@ class QListWidget;
 class QListWidgetItem;
 class QTextEdit;
 class QPushButton;
+class QCheckBox;
 
 namespace Gecko
 {
@@ -57,9 +61,13 @@ private:
   void SortEnabledCodesFirst();
   void SortDisabledCodesFirst();
 
+  void UpdateAutoCodeInjection_FullScreen();
+
   std::string m_game_id;
   std::string m_gametdb_id;
   u16 m_game_revision;
+
+  QCheckBox* autoInjectOnlineFullScreenCodes_CheckBox;
 
   CheatWarningWidget* m_warning;
 #ifdef USE_RETRO_ACHIEVEMENTS
@@ -73,7 +81,7 @@ private:
   QPushButton* m_add_code;
   QPushButton* m_edit_code;
   QPushButton* m_remove_code;
-  QPushButton* m_download_codes;
+  
   std::vector<Gecko::GeckoCode> m_gecko_codes;
   bool m_restart_required;
 };

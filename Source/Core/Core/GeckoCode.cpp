@@ -16,6 +16,7 @@
 #include "Common/FileUtil.h"
 
 #include "Core/Config/MainSettings.h"
+#include "Core/Config/NetplaySettings.h"
 #include "Core/Core.h"
 #include "Core/PowerPC/MMU.h"
 #include "Core/PowerPC/PowerPC.h"
@@ -66,17 +67,72 @@ static std::vector<GeckoCode> s_active_codes;
 static std::vector<GeckoCode> s_synced_codes;
 static std::mutex s_active_codes_lock;
 
+const char* fullscreenGekkoCodeNames[4] = {"P1 Fullscreen", "P2 Fullscreen", "P3 Fullscreen",
+                                           "P4 Fullscreen"};
+bool fullscreenGekkoCodeEnabled[4] = {false, false, false, false};
+
+//enables the specific player code and disables all others
+static inline void SetFullScreenCodes(const std::span<const GeckoCode> gcodes)
+{
+  Core::DisplayMessage("GCPort: " + std::to_string( Config::FULL_SCREEN_INDEX), 9000);
+  Core::DisplayMessage("User: " + Config::NETPLAY_NICKNAME.GetCachedValue().value, 9000);
+  Core::DisplayMessage("Mode: " + Config::NETPLAY_TRAVERSAL_CHOICE.GetCachedValue().value,
+                       9000);
+
+  memset(fullscreenGekkoCodeEnabled, false, sizeof(fullscreenGekkoCodeEnabled));
+
+  std::string fullscreenCode = (Config::FULL_SCREEN_INDEX < 4 ?
+       fullscreenGekkoCodeNames[Config::FULL_SCREEN_INDEX] :
+       "INVALID PORT, NO GEKKO CODE CAN BE SET THIS SHOULD NOT BE SEEN");
+  if (Config::FULL_SCREEN_INDEX < 4)
+    fullscreenGekkoCodeEnabled[Config::FULL_SCREEN_INDEX] = true;
+
+  Core::DisplayMessage("Full Screen Gekko Code: \"" + fullscreenCode + "\" is being used, if this is invalid please notify Jas.", 9000);
+  Core::DisplayMessage("---GEKKO CODE STATeS---", 9000);
+
+  //sets the active codes
+
+  for (size_t code = 0; code < gcodes.size(); ++code)
+  {
+    //if it's one of our full screen codes
+    if (gcodes[code].name == fullscreenGekkoCodeNames[0] && fullscreenGekkoCodeEnabled[0] ||
+        gcodes[code].name == fullscreenGekkoCodeNames[1] && fullscreenGekkoCodeEnabled[1] ||
+        gcodes[code].name == fullscreenGekkoCodeNames[2] && fullscreenGekkoCodeEnabled[2] ||
+        gcodes[code].name == fullscreenGekkoCodeNames[3] && fullscreenGekkoCodeEnabled[3])
+    {
+      s_active_codes.emplace_back(gcodes[code]);
+      continue;
+    }
+
+    //if it's a genaric code
+    if (gcodes[code].enabled)
+      s_active_codes.emplace_back(gcodes[code]);
+  }
+}
+
 void SetActiveCodes(std::span<const GeckoCode> gcodes)
 {
   std::lock_guard lk(s_active_codes_lock);
 
   s_active_codes.clear();
-  if (Config::AreCheatsEnabled())
+  s_active_codes.reserve(gcodes.size());
+
+  //if auto inject full screen is active
+  if (Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED)
+    SetFullScreenCodes(gcodes);
+
+  //otherwise we don't care whatever, just add em
+  else
   {
-    s_active_codes.reserve(gcodes.size());
     std::copy_if(gcodes.begin(), gcodes.end(), std::back_inserter(s_active_codes),
                  [](const GeckoCode& code) { return code.enabled; });
   }
+  
+  //if (Config::AreCheatsEnabled())
+  //{
+    
+   
+  //}
   s_active_codes.shrink_to_fit();
 
   s_code_handler_installed = Installation::Uninstalled;

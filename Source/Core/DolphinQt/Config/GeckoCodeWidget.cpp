@@ -1,6 +1,8 @@
 // Copyright 2017 Dolphin Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "Core/Config/MainSettings.h"
+
 #include "DolphinQt/Config/GeckoCodeWidget.h"
 #include "DolphinQt/QtUtils/WrapInScrollArea.h"
 
@@ -17,6 +19,7 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <QVBoxLayout>
+#include <QCheckBox>
 
 #include "Common/FileUtil.h"
 #include "Common/IniFile.h"
@@ -89,9 +92,8 @@ void GeckoCodeWidget::CreateWidgets()
   m_add_code = new NonDefaultQPushButton(tr("&Add New Code..."));
   m_edit_code = new NonDefaultQPushButton(tr("&Edit Code..."));
   m_remove_code = new NonDefaultQPushButton(tr("&Remove Code"));
-  m_download_codes = new NonDefaultQPushButton(tr("Download Codes"));
-
-  m_download_codes->setToolTip(tr("Download Codes from the WiiRD Database"));
+  autoInjectOnlineFullScreenCodes_CheckBox = new QCheckBox(tr("&Auto Inject Full Screen Codes"));
+    //  tr("Auto Inject Full Screen Codes"), Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
 
   m_code_list->setEnabled(!m_game_id.empty());
   m_name_label->setEnabled(!m_game_id.empty());
@@ -102,7 +104,8 @@ void GeckoCodeWidget::CreateWidgets()
   m_add_code->setEnabled(!m_game_id.empty());
   m_edit_code->setEnabled(false);
   m_remove_code->setEnabled(false);
-  m_download_codes->setEnabled(!m_game_id.empty());
+  ((QAbstractButton*)autoInjectOnlineFullScreenCodes_CheckBox)
+      ->setChecked(Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
 
   auto* layout = new QVBoxLayout;
 
@@ -135,7 +138,7 @@ void GeckoCodeWidget::CreateWidgets()
   btn_layout->addWidget(m_add_code);
   btn_layout->addWidget(m_edit_code);
   btn_layout->addWidget(m_remove_code);
-  btn_layout->addWidget(m_download_codes);
+  btn_layout->addWidget(autoInjectOnlineFullScreenCodes_CheckBox);
 
   layout->addLayout(btn_layout);
 
@@ -155,13 +158,20 @@ void GeckoCodeWidget::ConnectWidgets()
   connect(m_add_code, &QPushButton::clicked, this, &GeckoCodeWidget::AddCode);
   connect(m_remove_code, &QPushButton::clicked, this, &GeckoCodeWidget::RemoveCode);
   connect(m_edit_code, &QPushButton::clicked, this, &GeckoCodeWidget::EditCode);
-  connect(m_download_codes, &QPushButton::clicked, this, &GeckoCodeWidget::DownloadCodes);
+  connect(autoInjectOnlineFullScreenCodes_CheckBox, &QCheckBox::clicked, this,
+          &GeckoCodeWidget::UpdateAutoCodeInjection_FullScreen);
   connect(m_warning, &CheatWarningWidget::OpenCheatEnableSettings, this,
           &GeckoCodeWidget::OpenGeneralSettings);
 #ifdef USE_RETRO_ACHIEVEMENTS
   connect(m_hc_warning, &HardcoreWarningWidget::OpenAchievementSettings, this,
           &GeckoCodeWidget::OpenAchievementSettings);
 #endif  // USE_RETRO_ACHIEVEMENTS
+}
+
+void GeckoCodeWidget::UpdateAutoCodeInjection_FullScreen()
+{
+  Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED =
+      autoInjectOnlineFullScreenCodes_CheckBox->isChecked();
 }
 
 void GeckoCodeWidget::OnSelectionChanged()

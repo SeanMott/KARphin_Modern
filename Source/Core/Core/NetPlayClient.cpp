@@ -312,6 +312,7 @@ bool NetPlayClient::Connect()
     // add self to player list
     m_players[m_pid] = player;
     m_local_player = &m_players[m_pid];
+    Config::FULL_SCREEN_INDEX = m_pid;
 
     m_dialog->Update();
 
@@ -1904,6 +1905,9 @@ void NetPlayClient::UpdateDevices()
         {
           GCAdapter::ResetDeviceType(local_pad);
         }
+
+        Config::FULL_SCREEN_INDEX = pad;
+        //Config::FULL_SCREEN_INDEX = local_pad;
       }
       else
       {

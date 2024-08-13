@@ -42,3 +42,5 @@ CMakeLists.txt.user
 # Ignore Visual Studio Code's working dir
 /.vscode/
 /Data/User/Cache
+*.br
+*.tar

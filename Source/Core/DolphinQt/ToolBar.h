@@ -33,6 +33,9 @@ signals:
   void ControllersPressed();
   void GraphicsPressed();
 
+  //when Netplay is started via the button
+  void StartNetPlayPressed();
+
   void StepPressed();
   void StepOverPressed();
   void StepOutPressed();
@@ -57,6 +60,8 @@ private:
   QAction* m_config_action;
   QAction* m_controllers_action;
   QAction* m_graphics_action;
+
+  QAction* m_start_netplay_action;
 
   QAction* m_step_action;
   QAction* m_step_over_action;

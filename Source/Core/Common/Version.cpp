@@ -21,31 +21,29 @@ namespace Common
 
 const std::string& GetScmRevStr()
 {
-  static const std::string scm_rev_str = EMULATOR_NAME;
-  return scm_rev_str;
+  static const std::string scm_rev_str = EMULATOR_NAME " "
+  // Note this macro can be empty if the master branch does not exist.
+#if 1 - SCM_COMMITS_AHEAD_MASTER - 1 != 0
+                                                       "[" SCM_BRANCH_STR "] "
+#endif
 
-//  static const std::string scm_rev_str = EMULATOR_NAME " "
-//  // Note this macro can be empty if the master branch does not exist.
-//#if 1 - SCM_COMMITS_AHEAD_MASTER - 1 != 0
-//                                                       "[" SCM_BRANCH_STR "] "
-//#endif
-//
-//#ifdef __INTEL_COMPILER
-//      BUILD_TYPE_STR SCM_DESC_STR "-ICC";
-//#else
-//      BUILD_TYPE_STR SCM_DESC_STR;
-//#endif
-//  return scm_rev_str;
+#ifdef __INTEL_COMPILER
+      BUILD_TYPE_STR SCM_DESC_STR "-ICC";
+#else
+      BUILD_TYPE_STR SCM_DESC_STR;
+#endif
+  return scm_rev_str;
 }
 
-const std::string GetScmRevGitStr()
+const std::string& GetScmRevGitStr()
 {
-  return ":3 OwO_KARNetplay";
+  static const std::string scm_rev_git_str = SCM_REV_STR;
+  return scm_rev_git_str;
 }
 
 const std::string& GetScmDescStr()
 {
-  static const std::string scm_desc_str = ":3 OwO_KARNetplay This Was Made By A Furry";
+  static const std::string scm_desc_str = SCM_DESC_STR;
   return scm_desc_str;
 }
 
@@ -76,11 +74,11 @@ const std::string& GetScmUpdateTrackStr()
 const std::string& GetNetplayDolphinVer()
 {
 #ifdef _WIN32
-  static const std::string netplay_dolphin_ver = ":3 OwO_KARNetplay - Win";
+  static const std::string netplay_dolphin_ver = SCM_DESC_STR " Win";
 #elif __APPLE__
-  static const std::string netplay_dolphin_ver = ":3 OwO_KARNetplay - Mac";
+  static const std::string netplay_dolphin_ver = SCM_DESC_STR " Mac";
 #else
-  static const std::string netplay_dolphin_ver = ":3 OwO_KARNetplay - Lin";
+  static const std::string netplay_dolphin_ver = SCM_DESC_STR " Lin";
 #endif
   return netplay_dolphin_ver;
 }

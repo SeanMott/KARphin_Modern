@@ -98,7 +98,6 @@
 #include "DolphinQt/GameList/GameList.h"
 #include "DolphinQt/Host.h"
 #include "DolphinQt/HotkeyScheduler.h"
-#include "DolphinQt/InfinityBase/InfinityBaseWindow.h"
 #include "DolphinQt/MenuBar.h"
 #include "DolphinQt/NKitWarningDialog.h"
 #include "DolphinQt/NetPlay/NetPlayBrowser.h"
@@ -118,7 +117,6 @@
 #include "DolphinQt/RiivolutionBootWidget.h"
 #include "DolphinQt/SearchBar.h"
 #include "DolphinQt/Settings.h"
-#include "DolphinQt/SkylanderPortal/SkylanderPortalWindow.h"
 #include "DolphinQt/TAS/GBATASInputWindow.h"
 #include "DolphinQt/TAS/GCTASInputWindow.h"
 #include "DolphinQt/TAS/WiiTASInputWindow.h"
@@ -570,8 +568,6 @@ void MainWindow::ConnectMenuBar()
   connect(m_menu_bar, &MenuBar::StartNetPlay, this, &MainWindow::ShowNetPlaySetupDialog);
   connect(m_menu_bar, &MenuBar::BrowseNetPlay, this, &MainWindow::ShowNetPlayBrowser);
   connect(m_menu_bar, &MenuBar::ShowFIFOPlayer, this, &MainWindow::ShowFIFOPlayer);
-  connect(m_menu_bar, &MenuBar::ShowSkylanderPortal, this, &MainWindow::ShowSkylanderPortal);
-  connect(m_menu_bar, &MenuBar::ShowInfinityBase, this, &MainWindow::ShowInfinityBase);
   connect(m_menu_bar, &MenuBar::ConnectWiiRemote, this, &MainWindow::OnConnectWiiRemote);
 
 #ifdef USE_RETRO_ACHIEVEMENTS
@@ -675,11 +671,6 @@ void MainWindow::ConnectHotkeys()
           &CodeWidget::ToggleBreakpoint);
   connect(m_hotkey_scheduler, &HotkeyScheduler::AddBreakpoint, m_code_widget,
           &CodeWidget::AddBreakpoint);
-
-  connect(m_hotkey_scheduler, &HotkeyScheduler::SkylandersPortalHotkey, this,
-          &MainWindow::ShowSkylanderPortal);
-  connect(m_hotkey_scheduler, &HotkeyScheduler::InfinityBaseHotkey, this,
-          &MainWindow::ShowInfinityBase);
 }
 
 void MainWindow::ConnectToolBar()
@@ -1390,32 +1381,6 @@ void MainWindow::ShowFIFOPlayer()
   m_fifo_window->activateWindow();
 }
 
-void MainWindow::ShowSkylanderPortal()
-{
-  if (!m_skylander_window)
-  {
-    m_skylander_window = new SkylanderPortalWindow();
-  }
-
-  SetQWidgetWindowDecorations(m_skylander_window);
-  m_skylander_window->show();
-  m_skylander_window->raise();
-  m_skylander_window->activateWindow();
-}
-
-void MainWindow::ShowInfinityBase()
-{
-  if (!m_infinity_window)
-  {
-    m_infinity_window = new InfinityBaseWindow();
-  }
-
-  SetQWidgetWindowDecorations(m_infinity_window);
-  m_infinity_window->show();
-  m_infinity_window->raise();
-  m_infinity_window->activateWindow();
-}
-
 void MainWindow::StateLoad()
 {
   QString dialog_path = (Config::Get(Config::MAIN_CURRENT_STATE_PATH).empty()) ?
@@ -1787,10 +1752,6 @@ bool MainWindow::nativeEvent(const QByteArray& eventType, void* message, qintptr
     if (settings.IsSystemDark() != was_dark_before)
     {
       settings.ApplyStyle();
-
-      // force the colors in the Skylander window to update
-      if (m_skylander_window)
-        m_skylander_window->RefreshList();
     }
 
     // TODO: When switching from light to dark, the window decorations remain light. Qt seems very

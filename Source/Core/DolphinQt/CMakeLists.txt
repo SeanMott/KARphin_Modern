@@ -266,8 +266,6 @@ add_executable(dolphin-emu
   Host.h
   HotkeyScheduler.cpp
   HotkeyScheduler.h
-  InfinityBase/InfinityBaseWindow.cpp
-  InfinityBase/InfinityBaseWindow.h
   Main.cpp
   MainWindow.cpp
   MainWindow.h
@@ -354,10 +352,6 @@ add_executable(dolphin-emu
   Settings/USBDeviceAddToWhitelistDialog.h
   Settings/WiiPane.cpp
   Settings/WiiPane.h
-  SkylanderPortal/SkylanderModifyDialog.cpp
-  SkylanderPortal/SkylanderModifyDialog.h
-  SkylanderPortal/SkylanderPortalWindow.cpp
-  SkylanderPortal/SkylanderPortalWindow.h
   TAS/GCTASInputWindow.cpp
   TAS/GCTASInputWindow.h
   TAS/GBATASInputWindow.cpp

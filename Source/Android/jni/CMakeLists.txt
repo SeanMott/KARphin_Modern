@@ -15,7 +15,6 @@ add_library(main SHARED
   GpuDriver.cpp
   Host.cpp
   Host.h
-  InfinityConfig.cpp
   Input/Control.cpp
   Input/Control.h
   Input/ControlGroup.cpp
@@ -32,7 +31,6 @@ add_library(main SHARED
   Input/NumericSetting.h
   MainAndroid.cpp
   RiivolutionPatches.cpp
-  SkylanderConfig.cpp
   WiiUtils.cpp
 )
 

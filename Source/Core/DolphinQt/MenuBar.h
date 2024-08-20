@@ -89,8 +89,6 @@ signals:
   void ShowAboutDialog();
   void ShowCheatsManager();
   void ShowResourcePackManager();
-  void ShowSkylanderPortal();
-  void ShowInfinityBase();
   void ConnectWiiRemote(int id);
 
 #ifdef USE_RETRO_ACHIEVEMENTS

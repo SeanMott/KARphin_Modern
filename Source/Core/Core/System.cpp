@@ -30,8 +30,6 @@
 #include "Core/PowerPC/Interpreter/Interpreter.h"
 #include "Core/PowerPC/JitInterface.h"
 #include "Core/PowerPC/PowerPC.h"
-#include "IOS/USB/Emulated/Infinity.h"
-#include "IOS/USB/Emulated/Skylanders/Skylander.h"
 #include "VideoCommon/Assets/CustomAssetLoader.h"
 #include "VideoCommon/CommandProcessor.h"
 #include "VideoCommon/Fifo.h"
@@ -76,8 +74,6 @@ struct System::Impl
   GeometryShaderManager m_geometry_shader_manager;
   GPFifo::GPFifoManager m_gp_fifo;
   HSP::HSPManager m_hsp;
-  IOS::HLE::USB::InfinityBase m_infinity_base;
-  IOS::HLE::USB::SkylanderPortal m_skylander_portal;
   IOS::WiiIPC m_wii_ipc;
   Memory::MemoryManager m_memory;
   MemoryInterface::MemoryInterfaceManager m_memory_interface;
@@ -231,16 +227,6 @@ Interpreter& System::GetInterpreter() const
 JitInterface& System::GetJitInterface() const
 {
   return m_impl->m_jit_interface;
-}
-
-IOS::HLE::USB::SkylanderPortal& System::GetSkylanderPortal() const
-{
-  return m_impl->m_skylander_portal;
-}
-
-IOS::HLE::USB::InfinityBase& System::GetInfinityBase() const
-{
-  return m_impl->m_infinity_base;
 }
 
 IOS::WiiIPC& System::GetWiiIPC() const

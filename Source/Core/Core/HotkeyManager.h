@@ -183,9 +183,6 @@ enum Hotkey
   HK_GBA_3X,
   HK_GBA_4X,
 
-  HK_SKYLANDERS_PORTAL,
-  HK_INFINITY_BASE,
-
   NUM_HOTKEYS,
 };
 

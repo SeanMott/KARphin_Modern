@@ -93,7 +93,6 @@ void GeckoCodeWidget::CreateWidgets()
   m_edit_code = new NonDefaultQPushButton(tr("&Edit Code..."));
   m_remove_code = new NonDefaultQPushButton(tr("&Remove Code"));
   autoInjectOnlineFullScreenCodes_CheckBox = new QCheckBox(tr("&Auto Inject Full Screen Codes"));
-    //  tr("Auto Inject Full Screen Codes"), Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
 
   m_code_list->setEnabled(!m_game_id.empty());
   m_name_label->setEnabled(!m_game_id.empty());
@@ -105,7 +104,7 @@ void GeckoCodeWidget::CreateWidgets()
   m_edit_code->setEnabled(false);
   m_remove_code->setEnabled(false);
   ((QAbstractButton*)autoInjectOnlineFullScreenCodes_CheckBox)
-      ->setChecked(Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
+     ->setChecked(Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
 
   auto* layout = new QVBoxLayout;
 

@@ -172,41 +172,41 @@ void NetPlayDialog::CreateMainLayout()
   m_data_menu->addSeparator();
 
   m_sync_codes_action = m_data_menu->addAction(tr("Sync AR/Gecko Codes"));
-  m_sync_codes_action->setCheckable(true);
+  m_sync_codes_action->setCheckable(false);
   m_strict_settings_sync_action = m_data_menu->addAction(tr("Strict Settings Sync"));
   m_strict_settings_sync_action->setToolTip(
       tr("This will sync additional graphics settings, and force everyone to the same internal "
          "resolution.\nMay prevent desync in some games that use EFB reads. Please ensure everyone "
          "uses the same video backend."));
-  m_strict_settings_sync_action->setCheckable(true);
+  m_strict_settings_sync_action->setCheckable(false);
 
   m_network_menu = m_menu_bar->addMenu(tr("Network"));
   m_network_menu->setToolTipsVisible(true);
-  m_fixed_delay_action = m_network_menu->addAction(tr("Fair Input Delay"));
-  m_fixed_delay_action->setToolTip(
-      tr("Each player sends their own inputs to the game, with equal buffer size for all players, "
-         "configured by the host.\nSuitable for competitive games where fairness and minimal "
-         "latency are most important."));
-  m_fixed_delay_action->setCheckable(true);
-  m_host_input_authority_action = m_network_menu->addAction(tr("Host Input Authority"));
-  m_host_input_authority_action->setToolTip(
-      tr("Host has control of sending all inputs to the game, as received from other players, "
-         "giving the host zero latency but increasing latency for others.\nSuitable for casual "
-         "games with 3+ players, possibly on unstable or high latency connections."));
-  m_host_input_authority_action->setCheckable(true);
-  m_golf_mode_action = m_network_menu->addAction(tr("Golf Mode"));
-  m_golf_mode_action->setToolTip(
-      tr("Identical to Host Input Authority, except the \"Host\" (who has zero latency) can be "
-         "switched at any time.\nSuitable for turn-based games with timing-sensitive controls, "
-         "such as golf."));
-  m_golf_mode_action->setCheckable(true);
+ m_fixed_delay_action = m_network_menu->addAction(tr("Fair Input Delay"));
+ m_fixed_delay_action->setToolTip(
+     tr("Each player sends their own inputs to the game, with equal buffer size for all players, "
+        "configured by the host.\nSuitable for competitive games where fairness and minimal "
+        "latency are most important."));
+ m_fixed_delay_action->setCheckable(false);
+ m_host_input_authority_action = m_network_menu->addAction(tr("Host Input Authority"));
+ m_host_input_authority_action->setToolTip(
+     tr("Host has control of sending all inputs to the game, as received from other players, "
+        "giving the host zero latency but increasing latency for others.\nSuitable for casual "
+        "games with 3+ players, possibly on unstable or high latency connections."));
+ m_host_input_authority_action->setCheckable(false);
+ m_golf_mode_action = m_network_menu->addAction(tr("Golf Mode"));
+ m_golf_mode_action->setToolTip(
+     tr("Identical to Host Input Authority, except the \"Host\" (who has zero latency) can be "
+        "switched at any time.\nSuitable for turn-based games with timing-sensitive controls, "
+        "such as golf."));
+ m_golf_mode_action->setCheckable(false);
 
   m_network_mode_group = new QActionGroup(this);
   m_network_mode_group->setExclusive(true);
-  m_network_mode_group->addAction(m_fixed_delay_action);
-  m_network_mode_group->addAction(m_host_input_authority_action);
-  m_network_mode_group->addAction(m_golf_mode_action);
-  m_fixed_delay_action->setChecked(true);
+ m_network_mode_group->addAction(m_fixed_delay_action);
+ m_network_mode_group->addAction(m_host_input_authority_action);
+ m_network_mode_group->addAction(m_golf_mode_action);
+  m_fixed_delay_action->setChecked(false);
 
   m_game_digest_menu = m_menu_bar->addMenu(tr("Checksum"));
   m_game_digest_menu->addAction(tr("Current game"), this, [this] {
@@ -230,15 +230,15 @@ void NetPlayDialog::CreateMainLayout()
   m_record_input_action = m_other_menu->addAction(tr("Record Inputs"));
   m_record_input_action->setCheckable(true);
   m_golf_mode_overlay_action = m_other_menu->addAction(tr("Show Golf Mode Overlay"));
-  m_golf_mode_overlay_action->setCheckable(true);
+  m_golf_mode_overlay_action->setCheckable(false);
   m_hide_remote_gbas_action = m_other_menu->addAction(tr("Hide Remote GBAs"));
-  m_hide_remote_gbas_action->setCheckable(true);
+  m_hide_remote_gbas_action->setCheckable(false);
 
   m_game_button->setDefault(false);
   m_game_button->setAutoDefault(false);
 
   m_savedata_load_only_action->setChecked(true);
-  m_sync_codes_action->setChecked(true);
+  m_sync_codes_action->setChecked(false);
 
   m_main_layout->setMenuBar(m_menu_bar);
 
@@ -420,12 +420,12 @@ void NetPlayDialog::ConnectWidgets()
   connect(m_savedata_all_wii_saves_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_sync_codes_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_record_input_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
-  connect(m_strict_settings_sync_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
+  //connect(m_strict_settings_sync_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_host_input_authority_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_golf_mode_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_golf_mode_overlay_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_fixed_delay_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
-  connect(m_hide_remote_gbas_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
+  //connect(m_hide_remote_gbas_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
 }
 
 void NetPlayDialog::SendMessage(const std::string& msg)
@@ -474,14 +474,14 @@ void NetPlayDialog::OnStart()
       return;
   }
 
-  if (m_strict_settings_sync_action->isChecked() && Config::Get(Config::GFX_EFB_SCALE) == 0)
-  {
-    ModalMessageBox::critical(
-        this, tr("Error"),
-        tr("Auto internal resolution is not allowed in strict sync mode, as it depends on window "
-           "size.\n\nPlease select a specific internal resolution."));
-    return;
-  }
+  //if (m_strict_settings_sync_action->isChecked() && Config::Get(Config::GFX_EFB_SCALE) == 0)
+  //{
+  //  ModalMessageBox::critical(
+  //      this, tr("Error"),
+  //      tr("Auto internal resolution is not allowed in strict sync mode, as it depends on window "
+  //         "size.\n\nPlease select a specific internal resolution."));
+  //  return;
+  //}
 
   const auto game = FindGameFile(m_current_game_identifier);
   if (!game)
@@ -532,11 +532,11 @@ void NetPlayDialog::show(std::string nickname, bool use_traversal)
   m_data_menu->menuAction()->setVisible(is_hosting);
   m_network_menu->menuAction()->setVisible(is_hosting);
   m_game_digest_menu->menuAction()->setVisible(is_hosting);
-#ifdef HAS_LIBMGBA
-  m_hide_remote_gbas_action->setVisible(is_hosting);
-#else
-  m_hide_remote_gbas_action->setVisible(false);
-#endif
+//#ifdef HAS_LIBMGBA
+//  m_hide_remote_gbas_action->setVisible(is_hosting);
+//#else
+//  m_hide_remote_gbas_action->setVisible(false);
+//#endif
   m_start_button->setHidden(!is_hosting);
   m_kick_button->setHidden(!is_hosting);
   m_assign_ports_button->setHidden(!is_hosting);
@@ -1130,10 +1130,10 @@ void NetPlayDialog::LoadSettings()
   const bool savedata_load = Config::Get(Config::NETPLAY_SAVEDATA_LOAD);
   const bool savedata_write = Config::Get(Config::NETPLAY_SAVEDATA_WRITE);
   const bool sync_all_wii_saves = Config::Get(Config::NETPLAY_SAVEDATA_SYNC_ALL_WII);
-  const bool sync_codes = Config::Get(Config::NETPLAY_SYNC_CODES);
+  const bool sync_codes = false; //Config::Get(Config::NETPLAY_SYNC_CODES); //we temp override
   const bool record_inputs = Config::Get(Config::NETPLAY_RECORD_INPUTS);
-  const bool strict_settings_sync = Config::Get(Config::NETPLAY_STRICT_SETTINGS_SYNC);
-  const bool golf_mode_overlay = Config::Get(Config::NETPLAY_GOLF_MODE_OVERLAY);
+  const bool strict_settings_sync = false; // Config::Get(Config::NETPLAY_STRICT_SETTINGS_SYNC); //we temp override
+  const bool golf_mode_overlay = false; //Config::Get(Config::NETPLAY_GOLF_MODE_OVERLAY); //
   const bool hide_remote_gbas = Config::Get(Config::NETPLAY_HIDE_REMOTE_GBAS);
 
   m_buffer_size_box->setValue(buffer_size);
@@ -1189,10 +1189,10 @@ void NetPlayDialog::SaveSettings()
 
   Config::SetBase(Config::NETPLAY_SAVEDATA_SYNC_ALL_WII,
                   m_savedata_all_wii_saves_action->isChecked());
-  Config::SetBase(Config::NETPLAY_SYNC_CODES, m_sync_codes_action->isChecked());
+  Config::SetBase(Config::NETPLAY_SYNC_CODES, false);
   Config::SetBase(Config::NETPLAY_RECORD_INPUTS, m_record_input_action->isChecked());
-  Config::SetBase(Config::NETPLAY_STRICT_SETTINGS_SYNC, m_strict_settings_sync_action->isChecked());
-  Config::SetBase(Config::NETPLAY_GOLF_MODE_OVERLAY, m_golf_mode_overlay_action->isChecked());
+  Config::SetBase(Config::NETPLAY_STRICT_SETTINGS_SYNC, false);
+  Config::SetBase(Config::NETPLAY_GOLF_MODE_OVERLAY, false);
   Config::SetBase(Config::NETPLAY_HIDE_REMOTE_GBAS, m_hide_remote_gbas_action->isChecked());
 
   std::string network_mode;
@@ -1209,7 +1209,7 @@ void NetPlayDialog::SaveSettings()
     network_mode = "golf";
   }
 
-  Config::SetBase(Config::NETPLAY_NETWORK_MODE, network_mode);
+  Config::SetBase(Config::NETPLAY_NETWORK_MODE, "hostinputauthority");
 }
 
 void NetPlayDialog::ShowGameDigestDialog(const std::string& title)

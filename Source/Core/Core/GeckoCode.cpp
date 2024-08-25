@@ -81,33 +81,61 @@ static inline void SetFullScreenCodes(const std::span<const GeckoCode> gcodes)
 
   memset(fullscreenGekkoCodeEnabled, false, sizeof(fullscreenGekkoCodeEnabled));
 
-  std::string fullscreenCode = (Config::FULL_SCREEN_INDEX < 4 ?
-       fullscreenGekkoCodeNames[Config::FULL_SCREEN_INDEX] :
-       "INVALID PORT, NO GEKKO CODE CAN BE SET THIS SHOULD NOT BE SEEN");
-  if (Config::FULL_SCREEN_INDEX < 4)
+ // std::string fullscreenCode = (Config::FULL_SCREEN_INDEX < 4 ?
+  //     fullscreenGekkoCodeNames[Config::FULL_SCREEN_INDEX] :
+  //     "INVALID PORT, NO GEKKO CODE CAN BE SET THIS SHOULD NOT BE SEEN");
+ // if (Config::FULL_SCREEN_INDEX < 4)
     fullscreenGekkoCodeEnabled[Config::FULL_SCREEN_INDEX] = true;
 
-  Core::DisplayMessage("Full Screen Gekko Code: \"" + fullscreenCode + "\" is being used, if this is invalid please notify Jas.", 9000);
-  Core::DisplayMessage("---GEKKO CODE STATeS---", 9000);
+ // Core::DisplayMessage("Full Screen Gekko Code: \"" + fullscreenCode + "\" is being used, if this is invalid please notify Jas.", 9000);
+ // Core::DisplayMessage("---GEKKO CODE STATeS---", 9000);
 
   //sets the active codes
-
+  std::vector<GeckoCode> _gcodes;
   for (size_t code = 0; code < gcodes.size(); ++code)
   {
     //if it's one of our full screen codes
-    if (gcodes[code].name == fullscreenGekkoCodeNames[0] && fullscreenGekkoCodeEnabled[0] ||
-        gcodes[code].name == fullscreenGekkoCodeNames[1] && fullscreenGekkoCodeEnabled[1] ||
-        gcodes[code].name == fullscreenGekkoCodeNames[2] && fullscreenGekkoCodeEnabled[2] ||
-        gcodes[code].name == fullscreenGekkoCodeNames[3] && fullscreenGekkoCodeEnabled[3])
+    if (gcodes[code].name == fullscreenGekkoCodeNames[Config::FULL_SCREEN_INDEX] &&
+        fullscreenGekkoCodeEnabled[Config::FULL_SCREEN_INDEX])
     {
-      s_active_codes.emplace_back(gcodes[code]);
+      _gcodes.emplace_back(gcodes[code]);
+      _gcodes[_gcodes.size() - 1].enabled = true;
       continue;
     }
+    else if(gcodes[code].name == fullscreenGekkoCodeNames[0] && !fullscreenGekkoCodeEnabled[0] ||
+             gcodes[code].name == fullscreenGekkoCodeNames[1] && !fullscreenGekkoCodeEnabled[1])
+      {
+        //_gcodes.emplace_back(gcodes[code]);
+        continue;
+      }
+
+   // if (gcodes[code].name == fullscreenGekkoCodeNames[0] && fullscreenGekkoCodeEnabled[0] ||
+   //     gcodes[code].name == fullscreenGekkoCodeNames[1] && fullscreenGekkoCodeEnabled[1] ||
+   //     gcodes[code].name == fullscreenGekkoCodeNames[2] && fullscreenGekkoCodeEnabled[2] ||
+   //     gcodes[code].name == fullscreenGekkoCodeNames[3] && fullscreenGekkoCodeEnabled[3])
+   // {
+   //   _gcodes.emplace_back(gcodes[code]);
+   //   continue;
+   // }
+   //
+   // // if it's one of our full screen codes
+   // if (gcodes[code].name == fullscreenGekkoCodeNames[0] && !fullscreenGekkoCodeEnabled[0] ||
+   //     gcodes[code].name == fullscreenGekkoCodeNames[1] && !fullscreenGekkoCodeEnabled[1] ||
+   //     gcodes[code].name == fullscreenGekkoCodeNames[2] && !fullscreenGekkoCodeEnabled[2] ||
+   //     gcodes[code].name == fullscreenGekkoCodeNames[3] && !fullscreenGekkoCodeEnabled[3])
+   // {
+   //   _gcodes.emplace_back(gcodes[code]);
+   //   _gcodes[_gcodes.size() - 1].enabled = false;
+   //   continue;
+   // }
 
     //if it's a genaric code
     if (gcodes[code].enabled)
-      s_active_codes.emplace_back(gcodes[code]);
+      _gcodes.emplace_back(gcodes[code]);
   }
+
+  std::copy_if(_gcodes.begin(), _gcodes.end(), std::back_inserter(s_active_codes),
+               [](const GeckoCode& code) { return code.enabled; });
 }
 
 void SetActiveCodes(std::span<const GeckoCode> gcodes)

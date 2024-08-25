@@ -6,7 +6,7 @@
     name="DolphinTeam.DolphinTool"
     type="win32"
 />
-<description>Dolphin Tool</description>
+<description>KARphin Tool</description>
 <dependency>
     <dependentAssembly>
         <assemblyIdentity

@@ -221,7 +221,7 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
                        const std::string& movie_path)
     : QMainWindow(nullptr)
 {
-  setWindowTitle(QString::fromStdString(Common::GetScmRevStr()));
+  setWindowTitle(QString::fromStdString("KARphin"));
   setWindowIcon(Resources::GetAppIcon());
   setUnifiedTitleAndToolBarOnMac(true);
   setAcceptDrops(true);

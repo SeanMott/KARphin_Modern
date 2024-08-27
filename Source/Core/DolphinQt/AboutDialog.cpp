@@ -52,6 +52,15 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent)
 </p>
 
 <p>
+----CREDITS----<br>
+-App Icon: Plantt<br>
+-Toolbar Icons: Taco<br>
+-Main Programming: Jas<br>
+-Assisted Programming: Jinxy<br>
+
+</p>
+
+<p>
 )")
           .replace(QStringLiteral("%VERSION_STRING%"),
                    QString::fromUtf8(Common::GetScmDescStr().c_str()))

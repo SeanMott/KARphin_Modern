@@ -178,7 +178,7 @@ void NetPlayDialog::CreateMainLayout()
       tr("This will sync additional graphics settings, and force everyone to the same internal "
          "resolution.\nMay prevent desync in some games that use EFB reads. Please ensure everyone "
          "uses the same video backend."));
-  m_strict_settings_sync_action->setCheckable(false);
+  m_strict_settings_sync_action->setCheckable(true);
 
   m_network_menu = m_menu_bar->addMenu(tr("Network"));
   m_network_menu->setToolTipsVisible(true);
@@ -187,26 +187,26 @@ void NetPlayDialog::CreateMainLayout()
      tr("Each player sends their own inputs to the game, with equal buffer size for all players, "
         "configured by the host.\nSuitable for competitive games where fairness and minimal "
         "latency are most important."));
- m_fixed_delay_action->setCheckable(false);
+ m_fixed_delay_action->setCheckable(true);
  m_host_input_authority_action = m_network_menu->addAction(tr("Host Input Authority"));
  m_host_input_authority_action->setToolTip(
      tr("Host has control of sending all inputs to the game, as received from other players, "
         "giving the host zero latency but increasing latency for others.\nSuitable for casual "
         "games with 3+ players, possibly on unstable or high latency connections."));
- m_host_input_authority_action->setCheckable(false);
+ m_host_input_authority_action->setCheckable(true);
  m_golf_mode_action = m_network_menu->addAction(tr("Golf Mode"));
  m_golf_mode_action->setToolTip(
      tr("Identical to Host Input Authority, except the \"Host\" (who has zero latency) can be "
         "switched at any time.\nSuitable for turn-based games with timing-sensitive controls, "
         "such as golf."));
- m_golf_mode_action->setCheckable(false);
+ m_golf_mode_action->setCheckable(true);
 
   m_network_mode_group = new QActionGroup(this);
   m_network_mode_group->setExclusive(true);
  m_network_mode_group->addAction(m_fixed_delay_action);
  m_network_mode_group->addAction(m_host_input_authority_action);
  m_network_mode_group->addAction(m_golf_mode_action);
-  m_fixed_delay_action->setChecked(false);
+  m_fixed_delay_action->setChecked(true);
 
   m_game_digest_menu = m_menu_bar->addMenu(tr("Checksum"));
   m_game_digest_menu->addAction(tr("Current game"), this, [this] {

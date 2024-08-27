@@ -44,3 +44,5 @@ CMakeLists.txt.user
 /Data/User/Cache
 *.br
 *.tar
+/dolphinPackage/KARphin
+/dolphinPackage

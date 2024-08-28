@@ -144,16 +144,17 @@ void NetPlayDialog::CreateMainLayout()
       tr("Netplay will start without any save data, and any created save data will be discarded at "
          "the end of the Netplay session."));
   m_savedata_none_action->setCheckable(true);
+  m_savedata_none_action->setChecked(true);
   m_savedata_load_only_action = m_data_menu->addAction(tr("Load Host's Save Data Only"));
   m_savedata_load_only_action->setToolTip(tr(
       "Netplay will start using the Host's save data, but any save data created or modified during "
       "the Netplay session will be discarded at the end of the session."));
-  m_savedata_load_only_action->setCheckable(true);
+  m_savedata_load_only_action->setCheckable(false);
   m_savedata_load_and_write_action = m_data_menu->addAction(tr("Load and Write Host's Save Data"));
   m_savedata_load_and_write_action->setToolTip(
       tr("Netplay will start using the Host's save data, and any save data created or modified "
          "during the Netplay session will remain in the Host's local saves."));
-  m_savedata_load_and_write_action->setCheckable(true);
+  m_savedata_load_and_write_action->setCheckable(false);
 
   m_savedata_style_group = new QActionGroup(this);
   m_savedata_style_group->setExclusive(true);
@@ -167,7 +168,7 @@ void NetPlayDialog::CreateMainLayout()
   m_savedata_all_wii_saves_action->setToolTip(tr(
       "If checked, all Wii saves will be used instead of only the save of the game being started. "
       "Useful when switching games mid-session. Has no effect if No Save Data is selected."));
-  m_savedata_all_wii_saves_action->setCheckable(true);
+  m_savedata_all_wii_saves_action->setCheckable(false);
 
   m_data_menu->addSeparator();
 
@@ -199,7 +200,7 @@ void NetPlayDialog::CreateMainLayout()
      tr("Identical to Host Input Authority, except the \"Host\" (who has zero latency) can be "
         "switched at any time.\nSuitable for turn-based games with timing-sensitive controls, "
         "such as golf."));
- m_golf_mode_action->setCheckable(true);
+ m_golf_mode_action->setCheckable(false);
 
   m_network_mode_group = new QActionGroup(this);
   m_network_mode_group->setExclusive(true);

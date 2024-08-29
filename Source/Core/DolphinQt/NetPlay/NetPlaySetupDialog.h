@@ -94,7 +94,11 @@ private:
   QSpinBox* m_host_chunked_upload_limit_box;
   QCheckBox* m_host_server_browser;
   QLineEdit* m_host_server_name;
+  QLineEdit* m_host_server_password;
+  QRadioButton* m_host_server_radio_private;
+  QRadioButton* m_host_server_radio_public;
 
+  //browser
   QTableWidget* m_table_widget;
   QComboBox* m_region_combo;
   QLabel* m_status_label;

@@ -85,7 +85,7 @@ NetPlaySetupDialog::NetPlaySetupDialog(const GameListModel& game_list_model, QWi
   else if (visibility == QStringLiteral("private"))
     m_radio_private->setChecked(true);
 
-  m_check_hide_ingame->setChecked(true);
+  //m_check_hide_ingame->setChecked(true);
 
   OnConnectionTypeChanged(m_connection_type->currentIndex());
 
@@ -145,13 +145,16 @@ void NetPlaySetupDialog::CreateMainLayout()
   m_b_button_box = new QDialogButtonBox;
   m_button_refresh = new QPushButton(tr("Refresh"));
   m_edit_name = new QLineEdit;
-  m_check_hide_ingame = new QCheckBox(tr("Hide In-Game Sessions"));
+  //m_check_hide_ingame = new QCheckBox(tr("Hide In-Game Sessions"));
 
   m_radio_all = new QRadioButton(tr("Private and Public"));
   m_radio_private = new QRadioButton(tr("Private"));
   m_radio_public = new QRadioButton(tr("Public"));
 
   m_radio_all->setChecked(true);
+  layout->addWidget(m_radio_all);
+  layout->addWidget(m_radio_private);
+  layout->addWidget(m_radio_public);
 
   layout->addWidget(m_table_widget);
   layout->addWidget(m_status_label);
@@ -203,6 +206,12 @@ void NetPlaySetupDialog::CreateMainLayout()
 #endif
   m_host_games = new QListWidget;
   m_host_button = new NonDefaultQPushButton(tr("Host"));
+  m_host_server_password = new QLineEdit();
+  m_host_server_password->setPlaceholderText(tr("Password"));
+
+  m_host_server_radio_private = new QRadioButton(tr("Private"));
+  m_host_server_radio_public = new QRadioButton(tr("Public"));
+  
 
   m_host_port_box->setMaximum(65535);
 
@@ -214,6 +223,11 @@ void NetPlaySetupDialog::CreateMainLayout()
   host_layout->addWidget(m_host_upnp, 0, 5, Qt::AlignRight);
 #endif
   host_layout->addWidget(m_host_games, 2, 0, 1, -1);
+
+  host_layout->addWidget(m_host_server_radio_private);
+  host_layout->addWidget(m_host_server_radio_public);
+  host_layout->addWidget(m_host_server_password);
+
   host_layout->addWidget(m_host_button, 4, 5, Qt::AlignRight);
 
   host_widget->setLayout(host_layout);
@@ -264,6 +278,7 @@ void NetPlaySetupDialog::ConnectWidgets()
     Settings::GetQSettings().setValue(QStringLiteral("netplay/hostgame"),
                                       m_host_games->item(index)->text());
   });
+  connect(m_host_server_password, &QLineEdit::textChanged, this, &NetPlaySetupDialog::SaveSettings);
 
   // refresh browser on tab changed
   connect(m_tab_widget, &QTabWidget::currentChanged, this, &NetPlaySetupDialog::RefreshBrowser);
@@ -290,7 +305,7 @@ void NetPlaySetupDialog::ConnectWidgets()
 
   connect(m_radio_all, &QRadioButton::toggled, this, &NetPlaySetupDialog::RefreshBrowser);
   connect(m_radio_private, &QRadioButton::toggled, this, &NetPlaySetupDialog::RefreshBrowser);
-  connect(m_check_hide_ingame, &QRadioButton::toggled, this, &NetPlaySetupDialog::RefreshBrowser);
+  //connect(m_check_hide_ingame, &QRadioButton::toggled, this, &NetPlaySetupDialog::RefreshBrowser);
 
   connect(m_edit_name, &QLineEdit::textChanged, this, &NetPlaySetupDialog::RefreshBrowser);
 
@@ -320,7 +335,7 @@ void NetPlaySetupDialog::SaveSettings()
 
   Config::SetBaseOrCurrent(Config::NETPLAY_INDEX_REGION, "NA");
   Config::SetBaseOrCurrent(Config::NETPLAY_INDEX_NAME, m_nickname_edit->text().toStdString());
-  Config::SetBaseOrCurrent(Config::NETPLAY_INDEX_PASSWORD, "");
+  Config::SetBaseOrCurrent(Config::NETPLAY_INDEX_PASSWORD, m_host_server_password->text().toStdString());
   Config::SetBaseOrCurrent(Config::NETPLAY_USE_INDEX, true);
 
   // Browser Stuff
@@ -338,7 +353,7 @@ void NetPlaySetupDialog::SaveSettings()
   settings.setValue(QStringLiteral("netplaybrowser/visibility"), visibility);
 
   settings.setValue(QStringLiteral("netplaybrowser/hide_incompatible"), true);
-  settings.setValue(QStringLiteral("netplaybrowser/hide_ingame"), m_check_hide_ingame->isChecked());
+  settings.setValue(QStringLiteral("netplaybrowser/hide_ingame"), false);
 }
 
 void NetPlaySetupDialog::OnConnectionTypeChanged(int index)
@@ -441,20 +456,20 @@ void NetPlaySetupDialog::RefreshBrowser()
 {
   std::map<std::string, std::string> filters;
 
-  if (!m_edit_name->text().isEmpty())
-    filters["name"] = m_edit_name->text().toStdString();
+  //if (!m_edit_name->text().isEmpty())
+   // filters["name"] = m_edit_name->text().toStdString();
 
-  if (true)
+ // if (true)
     filters["version"] = Common::GetScmDescStr();
 
   if (!m_radio_all->isChecked())
     filters["password"] = std::to_string(m_radio_private->isChecked());
 
-  if (m_region_combo->currentIndex() != 0)
-    filters["region"] = m_region_combo->currentData().toString().toStdString();
+  //if (m_region_combo->currentIndex() != 0)
+   // filters["region"] = m_region_combo->currentData().toString().toStdString();
 
-  if (m_check_hide_ingame->isChecked())
-    filters["in_game"] = "0";
+  //if (m_check_hide_ingame->isChecked())
+    //filters["in_game"] = "0";
 
   std::unique_lock<std::mutex> lock(m_refresh_filters_mutex);
   m_refresh_filters = std::move(filters);

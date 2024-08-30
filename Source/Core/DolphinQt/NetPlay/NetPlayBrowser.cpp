@@ -36,7 +36,7 @@ NetPlayBrowser::NetPlayBrowser(QWidget* parent) : QDialog(parent)
 
   CreateWidgets();
   RestoreSettings();
-  //ConnectWidgets();
+  ConnectWidgets();
 
   resize(750, 500);
 
@@ -128,7 +128,6 @@ void NetPlayBrowser::CreateWidgets()
   setLayout(layout);
 }
 
-/*
 void NetPlayBrowser::ConnectWidgets()
 {
   connect(m_region_combo, &QComboBox::currentIndexChanged, this, &NetPlayBrowser::Refresh);
@@ -154,7 +153,6 @@ void NetPlayBrowser::ConnectWidgets()
   connect(this, &NetPlayBrowser::UpdateListRequested, this, &NetPlayBrowser::OnUpdateListRequested,
           Qt::QueuedConnection);
 }
-*/
 
 void NetPlayBrowser::Refresh()
 {
@@ -197,7 +195,7 @@ void NetPlayBrowser::RefreshLoop()
 
       lock.unlock();
 
-     // emit UpdateStatusRequested(tr("Refreshing..."));
+      emit UpdateStatusRequested(tr("Refreshing..."));
 
       NetPlayIndex client;
 
@@ -205,12 +203,12 @@ void NetPlayBrowser::RefreshLoop()
 
       if (entries)
       {
-      //  emit UpdateListRequested(std::move(*entries));
+        emit UpdateListRequested(std::move(*entries));
       }
       else
       {
-       // emit UpdateStatusRequested(tr("Error obtaining session list: %1")
-        //                               .arg(QString::fromStdString(client.GetLastError())));
+        emit UpdateStatusRequested(tr("Error obtaining session list: %1")
+                                       .arg(QString::fromStdString(client.GetLastError())));
       }
     }
   }

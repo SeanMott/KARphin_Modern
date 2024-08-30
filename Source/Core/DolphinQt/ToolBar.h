@@ -36,6 +36,9 @@ signals:
   //when Netplay is started via the button
   void StartNetPlayPressed();
 
+  // when Netplay Browser
+  void StartNetPlayBrowserPressed();
+
   void StepPressed();
   void StepOverPressed();
   void StepOutPressed();

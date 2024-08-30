@@ -34,12 +34,12 @@ public:
   void accept() override;
 signals:
   void Join();
- // void UpdateStatusRequested(const QString& status);
- // void UpdateListRequested(std::vector<NetPlaySession> sessions);
+  void UpdateStatusRequested(const QString& status);
+  void UpdateListRequested(std::vector<NetPlaySession> sessions);
 
 private:
   void CreateWidgets();
-//  void ConnectWidgets();
+  void ConnectWidgets();
 
   void Refresh();
   void RefreshLoop();

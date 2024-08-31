@@ -121,8 +121,8 @@ void ToolBar::MakeActions()
 
   
 
-  m_pause_play_action = addAction(tr("Local Play"), this, &ToolBar::PlayPressed);
-  m_start_netplay_action = addAction(tr("Online Play"), this, &ToolBar::StartNetPlayPressed);
+  m_pause_play_action = addAction(tr("Server Browser"), this, &ToolBar::PlayPressed);
+  m_start_netplay_action = addAction(tr("Host/Connect"), this, &ToolBar::StartNetPlayPressed);
 
   m_stop_action = addAction(tr("Stop"), this, &ToolBar::StopPressed);
 

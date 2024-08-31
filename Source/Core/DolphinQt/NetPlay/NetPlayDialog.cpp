@@ -1155,23 +1155,23 @@ void NetPlayDialog::LoadSettings()
 
   const std::string network_mode = Config::Get(Config::NETPLAY_NETWORK_MODE);
 
-  if (network_mode == "fixeddelay")
-  {
+  //if (network_mode == "fixeddelay")
+  //{
     m_fixed_delay_action->setChecked(true);
-  }
-  else if (network_mode == "hostinputauthority")
-  {
-    m_host_input_authority_action->setChecked(true);
-  }
-  else if (network_mode == "golf")
-  {
-    m_golf_mode_action->setChecked(true);
-  }
-  else
-  {
-    WARN_LOG_FMT(NETPLAY, "Unknown network mode '{}', using 'fixeddelay'", network_mode);
-    m_fixed_delay_action->setChecked(true);
-  }
+  //}
+  //else if (network_mode == "hostinputauthority")
+  //{
+  //  m_host_input_authority_action->setChecked(true);
+  //}
+  //else if (network_mode == "golf")
+  //{
+  //  m_golf_mode_action->setChecked(true);
+  //}
+  //else
+  //{
+  //  WARN_LOG_FMT(NETPLAY, "Unknown network mode '{}', using 'fixeddelay'", network_mode);
+  //  m_fixed_delay_action->setChecked(true);
+  //}
 }
 
 void NetPlayDialog::SaveSettings()
@@ -1196,21 +1196,21 @@ void NetPlayDialog::SaveSettings()
   Config::SetBase(Config::NETPLAY_GOLF_MODE_OVERLAY, false);
   Config::SetBase(Config::NETPLAY_HIDE_REMOTE_GBAS, m_hide_remote_gbas_action->isChecked());
 
-  std::string network_mode;
-  if (m_fixed_delay_action->isChecked())
-  {
-    network_mode = "fixeddelay";
-  }
-  else if (m_host_input_authority_action->isChecked())
-  {
-    network_mode = "hostinputauthority";
-  }
-  else if (m_golf_mode_action->isChecked())
-  {
-    network_mode = "golf";
-  }
+  //std::string network_mode;
+  //if (m_fixed_delay_action->isChecked())
+  //{
+  //  network_mode = "fixeddelay";
+  //}
+  //else if (m_host_input_authority_action->isChecked())
+  //{
+  //  network_mode = "hostinputauthority";
+  //}
+  //else if (m_golf_mode_action->isChecked())
+  //{
+  //  network_mode = "golf";
+  //}
 
-  Config::SetBase(Config::NETPLAY_NETWORK_MODE, "hostinputauthority");
+  Config::SetBase(Config::NETPLAY_NETWORK_MODE, "fixeddelay");
 }
 
 void NetPlayDialog::ShowGameDigestDialog(const std::string& title)

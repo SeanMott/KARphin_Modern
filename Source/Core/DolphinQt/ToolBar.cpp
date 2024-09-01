@@ -169,7 +169,7 @@ void ToolBar::UpdatePausePlayButtonState(const bool playing_state)
   else
   {
     disconnect(m_pause_play_action, nullptr, nullptr, nullptr);
-    m_pause_play_action->setText(tr("Local Play"));
+    m_pause_play_action->setText(tr("Server Browser"));
     m_pause_play_action->setIcon(Resources::GetThemeIcon("play"));
     connect(m_pause_play_action, &QAction::triggered, this, &ToolBar::PlayPressed);
   }

@@ -12,6 +12,8 @@
 #include "Core/PowerPC/MMU.h"
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/System.h"
+#include "HLE_OS.h"
+#include <iostream>
 
 namespace HLE_Misc
 {
@@ -79,4 +81,11 @@ void GeckoReturnTrampoline(const Core::CPUThreadGuard& guard)
                             PowerPC::MMU::HostRead_U64(guard, SP + 24 + (2 * i + 1) * sizeof(u64)));
   }
 }
+
+void DBPrintf(const char* message, ...)
+{
+  std::cout << message << std::endl;
+  return;
+}
+
 }  // namespace HLE_Misc

@@ -4,6 +4,8 @@
 #pragma once
 
 #include <string_view>
+#include <map>
+#include <vector>
 
 #include "Common/CommonTypes.h"
 
@@ -23,6 +25,8 @@ class PPCSymbolDB;
 namespace HLE
 {
 using HookFunction = void (*)(const Core::CPUThreadGuard&);
+
+extern std::map<uint32_t, uint32_t> s_hooked_addresses;
 
 enum class HookType
 {
@@ -78,5 +82,8 @@ bool IsEnabled(HookFlag flag, PowerPC::CoreMode mode);
 // can be HLEd. If it can be, the information needed for HLEing it is returned.
 TryReplaceFunctionResult TryReplaceFunction(PPCSymbolDB& ppc_symbol_db, u32 address,
                                             PowerPC::CoreMode mode);
+
+void RegisterDynamicHook(std::string_view func_name, void (*function)(const Core::CPUThreadGuard&),
+                         HookType type, HookFlag flags);
 
 }  // namespace HLE

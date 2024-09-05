@@ -2,29 +2,32 @@
 
 import os
 import subprocess
+from datetime import datetime
 
-#packages the distribution build
-uncompressedPackageFP = "KARphin"
-tarPackageFP = "KARphin.tar"
-brotliPackageFP = "KARphin.br"
+#writes data file
+f = open("new_KARphinBuild.txt", 'w')
+f.write(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
+
+uncompressedPackage = "KARphin"
+tarPackageName = uncompressedPackage + ".tar.gz"
+brotliPackageName = tarPackageName + ".br"
 
 #pack into TAR
-command = ['tar', '-cvf', tarPackageFP, uncompressedPackageFP]
+command = ['tar', '-czvf', tarPackageName, uncompressedPackage]
 subprocess.run(command)
 
 #pack TAR into Brotli
-command = ['brotli', '-q', '5', '-f', tarPackageFP, '-o', brotliPackageFP]
+command = ['brotli', '-q', '5', '-f', tarPackageName, '-o', brotliPackageName]
 subprocess.run(command)
 
-#packages the dev build
-uncompressedPackageFP = "KARphinDev"
-tarPackageFP = "KARphinDev.tar"
-brotliPackageFP = "KARphinDev.br"
+uncompressedPackage = "KARphinDev"
+tarPackageName = uncompressedPackage + ".tar.gz"
+brotliPackageName = tarPackageName + ".br"
 
 #pack into TAR
-command = ['tar', '-cvf', tarPackageFP, uncompressedPackageFP]
+command = ['tar', '-czvf', tarPackageName, uncompressedPackage]
 subprocess.run(command)
 
 #pack TAR into Brotli
-command = ['brotli', '-q', '5', '-f', tarPackageFP, '-o', brotliPackageFP]
+command = ['brotli', '-q', '5', '-f', tarPackageName, '-o', brotliPackageName]
 subprocess.run(command)

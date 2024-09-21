@@ -37,6 +37,7 @@
 #include "Core/Config/NetplaySettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
+
 #ifdef HAS_LIBMGBA
 #include "Core/HW/GBACore.h"
 #endif
@@ -44,6 +45,7 @@
 #include "Core/NetPlayServer.h"
 #include "Core/SyncIdentifier.h"
 #include "Core/System.h"
+#include "Core/Movie.h"
 
 #include "DolphinQt/NetPlay/ChunkedProgressDialog.h"
 #include "DolphinQt/NetPlay/GameDigestDialog.h"
@@ -228,8 +230,8 @@ void NetPlayDialog::CreateMainLayout()
   });
 
   m_other_menu = m_menu_bar->addMenu(tr("Other"));
-  m_record_input_action = m_other_menu->addAction(tr("Record Inputs"));
-  m_record_input_action->setCheckable(true);
+  //m_record_input_action = m_other_menu->addAction(tr("Record Inputs"));
+  //m_record_input_action->setCheckable(true);
   m_golf_mode_overlay_action = m_other_menu->addAction(tr("Show Golf Mode Overlay"));
   m_golf_mode_overlay_action->setCheckable(false);
   m_hide_remote_gbas_action = m_other_menu->addAction(tr("Hide Remote GBAs"));
@@ -420,7 +422,7 @@ void NetPlayDialog::ConnectWidgets()
   connect(m_savedata_load_and_write_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_savedata_all_wii_saves_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_sync_codes_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
-  connect(m_record_input_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
+  //connect(m_record_input_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   //connect(m_strict_settings_sync_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_host_input_authority_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
   connect(m_golf_mode_action, &QAction::toggled, this, &NetPlayDialog::SaveSettings);
@@ -779,9 +781,12 @@ void NetPlayDialog::BootGame(const std::string& filename,
 void NetPlayDialog::StopGame()
 {
   if (m_got_stop_request)
+  {
     return;
+  }
 
   m_got_stop_request = true;
+
   emit Stop();
 }
 
@@ -866,7 +871,7 @@ void NetPlayDialog::SetOptionsEnabled(bool enabled)
     m_fixed_delay_action->setEnabled(enabled);
   }
 
-  m_record_input_action->setEnabled(enabled);
+ // m_record_input_action->setEnabled(enabled);
 }
 
 void NetPlayDialog::OnMsgStartGame()
@@ -1048,10 +1053,12 @@ void NetPlayDialog::OnTtlDetermined(u8 ttl)
 
 bool NetPlayDialog::IsRecording()
 {
-  std::optional<bool> is_recording = RunOnObject(m_record_input_action, &QAction::isChecked);
-  if (is_recording)
-    return *is_recording;
-  return false;
+  return true;  // Config::Get(Config::NETPLAY_RECORD_INPUTS);
+
+  //std::optional<bool> is_recording = RunOnObject(m_record_input_action, &QAction::isChecked);
+  //if (is_recording)
+  //  return *is_recording;
+  //return false;
 }
 
 std::shared_ptr<const UICommon::GameFile>
@@ -1132,7 +1139,7 @@ void NetPlayDialog::LoadSettings()
   const bool savedata_write = Config::Get(Config::NETPLAY_SAVEDATA_WRITE);
   const bool sync_all_wii_saves = Config::Get(Config::NETPLAY_SAVEDATA_SYNC_ALL_WII);
   const bool sync_codes = false; //Config::Get(Config::NETPLAY_SYNC_CODES); //we temp override
-  const bool record_inputs = Config::Get(Config::NETPLAY_RECORD_INPUTS);
+  //const bool record_inputs = true;  // Config::Get(Config::NETPLAY_RECORD_INPUTS);
   const bool strict_settings_sync = false; // Config::Get(Config::NETPLAY_STRICT_SETTINGS_SYNC); //we temp override
   const bool golf_mode_overlay = false; //Config::Get(Config::NETPLAY_GOLF_MODE_OVERLAY); //
   const bool hide_remote_gbas = Config::Get(Config::NETPLAY_HIDE_REMOTE_GBAS);
@@ -1148,7 +1155,7 @@ void NetPlayDialog::LoadSettings()
   m_savedata_all_wii_saves_action->setChecked(sync_all_wii_saves);
 
   m_sync_codes_action->setChecked(sync_codes);
-  m_record_input_action->setChecked(record_inputs);
+ // m_record_input_action->setChecked(record_inputs);
   m_strict_settings_sync_action->setChecked(strict_settings_sync);
   m_golf_mode_overlay_action->setChecked(golf_mode_overlay);
   m_hide_remote_gbas_action->setChecked(hide_remote_gbas);
@@ -1191,7 +1198,7 @@ void NetPlayDialog::SaveSettings()
   Config::SetBase(Config::NETPLAY_SAVEDATA_SYNC_ALL_WII,
                   m_savedata_all_wii_saves_action->isChecked());
   Config::SetBase(Config::NETPLAY_SYNC_CODES, false);
-  Config::SetBase(Config::NETPLAY_RECORD_INPUTS, m_record_input_action->isChecked());
+  Config::SetBase(Config::NETPLAY_RECORD_INPUTS, true);  // m_record_input_action->isChecked());
   Config::SetBase(Config::NETPLAY_STRICT_SETTINGS_SYNC, false);
   Config::SetBase(Config::NETPLAY_GOLF_MODE_OVERLAY, false);
   Config::SetBase(Config::NETPLAY_HIDE_REMOTE_GBAS, m_hide_remote_gbas_action->isChecked());

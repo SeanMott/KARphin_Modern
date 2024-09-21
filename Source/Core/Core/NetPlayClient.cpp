@@ -1762,9 +1762,12 @@ bool NetPlayClient::StartGame(const std::string& path)
 
   m_first_pad_status_received.fill(false);
 
-  if (m_dialog->IsRecording())
-  {
-    auto& movie = Core::System::GetInstance().GetMovie();
+  //if (m_dialog->IsRecording())
+  //{
+  auto& movie = Core::System::GetInstance().GetMovie();
+ // if (!movie.IsRecordingInput())
+  //{
+    
     if (movie.IsReadOnly())
       movie.SetReadOnly(false);
 
@@ -1781,7 +1784,7 @@ bool NetPlayClient::StartGame(const std::string& path)
       wiimotes[i] = m_wiimote_map[i] > 0;
     }
     movie.BeginRecordingInput(controllers, wiimotes);
-  }
+  //}
 
   for (unsigned int i = 0; i < 4; ++i)
   {
@@ -2336,6 +2339,32 @@ bool NetPlayClient::StopGame()
   InvokeStop();
 
   NetPlay_Disable();
+
+  auto& system = Core::System::GetInstance();
+  //const Core::CPUThreadGuard guard(system);
+
+  // QString dtm_file = DolphinFileDialog::getSaveFileName(
+  //     this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
+  // if (!dtm_file.isEmpty())
+
+  // gets the current date and time
+  //   Get current time point
+  auto now = std::chrono::system_clock::now();
+
+  // Convert to time_t to get the time in seconds since epoch
+  std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+
+  // Convert to local time
+  std::tm* now_tm = std::localtime(&now_time_t);
+
+  // Print the current date and time
+  std::string dtm_file =
+      "../Replays/" + std::to_string(now_tm->tm_sec) + "_" + std::to_string(now_tm->tm_min) + "_" +
+      std::to_string(now_tm->tm_hour) + "_" + std::to_string(now_tm->tm_mday) + "_" +
+      std::to_string(now_tm->tm_mon) + "_" + std::to_string(now_tm->tm_year) + ".dtm";
+
+  system.GetMovie().SaveRecording(dtm_file);
+  system.GetMovie().EndPlayInput(false);  // forcibly shutdown movie
 
   // stop game
   m_dialog->StopGame();

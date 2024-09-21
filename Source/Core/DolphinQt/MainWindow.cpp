@@ -1948,10 +1948,27 @@ void MainWindow::OnExportRecording()
   auto& system = Core::System::GetInstance();
   const Core::CPUThreadGuard guard(system);
 
-  QString dtm_file = DolphinFileDialog::getSaveFileName(
-      this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
-  if (!dtm_file.isEmpty())
-    system.GetMovie().SaveRecording(dtm_file.toStdString());
+  //QString dtm_file = DolphinFileDialog::getSaveFileName(
+  //    this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
+ // if (!dtm_file.isEmpty())
+ 
+  // gets the current date and time
+  //   Get current time point
+  auto now = std::chrono::system_clock::now();
+
+  // Convert to time_t to get the time in seconds since epoch
+  std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+
+  // Convert to local time
+  std::tm* now_tm = std::localtime(&now_time_t);
+
+  // Print the current date and time
+  std::string dtm_file =
+      "../Replays/" + std::to_string(now_tm->tm_sec) + "_" + std::to_string(now_tm->tm_min) + "_" +
+      std::to_string(now_tm->tm_hour) + "_" + std::to_string(now_tm->tm_mday) + "_" +
+      std::to_string(now_tm->tm_mon) + "_" + std::to_string(now_tm->tm_year) + ".dtm";
+
+  system.GetMovie().SaveRecording(dtm_file);
 }
 
 void MainWindow::OnActivateChat()

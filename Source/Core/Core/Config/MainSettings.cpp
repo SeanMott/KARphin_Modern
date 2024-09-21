@@ -36,6 +36,9 @@ namespace Config
 bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED = true;
 uint16_t FULL_SCREEN_INDEX = 0;
 
+//should we auto boot into the netplay menus
+bool BOOT_MENU_NETPLAY_BROWSER_AT_START = false;
+bool BOOT_MENU_NETPLAY_HOST_AT_START = false;
 
 
 

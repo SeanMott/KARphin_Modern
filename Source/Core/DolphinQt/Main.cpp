@@ -150,9 +150,9 @@ int main(int argc, char* argv[])
 #endif
 #endif
 
-  QCoreApplication::setOrganizationName(QStringLiteral("Dolphin Emulator"));
+  QCoreApplication::setOrganizationName(QStringLiteral("KAR Workshop"));
   QCoreApplication::setOrganizationDomain(QStringLiteral("dolphin-emu.org"));
-  QCoreApplication::setApplicationName(QStringLiteral("dolphin-emu"));
+  QCoreApplication::setApplicationName(QStringLiteral("KARphin"));
 
   // QApplication will parse arguments and remove any it recognizes as targeting Qt
   QApplication app(argc, argv);
@@ -181,6 +181,12 @@ int main(int argc, char* argv[])
   // queued in the Core first.
   QObject::connect(QAbstractEventDispatcher::instance(), &QAbstractEventDispatcher::aboutToBlock,
                    &app, [] { Core::HostDispatchJobs(Core::System::GetInstance()); });
+
+  // checks if we're booting into the server browser
+  Config::BOOT_MENU_NETPLAY_HOST_AT_START = (options.is_set("netBrowser"));
+
+  // checks if we're booting into the netplay host
+  Config::BOOT_MENU_NETPLAY_BROWSER_AT_START = (options.is_set("netHost"));
 
   std::optional<std::string> save_state_path;
   if (options.is_set("save_state"))
@@ -213,12 +219,15 @@ int main(int argc, char* argv[])
     }
     game_specified = true;
   }
+
   else if (!args.empty())
   {
     boot = BootParameters::GenerateFromFile(
         args.front(), BootSessionData(save_state_path, DeleteSavestateAfterBoot::No));
     game_specified = true;
   }
+
+  
 
   int retval;
 

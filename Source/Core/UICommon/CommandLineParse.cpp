@@ -106,6 +106,12 @@ std::unique_ptr<optparse::OptionParser> CreateParser(ParserOptions options)
       .type("string")
       .help("Load the initial save state");
 
+  //boots the server browser
+  parser->add_option("-nb", "--netBrowser").help("Boots the Server Browser at start");
+
+  //boots the netplay host menu
+  parser->add_option("-nh", "--netHost").help("Boots the Netplay Host at start");
+
   if (options == ParserOptions::IncludeGUIOptions)
   {
     parser->add_option("-d", "--debugger")

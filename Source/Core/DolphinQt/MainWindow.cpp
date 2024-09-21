@@ -329,6 +329,14 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
     StartGame(std::move(m_pending_boot));
     m_pending_boot.reset();
   }
+
+  // open the server browser if Host is selected
+  if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
+    m_tool_bar->PlayPressed();
+
+  // open the host menu if the Host is selected
+  if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
+    m_tool_bar->StartNetPlayPressed();
 }
 
 MainWindow::~MainWindow()

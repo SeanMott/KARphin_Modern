@@ -41,6 +41,7 @@
 #include "Core/Config/WiimoteSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/GeckoCode.h"
+#include "Core/GeckoCodeConfig.h"
 #include "Core/HW/EXI/EXI.h"
 #include "Core/HW/EXI/EXI_DeviceIPL.h"
 #ifdef HAS_LIBMGBA
@@ -2336,8 +2337,17 @@ void NetPlayClient::InvokeStop()
 // called from ---GUI--- thread and ---NETPLAY--- thread (client side)
 bool NetPlayClient::StopGame()
 {
+  //-------writes the players and who's port was which and match data
+  std::string matchData = "Game: " + m_selected_game.game_id + "\n";  // stores the game
+  matchData += std::string("P1: ") + GetPadDetails(0).player_name + "\n";  // who was GC Port 1, so we know what full screen code to use
+  matchData += "P2: " + GetPadDetails(1).player_name + "\n";  // who was GC Port 2, so we know what full screen code to use
+  matchData += "P3: " + GetPadDetails(2).player_name + "\n";  // who was GC Port 3, so we know what full screen code to use
+  matchData += "P4: " + GetPadDetails(3).player_name + "\n";  // who was GC Port 4, so we know what full screen code to use
+
+  //stop game
   InvokeStop();
 
+  //disables netplay
   NetPlay_Disable();
 
   auto& system = Core::System::GetInstance();
@@ -2348,7 +2358,6 @@ bool NetPlayClient::StopGame()
   // if (!dtm_file.isEmpty())
 
   // gets the current date and time
-  //   Get current time point
   auto now = std::chrono::system_clock::now();
 
   // Convert to time_t to get the time in seconds since epoch
@@ -2357,14 +2366,32 @@ bool NetPlayClient::StopGame()
   // Convert to local time
   std::tm* now_tm = std::localtime(&now_time_t);
 
-  // Print the current date and time
-  std::string dtm_file =
-      "../Replays/" + std::to_string(now_tm->tm_sec) + "_" + std::to_string(now_tm->tm_min) + "_" +
+  //formats
+  std::string date_timecode_identifier =
+      std::to_string(now_tm->tm_sec) + "_" + std::to_string(now_tm->tm_min) + "_" +
       std::to_string(now_tm->tm_hour) + "_" + std::to_string(now_tm->tm_mday) + "_" +
-      std::to_string(now_tm->tm_mon) + "_" + std::to_string(now_tm->tm_year) + ".dtm";
+      std::to_string(now_tm->tm_mon) + "_" + std::to_string(now_tm->tm_year);
+
+  //creates a folder to contain the data
+  std::string replayFolder = "../Replays/" + date_timecode_identifier;
+  File::CreateDir(replayFolder);
+
+  //-------writes the emulation input file
+  std::string dtm_file = replayFolder + "/" + date_timecode_identifier + ".dtm";
 
   system.GetMovie().SaveRecording(dtm_file);
   system.GetMovie().EndPlayInput(false);  // forcibly shutdown movie
+  
+
+  //-------writes the active gekko codes
+  Common::IniFile game_ini_local;
+  //game_ini_local.Save(replayFolder + "/" + m_selected_game.game_id + ".ini");
+  Gecko::SaveCodes(game_ini_local, Gecko::GetActiveCodes());
+  game_ini_local.Save(replayFolder + "/" + m_selected_game.game_id + ".ini");
+
+  //writes match data
+  File::CreateEmptyFile(replayFolder + "/matchData.txt");
+  File::WriteStringToFile(replayFolder + "/matchData.txt", matchData);
 
   // stop game
   m_dialog->StopGame();

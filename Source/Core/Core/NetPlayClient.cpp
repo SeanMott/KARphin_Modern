@@ -2373,8 +2373,9 @@ bool NetPlayClient::StopGame()
       std::to_string(now_tm->tm_mon) + "_" + std::to_string(now_tm->tm_year);
 
   //creates a folder to contain the data
-  std::string replayFolder = "../Replays/" + date_timecode_identifier;
-  File::CreateDir(replayFolder);
+  std::string replayFolder = File::GetExeDirectory() + "/../Replays/" + date_timecode_identifier;
+  if (!File::Exists(replayFolder))
+    File::CreateDirs(replayFolder);
 
   //-------writes the emulation input file
   std::string dtm_file = replayFolder + "/" + date_timecode_identifier + ".dtm";

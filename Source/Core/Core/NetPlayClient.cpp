@@ -2365,8 +2365,6 @@ bool NetPlayClient::StopGame()
   const std::string day = std::to_string(now_tm->tm_mday);
   const std::string year = std::to_string(now_tm->tm_year + 1900);
 
-  
-
   auto& system = Core::System::GetInstance();
 
   //formats

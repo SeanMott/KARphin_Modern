@@ -2337,25 +2337,16 @@ void NetPlayClient::InvokeStop()
 // called from ---GUI--- thread and ---NETPLAY--- thread (client side)
 bool NetPlayClient::StopGame()
 {
-  //-------writes the players and who's port was which and match data
-  std::string matchData = "Game: " + m_selected_game.game_id + "\n";  // stores the game
-  matchData += std::string("P1: ") + GetPadDetails(0).player_name + "\n";  // who was GC Port 1, so we know what full screen code to use
-  matchData += "P2: " + GetPadDetails(1).player_name + "\n";  // who was GC Port 2, so we know what full screen code to use
-  matchData += "P3: " + GetPadDetails(2).player_name + "\n";  // who was GC Port 3, so we know what full screen code to use
-  matchData += "P4: " + GetPadDetails(3).player_name + "\n";  // who was GC Port 4, so we know what full screen code to use
+  const std::string portName1 = GetPadDetails(0).player_name;
+  const std::string portName2 = GetPadDetails(1).player_name;
+  const std::string portName3 = GetPadDetails(2).player_name;
+  const std::string portName4 = GetPadDetails(3).player_name;
 
-  //stop game
+  // stop game
   InvokeStop();
 
-  //disables netplay
+  // disables netplay
   NetPlay_Disable();
-
-  auto& system = Core::System::GetInstance();
-  //const Core::CPUThreadGuard guard(system);
-
-  // QString dtm_file = DolphinFileDialog::getSaveFileName(
-  //     this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
-  // if (!dtm_file.isEmpty())
 
   // gets the current date and time
   auto now = std::chrono::system_clock::now();
@@ -2366,11 +2357,23 @@ bool NetPlayClient::StopGame()
   // Convert to local time
   std::tm* now_tm = std::localtime(&now_time_t);
 
+  const std::string secs = std::to_string(now_tm->tm_sec);
+  const std::string mins = std::to_string(now_tm->tm_min);
+  const std::string hours = std::to_string(now_tm->tm_hour);
+
+  const std::string month = std::to_string(now_tm->tm_mon + 1);
+  const std::string day = std::to_string(now_tm->tm_mday);
+  const std::string year = std::to_string(now_tm->tm_year + 1900);
+
+  
+
+  auto& system = Core::System::GetInstance();
+
   //formats
   std::string date_timecode_identifier =
-      std::to_string(now_tm->tm_sec) + "_" + std::to_string(now_tm->tm_min) + "_" +
-      std::to_string(now_tm->tm_hour) + "_" + std::to_string(now_tm->tm_mday) + "_" +
-      std::to_string(now_tm->tm_mon) + "_" + std::to_string(now_tm->tm_year);
+      secs + "_" + mins + "_" +
+      hours + "_" + month + "_" +
+      day + "_" + year;
 
   //creates a folder to contain the data
   std::string replayFolder = File::GetExeDirectory() + "/../Replays/" + date_timecode_identifier;
@@ -2378,7 +2381,7 @@ bool NetPlayClient::StopGame()
     File::CreateDirs(replayFolder);
 
   //-------writes the emulation input file
-  std::string dtm_file = replayFolder + "/" + date_timecode_identifier + ".dtm";
+  std::string dtm_file = replayFolder + "/Replay.dtm";
 
   system.GetMovie().SaveRecording(dtm_file);
   system.GetMovie().EndPlayInput(false);  // forcibly shutdown movie
@@ -2386,9 +2389,16 @@ bool NetPlayClient::StopGame()
 
   //-------writes the active gekko codes
   Common::IniFile game_ini_local;
-  //game_ini_local.Save(replayFolder + "/" + m_selected_game.game_id + ".ini");
   Gecko::SaveCodes(game_ini_local, Gecko::GetActiveCodes());
   game_ini_local.Save(replayFolder + "/" + m_selected_game.game_id + ".ini");
+
+  //-------writes the players and who's port was which and match data
+  std::string matchData = m_selected_game.game_id + "\n";  // stores the game
+  matchData += month + "-" + day + "-" + year + "\n";
+  matchData += portName1 + "\n";  // who was GC Port 1, so we know what full screen code to use
+  matchData += portName2 + "\n";  // who was GC Port 2, so we know what full screen code to use
+  matchData += portName3 + "\n";  // who was GC Port 3, so we know what full screen code to use
+  matchData += portName4 + "\n";  // who was GC Port 4, so we know what full screen code to use
 
   //writes match data
   File::CreateEmptyFile(replayFolder + "/matchData.txt");

@@ -75,6 +75,96 @@ const char* fullscreenGekkoCodeNames[4] = {"P1 Fullscreen", "P2 Fullscreen", "P3
                                            "P4 Fullscreen"};
 bool fullscreenGekkoCodeEnabled[4] = {false, false, false, false};
 
+//checks if a gecko code exists
+inline bool CheckIfGekkoCodeExists(const std::vector<GeckoCode>& codes, const char* codeName)
+{
+  for (size_t i = 0; i < codes.size(); ++i)
+  {
+    if (!strcmp(codes[i].name.c_str(), codeName))
+      return true;
+  }
+
+  return false;
+}
+
+//checks if a gecko code is active or not
+inline bool CheckGeckoCodeActiveState(const std::vector<GeckoCode>& codes, const char* codeName)
+{
+  for (size_t i = 0; i < codes.size(); ++i)
+  {
+    if (!strcmp(codes[i].name.c_str(), codeName))
+      return codes[i].enabled;
+  }
+
+  return false;
+}
+
+//checks if P1 full screen code exists
+inline bool CheckIfGekkoCodeExists_P1FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[0]);
+}
+
+// checks if P2 full screen code exists
+inline bool CheckIfGekkoCodeExists_P2FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[1]);
+}
+
+// checks if P3 full screen code exists
+inline bool CheckIfGekkoCodeExists_P3FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[2]);
+}
+
+// checks if P4 full screen code exists
+inline bool CheckIfGekkoCodeExists_P4FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[3]);
+}
+
+// checks if P1 full screen code is active
+inline bool CheckIfGekkoCodeIsActive_P1FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[0]);
+}
+
+// checks if P2 full screen code is active
+inline bool CheckIfGekkoCodeIsActive_P2FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[1]);
+}
+
+// checks if P3 full screen code is active
+inline bool CheckIfGekkoCodeIsActive_P3FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[2]);
+}
+
+// checks if P4 full screen code is active
+inline bool CheckIfGekkoCodeIsActive_P4FullScreen(const std::vector<GeckoCode>& codes)
+{
+  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[3]);
+}
+
+//loads P1 full screen code
+inline GeckoCode LoadGeckkoCode_P1FullScreen()
+{
+  //Common::IniFile game_ini;
+  //for (const std::string& filename : ConfigLoaders::GetGameIniFilenames(id, revision))
+  //  game_ini.Load(File::GetSysDirectory() + GAMESETTINGS_DIR DIR_SEP + filename, true);
+  //for (const std::string& filename : ConfigLoaders::GetGameIniFilenames(id, revision))
+  //  game_ini.Load(File::GetUserPath(D_GAMESETTINGS_IDX) + filename, true);
+  //
+  //return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[3]);
+}
+
+//loads P2 full screen code
+
+//loads P3 full screen code
+
+//loads P4 full screen code
+
 //enables the specific player code and disables all others
 static inline void SetFullScreenCodes(const std::span<const GeckoCode> gcodes)
 {

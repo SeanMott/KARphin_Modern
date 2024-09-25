@@ -188,6 +188,14 @@ int main(int argc, char* argv[])
   // checks if we're booting into the netplay host
   Config::BOOT_MENU_NETPLAY_BROWSER_AT_START = (options.is_set("netHost"));
 
+  //checks if we're gonna load a KARphin Warp Record
+  if(Config::PLAY_KARPHIN_REPLAY_AT_START = options.is_set("playback"))
+    Config::REPLAY_FOLDER_PATH = options.get("playback");
+
+  //what fullscreen index should be used during the playback, if any
+  if(Config::IS_KARPHIN_PLAY_USING_A_FULL_SCREEN_INDEX = options.is_set("playbackFullScreenIndex"))  // if false, we're using split screen and no codes are injected
+    Config::FULL_SCREEN_INDEX_TO_USE_IN_PLAY_BACK = options.get("playbackFullscreenIndex");
+
   std::optional<std::string> save_state_path;
   if (options.is_set("save_state"))
   {
@@ -226,8 +234,6 @@ int main(int argc, char* argv[])
         args.front(), BootSessionData(save_state_path, DeleteSavestateAfterBoot::No));
     game_specified = true;
   }
-
-  
 
   int retval;
 

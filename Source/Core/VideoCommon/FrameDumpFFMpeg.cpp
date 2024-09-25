@@ -122,16 +122,14 @@ void InitAVCodec()
 
 std::string GetDumpPath(const std::string& extension, std::time_t time, u32 index)
 {
-  if (!g_Config.sDumpPath.empty())
-    return g_Config.sDumpPath;
+  //gets the replay MP4 and audio dump folder if it doesn't exist, we make one
+  if (!File::Exists(g_Config.sDumpPath))
+    File::CreateDirs(g_Config.sDumpPath);
 
-  const std::string path_prefix =
-      File::GetUserPath(D_DUMPFRAMES_IDX) + SConfig::GetInstance().GetGameID();
+  const std::string base_name = fmt::format("{}_videoDump_{:%Y-%m-%d}_{}", SConfig::GetInstance().GetGameID(),
+                  fmt::localtime(time), index);
 
-  const std::string base_name =
-      fmt::format("{}_{:%Y-%m-%d_%H-%M-%S}_{}", path_prefix, fmt::localtime(time), index);
-
-  const std::string path = fmt::format("{}.{}", base_name, extension);
+  const std::string path = g_Config.sDumpPath + "/" + fmt::format("{}.{}", base_name, extension);
 
   // Ask to delete file.
   if (File::Exists(path))

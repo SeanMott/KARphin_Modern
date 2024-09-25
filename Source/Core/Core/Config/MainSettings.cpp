@@ -40,7 +40,11 @@ uint16_t FULL_SCREEN_INDEX = 0;
 bool BOOT_MENU_NETPLAY_BROWSER_AT_START = false;
 bool BOOT_MENU_NETPLAY_HOST_AT_START = false;
 
-
+//should we load a KARphin replay at runtime
+bool PLAY_KARPHIN_REPLAY_AT_START = false;
+std::string REPLAY_FOLDER_PATH = "";
+uint16_t FULL_SCREEN_INDEX_TO_USE_IN_PLAY_BACK = 0;
+bool IS_KARPHIN_PLAY_USING_A_FULL_SCREEN_INDEX = true; //if false, we're using split screen and no codes are injected
 
 // Main.Core
 

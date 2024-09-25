@@ -16,6 +16,7 @@
 #include <type_traits>
 #include <vector>
 
+#include <fmt/chrono.h>
 #include <fmt/format.h>
 
 #include "Common/Assert.h"
@@ -2349,32 +2350,40 @@ bool NetPlayClient::StopGame()
   NetPlay_Disable();
 
   // gets the current date and time
-  auto now = std::chrono::system_clock::now();
+  auto t = fmt::localtime(std::time(nullptr));
+  const std::string year = std::to_string(t.tm_year + 1900);
+  const std::string month = std::to_string(t.tm_mon);
+  const std::string day = std::to_string(t.tm_mday);
+  const std::string hour = std::to_string(t.tm_hour);
+  const std::string minuet = std::to_string(t.tm_min);
+  const std::string sec = std::to_string(t.tm_sec);
 
-  // Convert to time_t to get the time in seconds since epoch
-  std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+  std::string timeIdentifier =
+      fmt::format("{:%Y-%m-%d_%H-%M-%S}", t);
 
-  // Convert to local time
-  std::tm* now_tm = std::localtime(&now_time_t);
+  //std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
 
-  const std::string secs = std::to_string(now_tm->tm_sec);
-  const std::string mins = std::to_string(now_tm->tm_min);
-  const std::string hours = std::to_string(now_tm->tm_hour);
+  //// Convert to local time
+  //std::tm* now_tm = std::localtime(&now_time_t);
 
-  const std::string month = std::to_string(now_tm->tm_mon + 1);
-  const std::string day = std::to_string(now_tm->tm_mday);
-  const std::string year = std::to_string(now_tm->tm_year + 1900);
+  //const std::string secs = std::to_string(now_tm->tm_sec);
+  //const std::string mins = std::to_string(now_tm->tm_min);
+  //const std::string hours = std::to_string(now_tm->tm_hour);
+
+  //const std::string month = std::to_string(now_tm->tm_mon + 1);
+  //const std::string day = std::to_string(now_tm->tm_mday);
+  //const std::string year = std::to_string(now_tm->tm_year + 1900);
 
   auto& system = Core::System::GetInstance();
 
-  //formats
-  std::string date_timecode_identifier =
-      secs + "_" + mins + "_" +
-      hours + "_" + month + "_" +
-      day + "_" + year;
+  ////formats
+  //std::string date_timecode_identifier =
+  //    secs + "_" + mins + "_" +
+  //    hours + "_" + month + "_" +
+  //    day + "_" + year;
 
   //creates a folder to contain the data
-  std::string replayFolder = File::GetExeDirectory() + "/../Replays/" + date_timecode_identifier;
+  std::string replayFolder = File::GetExeDirectory() + "/../Replays/" + timeIdentifier;
   if (!File::Exists(replayFolder))
     File::CreateDirs(replayFolder);
 

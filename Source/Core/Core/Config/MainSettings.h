@@ -53,10 +53,17 @@ namespace Config
   //custom KAR configs
 extern bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED;
 extern uint16_t FULL_SCREEN_INDEX;
+
+//should we auto boot to a netplay menu
 extern bool BOOT_MENU_NETPLAY_BROWSER_AT_START;
 extern bool BOOT_MENU_NETPLAY_HOST_AT_START;
 
-
+// should we load a KARphin replay at runtime
+extern bool PLAY_KARPHIN_REPLAY_AT_START;
+extern std::string REPLAY_FOLDER_PATH;
+extern uint16_t FULL_SCREEN_INDEX_TO_USE_IN_PLAY_BACK;
+extern bool IS_KARPHIN_PLAY_USING_A_FULL_SCREEN_INDEX;  // if false, we're using split screen and no codes
+                                                 // are injected
 
 
 

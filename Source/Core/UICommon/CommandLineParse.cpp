@@ -112,6 +112,11 @@ std::unique_ptr<optparse::OptionParser> CreateParser(ParserOptions options)
   //boots the netplay host menu
   parser->add_option("-nh", "--netHost").help("Boots the Netplay Host at start");
 
+  //sets if we're performing a playback of a Warp Record
+  parser->add_option("-play", "--playback").help("Plays a Warp Record and dumps MP4 data");
+  // sets what fullscreen index a Warp Record will use when 
+  parser->add_option("-playFS", "--playbackFullScreenIndex").help("If set, sets the full screen index to use when playing a Warp Record");
+
   if (options == ParserOptions::IncludeGUIOptions)
   {
     parser->add_option("-d", "--debugger")

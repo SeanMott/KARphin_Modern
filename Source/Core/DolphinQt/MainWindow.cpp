@@ -44,6 +44,7 @@
 #include "Core/CommonTitles.h"
 #include "Core/Config/AchievementSettings.h"
 #include "Core/Config/MainSettings.h"
+#include "Core/Config/GraphicsSettings.h"
 #include "Core/Config/NetplaySettings.h"
 #include "Core/Config/UISettings.h"
 #include "Core/Config/WiimoteSettings.h"
@@ -337,6 +338,15 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   // open the host menu if the Host is selected
   if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
     m_tool_bar->StartNetPlayPressed();
+
+  // starts to replay of a Warp Record
+  if (Config::PLAY_KARPHIN_REPLAY_AT_START)
+    PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
+  else // if we're not in a warp record, clear the warp record features just to be safe
+  {  
+    Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES, false);
+    Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO, false);
+  }
 }
 
 MainWindow::~MainWindow()
@@ -927,6 +937,13 @@ void MainWindow::OnStopComplete()
 
 bool MainWindow::RequestStop()
 {
+  //if we're in playback mode
+  if (Config::PLAY_KARPHIN_REPLAY_AT_START)
+  {
+    Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO, false);
+    Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES, false);
+  }
+
   if (!Core::IsRunning(Core::System::GetInstance()))
   {
     Core::QueueHostJob([this](Core::System&) { OnStopComplete(); }, true);
@@ -1900,6 +1917,51 @@ void MainWindow::OnPlayRecording()
   }
 }
 
+// consumes a folder holding all the data needed to play a Warp Record (KARphin Replay)
+void MainWindow::PlayWarpRecord(const std::string replayFolderToConsume)
+{
+  auto& movie = Core::System::GetInstance().GetMovie();
+  if (!movie.IsReadOnly())
+  {
+    // let's make the read-only flag consistent at the start of a movie.
+    movie.SetReadOnly(true);
+    emit ReadOnlyModeChanged(true);
+  }
+
+  //loads the match data
+  std::string gameID = "SLAV01";
+  std::vector<std::string> players;
+
+  //sets the game to be played
+  for (auto& game : m_game_list->GetGameListModel().GetGames())
+  {
+    if (game->GetGameID() == gameID)
+    {
+      Config::SetBaseOrCurrent(Config::MAIN_DEFAULT_ISO, game->GetFilePath());
+      break;
+    }
+  }
+
+  //inject the gekko codes used
+
+  //sets some settings only needed during a replay
+  Config::SetBaseOrCurrent(Config::MAIN_MOVIE_PAUSE_MOVIE, true); //tells the game to pause after the replay is done
+  Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES, true);  // tells it to dump frames
+  Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES_SILENT, true);  // tells it to delete old exported data, since if it's re-ran, we override the raw exported data anyway
+  Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO, true);  // tells it to dump audio
+  Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO_SILENT, true);  // tells it to delete old exported data, since if it's re-ran, we override the raw exported data anyway
+  Config::SetBaseOrCurrent(Config::GFX_DUMP_PATH, replayFolderToConsume + "/exportedData");  // tells it to dump video files to the same replay folder we are pulling data from
+  File::SetUserPath(D_DUMPAUDIO_IDX, replayFolderToConsume + "/exportedData");  // tells it to dump audio files to the same replay folder we are pulling data from
+
+  std::optional<std::string> savestate_path;
+  if (movie.PlayInput(replayFolderToConsume + "/Replay.dtm", &savestate_path))
+  {
+    emit RecordingStatusChanged(true);
+
+    Play(savestate_path);
+  }
+}
+
 void MainWindow::OnStartRecording()
 {
   auto& system = Core::System::GetInstance();
@@ -1953,9 +2015,9 @@ void MainWindow::OnStopRecording()
 
 void MainWindow::OnExportRecording()
 {
-  if (NetPlay::IsNetPlayRunning())
-    return;
+  //if we just did a recording via Netplay, don't do this
 
+  //untill we fix that, we don't do any replays
  auto& system = Core::System::GetInstance();
   const Core::CPUThreadGuard guard(system);
 

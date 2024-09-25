@@ -191,6 +191,9 @@ private:
   void OnSignal();
 #endif
 
+  //consumes a folder holding all the data needed to play a Warp Record (KARphin Replay)
+  void PlayWarpRecord(const std::string replayFolderToConsume);
+
   void OnPlayRecording();
   void OnStartRecording();
   void OnStopRecording();

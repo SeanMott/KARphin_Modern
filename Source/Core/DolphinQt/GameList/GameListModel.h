@@ -40,6 +40,9 @@ public:
   bool ShouldDisplayGameListItem(int index) const;
   void SetSearchTerm(const QString& term);
 
+  // gets all the games
+  QList<std::shared_ptr<const UICommon::GameFile>> GetGames() const { return m_games; }
+
   // Using a custom sort role as it sometimes differs slightly from the default Qt::DisplayRole.
   static constexpr int SORT_ROLE = Qt::UserRole;
 
@@ -82,6 +85,8 @@ public:
   void DeleteTag(const QString& name);
 
   void PurgeCache();
+
+  
 
 private:
   // Index in m_games, or -1 if it isn't found

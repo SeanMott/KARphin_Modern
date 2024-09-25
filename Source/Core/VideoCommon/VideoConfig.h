@@ -113,6 +113,9 @@ struct VideoConfig final
   void Refresh();
   void VerifyValidity();
 
+  //defines data for replays
+  std::string replayDate = "MM-DD-YYYY"; //when the replay was created
+
   // General
   bool bVSync = false;
   bool bVSyncActive = false;

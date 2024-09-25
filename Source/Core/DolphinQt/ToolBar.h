@@ -75,5 +75,6 @@ private:
 
   QAction* m_donate_action;
   QAction* m_website_action;
+  QAction* m_karOnlineWebsite_action;
   QAction* m_discord_action;
 };

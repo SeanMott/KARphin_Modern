@@ -127,20 +127,24 @@ void ToolBar::MakeActions()
 
   addSeparator();
 
- // m_website_action = addAction(tr("KAR Workshop"));
- // connect(m_website_action, &QAction::triggered, this, []() {
- //   QDesktopServices::openUrl(QUrl(QStringLiteral("https://karworkshop.sean-mott.com/")));
- // });
+   m_karOnlineWebsite_action = addAction(tr("KAR Online"));
+  connect(m_karOnlineWebsite_action, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://www.kirbyairrideonline.com/home")));
+  });
+
+  m_discord_action = addAction(tr("Discord"));
+  connect(m_discord_action, &QAction::triggered, this,
+          []() { QDesktopServices::openUrl(QUrl(QStringLiteral("http://discord.gg/p3rGrcr"))); });
+
+  m_website_action = addAction(tr("KAR Workshop"));
+  connect(m_website_action, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://karworkshop.sean-mott.com/")));
+  });
 
   m_donate_action = addAction(tr("Donate"));
   connect(m_donate_action, &QAction::triggered, this, []() {
     QDesktopServices::openUrl(QUrl(QStringLiteral("https://ko-fi.com/jas_kar_workshop")));
   });
-
-  //m_discord_action = addAction(tr("Discord"));
- // connect(m_discord_action, &QAction::triggered, this, []() {
- //   QDesktopServices::openUrl(QUrl(QStringLiteral("http://discord.gg/p3rGrcr")));
- // });
 
   addSeparator();
 
@@ -151,8 +155,9 @@ void ToolBar::MakeActions()
   // Ensure every button has about the same width
   std::vector<QWidget*> items;
   for (const auto& action :
-       {m_open_action, m_pause_play_action, /*m_stop_action,*/ m_fullscreen_action,
-        m_donate_action, /*m_website_action, m_discord_action,*/ m_config_action, m_graphics_action, m_controllers_action,
+       {m_open_action, m_pause_play_action, /*m_stop_action,*/ m_fullscreen_action, m_donate_action,
+        m_website_action, m_discord_action, m_karOnlineWebsite_action, m_config_action, m_graphics_action,
+        m_controllers_action,
         m_step_action, m_step_over_action, m_step_out_action, m_skip_action, m_show_pc_action,
         m_set_pc_action})
   {
@@ -214,6 +219,7 @@ void ToolBar::UpdateIcons()
   m_start_netplay_action->setIcon(Resources::GetThemeIcon("wifi"));
 
   m_donate_action->setIcon(Resources::GetThemeIcon("donate"));
- // m_website_action->setIcon(Resources::GetThemeIcon("donate"));
- // m_discord_action->setIcon(Resources::GetThemeIcon("donate"));
+  m_website_action->setIcon(Resources::GetThemeIcon("donate"));
+  m_karOnlineWebsite_action->setIcon(Resources::GetThemeIcon("donate"));
+  m_discord_action->setIcon(Resources::GetThemeIcon("donate"));
 }

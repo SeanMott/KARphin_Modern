@@ -64,6 +64,9 @@ constexpr u32 HLE_TRAMPOLINE_ADDRESS = INSTALLER_END_ADDRESS - 4;
 // preserve the emulation performance.
 constexpr u32 MAGIC_GAMEID = 0xD01F1BAD;
 
+//checks if the full screen gecko codes exist, and if not, we load and add them
+void CheckAndLoadFullScreenGeckoCodesIfMissing(std::vector<Gecko::GeckoCode>& codes);
+
 //gets the active codes
 std::vector<GeckoCode>& GetActiveCodes();
 

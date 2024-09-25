@@ -2070,6 +2070,9 @@ bool NetPlayServer::SyncCodes()
     std::vector<Gecko::GeckoCode> s_active_codes =
         Gecko::SetAndReturnActiveCodes(Gecko::LoadCodes(globalIni, localIni));
 
+    // injects all the extra full screen codes if they don't exist
+
+
     // Determine Codelist Size
     u16 codelines = 0;
     for (const Gecko::GeckoCode& active_code : s_active_codes)

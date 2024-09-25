@@ -175,7 +175,7 @@ void NetPlayDialog::CreateMainLayout()
   m_data_menu->addSeparator();
 
   m_sync_codes_action = m_data_menu->addAction(tr("Sync AR/Gecko Codes"));
-  m_sync_codes_action->setCheckable(false);
+  m_sync_codes_action->setCheckable(true);
   m_strict_settings_sync_action = m_data_menu->addAction(tr("Strict Settings Sync"));
   m_strict_settings_sync_action->setToolTip(
       tr("This will sync additional graphics settings, and force everyone to the same internal "
@@ -1197,7 +1197,7 @@ void NetPlayDialog::SaveSettings()
 
   Config::SetBase(Config::NETPLAY_SAVEDATA_SYNC_ALL_WII,
                   m_savedata_all_wii_saves_action->isChecked());
-  Config::SetBase(Config::NETPLAY_SYNC_CODES, false);
+  Config::SetBase(Config::NETPLAY_SYNC_CODES, m_sync_codes_action->isChecked());
   Config::SetBase(Config::NETPLAY_RECORD_INPUTS, true);  // m_record_input_action->isChecked());
   Config::SetBase(Config::NETPLAY_STRICT_SETTINGS_SYNC, false);
   Config::SetBase(Config::NETPLAY_GOLF_MODE_OVERLAY, false);

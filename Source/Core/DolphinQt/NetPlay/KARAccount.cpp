@@ -85,7 +85,6 @@ void AccountSettings::SaveSettings()
 
 void AccountSettings::show()
 {
-  //PopulateGameList();
   QDialog::show();
 }
 

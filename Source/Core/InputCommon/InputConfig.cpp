@@ -161,7 +161,12 @@ bool InputConfig::ControllersNeedToBeCreated() const
 
 std::string InputConfig::GetUserProfileDirectoryPath() const
 {
-  return fmt::format("{}Profiles/{}/", File::GetUserPath(D_CONFIG_IDX), GetProfileDirectoryName());
+  //gets the folder for Accounts
+  std::string accountFolder_ControllerProfiles = File::GetExeDirectory() + "/../Accounts";
+  if (!File::Exists(accountFolder_ControllerProfiles))
+    File::CreateDirs(accountFolder_ControllerProfiles);
+
+  return fmt::format("{}/Profiles/{}/", accountFolder_ControllerProfiles, GetProfileDirectoryName());
 }
 
 std::string InputConfig::GetSysProfileDirectoryPath() const

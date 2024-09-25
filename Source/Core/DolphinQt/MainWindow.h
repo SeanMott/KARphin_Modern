@@ -178,6 +178,9 @@ private:
 //  void ShowAchievementSettings();
 //#endif  // USE_RETRO_ACHIEVEMENTS
 
+  // shows the account window for ajusting Netplay details
+  void ShowAccountWindow();
+
   void NetPlayInit();
   bool NetPlayJoin();
   bool NetPlayHost(const UICommon::GameFile& game);

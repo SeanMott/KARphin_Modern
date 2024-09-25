@@ -61,7 +61,7 @@ void ToolBar::OnEmulationStateChanged(Core::State state)
 {
   bool running = state != Core::State::Uninitialized;
   //m_stop_action->setEnabled(running);
-  m_fullscreen_action->setEnabled(running);
+  //m_fullscreen_action->setEnabled(running);
   //m_donate_action->setEnabled(running);
 
   bool playing = running && state != Core::State::Paused;
@@ -124,7 +124,7 @@ void ToolBar::MakeActions()
   m_pause_play_action = addAction(tr("Server Browser"), this, &ToolBar::PlayPressed);
   m_start_netplay_action = addAction(tr("Host/Connect"), this, &ToolBar::StartNetPlayPressed);
 
-  m_fullscreen_action = addAction(tr("FullScr"), this, &ToolBar::FullScreenPressed);
+  m_fullscreen_action = addAction(tr("Account"), this, &ToolBar::AccountPressed);
 
   addSeparator();
 

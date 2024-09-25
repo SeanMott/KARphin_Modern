@@ -42,6 +42,9 @@ signals:
   //when the Match Settings button is open
   void OnMatchSettingsPressed();
 
+  //when the show account is pressed
+  void AccountPressed();
+
   void StepPressed();
   void StepOverPressed();
   void StepOutPressed();

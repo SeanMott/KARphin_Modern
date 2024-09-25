@@ -9,7 +9,7 @@
 namespace Discord
 {
 // The number is the client ID for Dolphin, it's used for images and the application name
-const std::string DEFAULT_CLIENT_ID = "455712169795780630";
+const std::string DEFAULT_CLIENT_ID = "1288345593487560724";
 
 class Handler
 {

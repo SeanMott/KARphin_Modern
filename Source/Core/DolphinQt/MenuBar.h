@@ -93,9 +93,9 @@ signals:
   void ShowInfinityBase();
   void ConnectWiiRemote(int id);
 
-#ifdef USE_RETRO_ACHIEVEMENTS
-  void ShowAchievementsWindow();
-#endif  // USE_RETRO_ACHIEVEMENTS
+//#ifdef USE_RETRO_ACHIEVEMENTS
+//  void ShowAchievementsWindow();
+//#endif  // USE_RETRO_ACHIEVEMENTS
 
   // Options
   void Configure();
@@ -221,7 +221,7 @@ private:
   QAction* m_reset_action;
   QAction* m_fullscreen_action;
   QAction* m_frame_advance_action;
-  QAction* m_screenshot_action;
+  //QAction* m_donate_action;
   QAction* m_boot_sysmenu;
   QMenu* m_state_load_menu;
   QMenu* m_state_save_menu;

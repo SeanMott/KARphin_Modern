@@ -173,10 +173,10 @@ private:
   void ShowCheatsManager();
   void ShowRiivolutionBootWidget(const UICommon::GameFile& game);
 
-#ifdef USE_RETRO_ACHIEVEMENTS
-  void ShowAchievementsWindow();
-  void ShowAchievementSettings();
-#endif  // USE_RETRO_ACHIEVEMENTS
+//#ifdef USE_RETRO_ACHIEVEMENTS
+//  void ShowAchievementsWindow();
+//  void ShowAchievementSettings();
+//#endif  // USE_RETRO_ACHIEVEMENTS
 
   void NetPlayInit();
   bool NetPlayJoin();

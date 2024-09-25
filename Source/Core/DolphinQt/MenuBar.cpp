@@ -124,7 +124,7 @@ void MenuBar::OnEmulationStateChanged(Core::State state)
   m_stop_action->setVisible(running);
   m_reset_action->setEnabled(running);
   m_fullscreen_action->setEnabled(running);
-  m_screenshot_action->setEnabled(running);
+  //m_donate_action->setEnabled(running);
   m_state_save_menu->setEnabled(running);
 
   const bool hardcore = AchievementManager::GetInstance().IsHardcoreModeActive();
@@ -266,11 +266,11 @@ void MenuBar::AddToolsMenu()
 
   tools_menu->addSeparator();
 
-#ifdef USE_RETRO_ACHIEVEMENTS
-  tools_menu->addAction(tr("Achievements"), this, [this] { emit ShowAchievementsWindow(); });
-
-  tools_menu->addSeparator();
-#endif  // USE_RETRO_ACHIEVEMENTS
+//#ifdef USE_RETRO_ACHIEVEMENTS
+//  tools_menu->addAction(tr("Achievements"), this, [this] { emit ShowAchievementsWindow(); });
+//
+//  tools_menu->addSeparator();
+//#endif  // USE_RETRO_ACHIEVEMENTS
 
   QMenu* gc_ipl = tools_menu->addMenu(tr("Load GameCube Main Menu"));
 
@@ -348,7 +348,7 @@ void MenuBar::AddEmulationMenu()
   m_fullscreen_action = emu_menu->addAction(tr("Toggle &Fullscreen"), this, &MenuBar::Fullscreen);
   m_frame_advance_action = emu_menu->addAction(tr("&Frame Advance"), this, &MenuBar::FrameAdvance);
 
-  m_screenshot_action = emu_menu->addAction(tr("Take Screenshot"), this, &MenuBar::Screenshot);
+ // m_donate_action = emu_menu->addAction(tr("Take Screenshot"), this, &ToolBar);
 
   emu_menu->addSeparator();
 

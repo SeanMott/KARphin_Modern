@@ -39,6 +39,7 @@ signals:
   // when Netplay Browser
   void StartNetPlayBrowserPressed();
 
+
   void StepPressed();
   void StepOverPressed();
   void StepOutPressed();
@@ -59,7 +60,6 @@ private:
   QAction* m_pause_play_action;
   QAction* m_stop_action;
   QAction* m_fullscreen_action;
-  QAction* m_screenshot_action;
   QAction* m_config_action;
   QAction* m_controllers_action;
   QAction* m_graphics_action;
@@ -72,4 +72,8 @@ private:
   QAction* m_skip_action;
   QAction* m_show_pc_action;
   QAction* m_set_pc_action;
+
+  QAction* m_donate_action;
+  QAction* m_website_action;
+  QAction* m_discord_action;
 };

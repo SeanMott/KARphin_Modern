@@ -114,11 +114,12 @@ void ToolBar::MakeActions()
   // i18n: Here, PC is an acronym for program counter, not personal computer.
   m_set_pc_action = addAction(tr("Set PC"), this, &ToolBar::SetPCPressed);
 
-  m_open_action = addAction(tr("Open"), this, &ToolBar::OpenPressed);
   m_refresh_action = addAction(tr("Refresh"), [this] { emit RefreshPressed(); });
   m_refresh_action->setEnabled(false);
 
   addSeparator();
+
+  m_open_action = addAction(tr("Match Settings"), this, &ToolBar::OpenPressed);
 
   m_pause_play_action = addAction(tr("Server Browser"), this, &ToolBar::PlayPressed);
   m_start_netplay_action = addAction(tr("Host/Connect"), this, &ToolBar::StartNetPlayPressed);

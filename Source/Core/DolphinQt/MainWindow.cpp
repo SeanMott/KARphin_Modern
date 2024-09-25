@@ -73,6 +73,7 @@
 #include "DiscIO/NANDImporter.h"
 #include "DiscIO/RiivolutionPatcher.h"
 
+#include "DolphinQt/Config/Match/MatchSettingsWindow.h"
 #include "DolphinQt/AboutDialog.h"
 #include "DolphinQt/Achievements/AchievementsWindow.h"
 #include "DolphinQt/CheatsManager.h"
@@ -705,7 +706,7 @@ void MainWindow::ConnectToolBar()
 {
   addToolBar(m_tool_bar);
 
-  connect(m_tool_bar, &ToolBar::OnMatchSettingsPressed, this, &MainWindow::Open);
+  connect(m_tool_bar, &ToolBar::OnMatchSettingsPressed, this, &MainWindow::ShowMatchSettingsWindow);
   connect(m_tool_bar, &ToolBar::RefreshPressed, this, &MainWindow::RefreshGameList);
 
   connect(m_tool_bar, &ToolBar::PlayPressed, this, &MainWindow::ShowNetPlayBrowser);
@@ -735,6 +736,17 @@ void MainWindow::ShowAccountWindow()
   }
 
   KARAccount->show();
+}
+
+//shows the match settings widget
+void MainWindow::ShowMatchSettingsWindow()
+{
+  matchSettingsWindow = new MatchSettingsWindow(this);
+
+  SetQWidgetWindowDecorations(matchSettingsWindow);
+  matchSettingsWindow->show();
+  matchSettingsWindow->raise();
+  matchSettingsWindow->activateWindow();
 }
 
 void MainWindow::ConnectGameList()

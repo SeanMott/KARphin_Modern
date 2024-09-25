@@ -17,6 +17,7 @@ class QMenu;
 class QStackedWidget;
 class QString;
 
+class MatchSettingsWindow;
 class AchievementsWindow;
 class AssemblerWidget;
 class BreakpointWidget;
@@ -182,6 +183,9 @@ private:
   // shows the account window for ajusting Netplay details
   void ShowAccountWindow();
 
+  // shows the match settings widget
+  void ShowMatchSettingsWindow();
+
   void NetPlayInit();
   bool NetPlayJoin();
   bool NetPlayHost(const UICommon::GameFile& game);
@@ -252,6 +256,7 @@ private:
   InfinityBaseWindow* m_infinity_window = nullptr;
   MappingWindow* m_hotkey_window = nullptr;
   FreeLookWindow* m_freelook_window = nullptr;
+  MatchSettingsWindow* matchSettingsWindow = nullptr;
 
   HotkeyScheduler* m_hotkey_scheduler;
   NetPlayDialog* m_netplay_dialog;

@@ -42,6 +42,7 @@ class MemoryWidget;
 class MenuBar;
 class NetPlayDialog;
 class NetPlaySetupDialog;
+class AccountSettings;
 class NetworkWidget;
 class RegisterWidget;
 class RenderWidget;
@@ -254,6 +255,7 @@ private:
 
   HotkeyScheduler* m_hotkey_scheduler;
   NetPlayDialog* m_netplay_dialog;
+  AccountSettings* KARAccount;
   DiscordHandler* m_netplay_discord;
   NetPlaySetupDialog* m_netplay_setup_dialog;
   static constexpr int num_gc_controllers = 4;

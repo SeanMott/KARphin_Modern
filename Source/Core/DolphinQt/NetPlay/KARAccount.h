@@ -1,6 +1,3 @@
-// Copyright 2017 Dolphin Emulator Project
-// SPDX-License-Identifier: GPL-2.0-or-later
-
 #pragma once
 
 #include <QDialog>
@@ -18,38 +15,23 @@ class QPushButton;
 class QSpinBox;
 class QTabWidget;
 
-namespace UICommon
+class AccountSettings : public QDialog
 {
-class GameFile;
-}
 
-class NetPlaySetupDialog : public QDialog
-{
-  Q_OBJECT
 public:
-  explicit NetPlaySetupDialog(const GameListModel& game_list_model, QWidget* parent);
+  explicit AccountSettings(QWidget* parent);
 
   void accept() override;
   void show();
 
-signals:
-  bool Join();
-  bool Host(const UICommon::GameFile& game);
-
 private:
-  void CreateMainLayout();
-  void ConnectWidgets();
-  void PopulateGameList();
-  void ResetTraversalHost();
 
   void SaveSettings();
-
-  void OnConnectionTypeChanged(int index);
 
   // Main Widget
   QDialogButtonBox* m_button_box;
   QComboBox* m_connection_type;
-  //QLineEdit* m_nickname_edit;
+  QLineEdit* m_nickname_edit;
   QGridLayout* m_main_layout;
   QTabWidget* m_tab_widget;
   QPushButton* m_reset_traversal_button;
@@ -74,10 +56,4 @@ private:
   QLineEdit* m_host_server_name;
   QLineEdit* m_host_server_password;
   QComboBox* m_host_server_region;
-
-#ifdef USE_UPNP
-  QCheckBox* m_host_upnp;
-#endif
-
-  const GameListModel& m_game_list_model;
 };

@@ -105,6 +105,7 @@
 #include "DolphinQt/NetPlay/NetPlayBrowser.h"
 #include "DolphinQt/NetPlay/NetPlayDialog.h"
 #include "DolphinQt/NetPlay/NetPlaySetupDialog.h"
+#include "DolphinQt/NetPlay/KARAccount.h"
 #include "DolphinQt/QtUtils/DolphinFileDialog.h"
 #include "DolphinQt/QtUtils/FileOpenEventFilter.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
@@ -728,6 +729,12 @@ void MainWindow::ConnectToolBar()
 //shows the account window for ajusting Netplay details
 void MainWindow::ShowAccountWindow()
 {
+  if (!KARAccount)
+  {
+    KARAccount = new AccountSettings(this);
+  }
+
+  KARAccount->show();
 }
 
 void MainWindow::ConnectGameList()

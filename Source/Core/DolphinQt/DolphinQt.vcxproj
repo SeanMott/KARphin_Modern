@@ -179,6 +179,7 @@
     <ClCompile Include="NetPlay\ChunkedProgressDialog.cpp" />
     <ClCompile Include="NetPlay\GameDigestDialog.cpp" />
     <ClCompile Include="NetPlay\GameListDialog.cpp" />
+    <ClCompile Include="NetPlay\KARAccount.cpp" />
     <ClCompile Include="NetPlay\NetPlayBrowser.cpp" />
     <ClCompile Include="NetPlay\NetPlayDialog.cpp" />
     <ClCompile Include="NetPlay\NetPlaySetupDialog.cpp" />
@@ -250,6 +251,7 @@
     <QtMoc Include="Config\PatchesWidget.h" />
     <ClInclude Include="Debugger\RegisterColumn.h" />
     <ClInclude Include="GBAHost.h" />
+    <ClInclude Include="NetPlay\KARAccount.h" />
     <ClInclude Include="QtUtils\ActionHelper.h" />
     <ClInclude Include="QtUtils\ClearLayoutRecursively.h" />
     <ClInclude Include="QtUtils\DolphinFileDialog.h" />

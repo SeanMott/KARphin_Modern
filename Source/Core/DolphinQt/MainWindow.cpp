@@ -704,7 +704,7 @@ void MainWindow::ConnectToolBar()
 {
   addToolBar(m_tool_bar);
 
-  connect(m_tool_bar, &ToolBar::OpenPressed, this, &MainWindow::Open);
+  connect(m_tool_bar, &ToolBar::OnMatchSettingsPressed, this, &MainWindow::Open);
   connect(m_tool_bar, &ToolBar::RefreshPressed, this, &MainWindow::RefreshGameList);
 
   connect(m_tool_bar, &ToolBar::PlayPressed, this, &MainWindow::ShowNetPlayBrowser);

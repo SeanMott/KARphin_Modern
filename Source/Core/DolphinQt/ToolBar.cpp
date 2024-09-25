@@ -119,7 +119,7 @@ void ToolBar::MakeActions()
 
   addSeparator();
 
-  m_open_action = addAction(tr("Match Settings"), this, &ToolBar::OpenPressed);
+  m_open_action = addAction(tr("Match Settings"), this, &ToolBar::OnMatchSettingsPressed);
 
   m_pause_play_action = addAction(tr("Server Browser"), this, &ToolBar::PlayPressed);
   m_start_netplay_action = addAction(tr("Host/Connect"), this, &ToolBar::StartNetPlayPressed);

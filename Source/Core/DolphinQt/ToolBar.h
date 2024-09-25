@@ -39,6 +39,8 @@ signals:
   // when Netplay Browser
   void StartNetPlayBrowserPressed();
 
+  //when the Match Settings button is open
+  void OnMatchSettingsPressed();
 
   void StepPressed();
   void StepOverPressed();

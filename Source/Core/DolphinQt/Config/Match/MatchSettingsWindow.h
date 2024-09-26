@@ -26,6 +26,12 @@ public:
 private:
   void CreateMainLayout();
 
+  //when the user clicks the automatic fullscreen code
+
+  //when the user clicks a single-person screen code
+
+  //when the user clicks a multi-person screen code
+
   //button for auto-fullscreen codes
   QCheckBox* autoFullScreen_CheckBox;
 

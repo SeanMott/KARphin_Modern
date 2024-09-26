@@ -61,13 +61,13 @@ private:
   void SortEnabledCodesFirst();
   void SortDisabledCodesFirst();
 
-  void UpdateAutoCodeInjection_FullScreen();
+ // void UpdateAutoCodeInjection_FullScreen();
 
   std::string m_game_id;
   std::string m_gametdb_id;
   u16 m_game_revision;
 
-  QCheckBox* autoInjectOnlineFullScreenCodes_CheckBox;
+  //QCheckBox* autoInjectOnlineFullScreenCodes_CheckBox;
 
   CheatWarningWidget* m_warning;
 #ifdef USE_RETRO_ACHIEVEMENTS

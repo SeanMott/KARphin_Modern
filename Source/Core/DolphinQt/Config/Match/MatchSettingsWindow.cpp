@@ -42,6 +42,8 @@ void MatchSettingsWindow::CreateMainLayout()
       "using multiable people on the same machine, and want to play with someone over Netplay.\nYou "
       "will have to de-select this and use one of the multi-person codes.\nIf unsure leave this "
       "enabled and or go to the discord for clarity, or questions about the multi-person codes."));
+  ((QAbstractButton*)autoFullScreen_CheckBox)
+      ->setChecked(Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
 
   main_layout->addWidget(autoFullScreen_CheckBox);
 

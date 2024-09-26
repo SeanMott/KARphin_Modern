@@ -92,7 +92,7 @@ void GeckoCodeWidget::CreateWidgets()
   m_add_code = new NonDefaultQPushButton(tr("&Add New Code..."));
   m_edit_code = new NonDefaultQPushButton(tr("&Edit Code..."));
   m_remove_code = new NonDefaultQPushButton(tr("&Remove Code"));
-  autoInjectOnlineFullScreenCodes_CheckBox = new QCheckBox(tr("&Auto Inject Full Screen Codes"));
+ // autoInjectOnlineFullScreenCodes_CheckBox = new QCheckBox(tr("&Auto Inject Full Screen Codes"));
 
   m_code_list->setEnabled(!m_game_id.empty());
   m_name_label->setEnabled(!m_game_id.empty());
@@ -103,8 +103,8 @@ void GeckoCodeWidget::CreateWidgets()
   m_add_code->setEnabled(!m_game_id.empty());
   m_edit_code->setEnabled(false);
   m_remove_code->setEnabled(false);
-  ((QAbstractButton*)autoInjectOnlineFullScreenCodes_CheckBox)
-     ->setChecked(Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
+  //((QAbstractButton*)autoInjectOnlineFullScreenCodes_CheckBox)
+  //   ->setChecked(Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
 
   auto* layout = new QVBoxLayout;
 
@@ -137,7 +137,7 @@ void GeckoCodeWidget::CreateWidgets()
   btn_layout->addWidget(m_add_code);
   btn_layout->addWidget(m_edit_code);
   btn_layout->addWidget(m_remove_code);
-  btn_layout->addWidget(autoInjectOnlineFullScreenCodes_CheckBox);
+  //btn_layout->addWidget(autoInjectOnlineFullScreenCodes_CheckBox);
 
   layout->addLayout(btn_layout);
 
@@ -157,8 +157,8 @@ void GeckoCodeWidget::ConnectWidgets()
   connect(m_add_code, &QPushButton::clicked, this, &GeckoCodeWidget::AddCode);
   connect(m_remove_code, &QPushButton::clicked, this, &GeckoCodeWidget::RemoveCode);
   connect(m_edit_code, &QPushButton::clicked, this, &GeckoCodeWidget::EditCode);
-  connect(autoInjectOnlineFullScreenCodes_CheckBox, &QCheckBox::clicked, this,
-          &GeckoCodeWidget::UpdateAutoCodeInjection_FullScreen);
+  //connect(autoInjectOnlineFullScreenCodes_CheckBox, &QCheckBox::clicked, this,
+  //        &GeckoCodeWidget::UpdateAutoCodeInjection_FullScreen);
   connect(m_warning, &CheatWarningWidget::OpenCheatEnableSettings, this,
           &GeckoCodeWidget::OpenGeneralSettings);
 #ifdef USE_RETRO_ACHIEVEMENTS
@@ -167,11 +167,11 @@ void GeckoCodeWidget::ConnectWidgets()
 #endif  // USE_RETRO_ACHIEVEMENTS
 }
 
-void GeckoCodeWidget::UpdateAutoCodeInjection_FullScreen()
-{
-  Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED =
-      autoInjectOnlineFullScreenCodes_CheckBox->isChecked();
-}
+//void GeckoCodeWidget::UpdateAutoCodeInjection_FullScreen()
+//{
+//  Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED =
+//      autoInjectOnlineFullScreenCodes_CheckBox->isChecked();
+//}
 
 void GeckoCodeWidget::OnSelectionChanged()
 {

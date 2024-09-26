@@ -50,8 +50,11 @@ enum class HSPDeviceType : int;
 
 namespace Config
 {
-  //custom KAR configs
-extern bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED;
+//full screen code settings
+extern bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED;  // if true, a single full screen code will be enabled, does not support multi-fullscreen codes
+extern bool NO_FULL_SCREEN_CODES_ENABLED; //if true, no full screen codes single or multi will be used
+extern bool ARE_WE_USING_A_SINGLE_FULL_SCREEN_CODE;  // if true, uses a single full screen code, if false uses one of the multi-fullscreen codes
+
 extern uint16_t FULL_SCREEN_INDEX;
 
 //should we auto boot to a netplay menu
@@ -62,10 +65,7 @@ extern bool BOOT_MENU_NETPLAY_HOST_AT_START;
 extern bool PLAY_KARPHIN_REPLAY_AT_START;
 extern std::string REPLAY_FOLDER_PATH;
 extern uint16_t FULL_SCREEN_INDEX_TO_USE_IN_PLAY_BACK;
-extern bool IS_KARPHIN_PLAY_USING_A_FULL_SCREEN_INDEX;  // if false, we're using split screen and no codes
-                                                 // are injected
-
-
+extern bool IS_KARPHIN_PLAY_USING_A_FULL_SCREEN_INDEX;  // if false, we're using split screen and no codes are injected
 
 // Main.Core
 

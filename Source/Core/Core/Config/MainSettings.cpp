@@ -32,8 +32,10 @@
 
 namespace Config
 {
-// custom KAR configs
-bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED = true;
+//full screen code settings
+bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED = true; //if true, a single full screen code will be enabled, does not support multi-fullscreen codes
+bool NO_FULL_SCREEN_CODES_ENABLED = false; //if true, no full screen codes single or multi will be used
+bool ARE_WE_USING_A_SINGLE_FULL_SCREEN_CODE = true;  // if true, uses a single full screen code, if false uses one of the multi-fullscreen codes
 uint16_t FULL_SCREEN_INDEX = 0;
 
 //should we auto boot into the netplay menus

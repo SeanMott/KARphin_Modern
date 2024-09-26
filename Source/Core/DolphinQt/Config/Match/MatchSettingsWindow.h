@@ -13,6 +13,9 @@ class QTabWidget;
 class QDialogButtonBox;
 class SoftwareRendererWidget;
 
+class QCheckBox;
+class QGroupBox;
+
 class MatchSettingsWindow final : public QDialog
 {
 
@@ -22,7 +25,15 @@ public:
 
 private:
   void CreateMainLayout();
-  //void OnBackendChanged(const QString& backend);
+
+  //button for auto-fullscreen codes
+  QCheckBox* autoFullScreen_CheckBox;
+
+  //single person full screen codes
+  QGroupBox* singlePersonFSCodes_Group;
+
+  //multi-person full screen codes
+  QGroupBox* multiPersonFSCodes_Group;
 
   MainWindow* const m_main_window;
 };

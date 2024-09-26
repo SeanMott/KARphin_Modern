@@ -73,9 +73,39 @@ std::vector<GeckoCode>& GetActiveCodes() { return s_active_codes; }
 static std::vector<GeckoCode> s_synced_codes;
 static std::mutex s_active_codes_lock;
 
-const char* fullscreenGekkoCodeNames[4] = {"P1 Fullscreen", "P2 Fullscreen", "P3 Fullscreen",
-                                           "P4 Fullscreen"};
-bool fullscreenGekkoCodeEnabled[4] = {false, false, false, false};
+//defines the single full screen code names
+static const char* FULL_SCREEN_CODE_NAME_SINGLE_P1 = "P1 Fullscreen";
+static const char* FULL_SCREEN_CODE_NAME_SINGLE_P2 = "P1 Fullscreen";
+static const char* FULL_SCREEN_CODE_NAME_SINGLE_P3 = "P1 Fullscreen";
+static const char* FULL_SCREEN_CODE_NAME_SINGLE_P4 = "P1 Fullscreen";
+
+//defines a array with the codes
+static const char* FULL_SCREEN_CODES_SINGLE[4] = {
+    FULL_SCREEN_CODE_NAME_SINGLE_P1, FULL_SCREEN_CODE_NAME_SINGLE_P2,
+    FULL_SCREEN_CODE_NAME_SINGLE_P3, FULL_SCREEN_CODE_NAME_SINGLE_P4};
+
+//defines the single full screen code file names for loading embbed codes in KARphin
+static const char* FULL_SCREEN_CODE_FILE_NAME_SINGLE_P1 = "P1_FullScreenCode";
+static const char* FULL_SCREEN_CODE_FILE_NAME_SINGLE_P2 = "P2_FullScreenCode";
+static const char* FULL_SCREEN_CODE_FILE_NAME_SINGLE_P3 = "P3_FullScreenCode";
+static const char* FULL_SCREEN_CODE_FILE_NAME_SINGLE_P4 = "P4_FullScreenCode";
+
+//defines the multi full screen code names
+static const char* FULL_SCREEN_CODE_NAME_MULTI_P1_P2 = "P1 and P2 screen";
+static const char* FULL_SCREEN_CODE_NAME_MULTI_P3_P4 = "P3 and P4 screen";
+static const char* FULL_SCREEN_CODE_NAME_MULTI_P1_P2_P3 = "P1, P2 and P3 screen";
+static const char* FULL_SCREEN_CODE_NAME_MULTI_P2_P3_P4 = "P2, P3 and P4 screen";
+
+// defines a array with the codes
+static const char* FULL_SCREEN_CODES_MULTI[4] = {
+    FULL_SCREEN_CODE_NAME_MULTI_P1_P2, FULL_SCREEN_CODE_NAME_MULTI_P3_P4,
+    FULL_SCREEN_CODE_NAME_MULTI_P1_P2_P3, FULL_SCREEN_CODE_NAME_MULTI_P2_P3_P4};
+
+// defines the multi full screen code file names for loading embbed codes in KARphin
+static const char* FULL_SCREEN_CODE_FILE_NAME_MULTI_P1_P2 = "P1_P2_FullScreenCode";
+static const char* FULL_SCREEN_CODE_FILE_NAME_MULTI_P3_P4 = "P3_P4_FullScreenCode";
+static const char* FULL_SCREEN_CODE_FILE_NAME_MULTI_P1_P2_P3 = "P1_P2_P3_FullScreenCode";
+static const char* FULL_SCREEN_CODE_FILE_NAME_MULTI_P2_P3_P4 = "P2_P3_P4_FullScreenCode";
 
 //checks if a gecko code exists
 inline bool CheckIfGekkoCodeExists(const std::vector<GeckoCode>& codes, const char* codeName)
@@ -84,6 +114,52 @@ inline bool CheckIfGekkoCodeExists(const std::vector<GeckoCode>& codes, const ch
   {
     if (!strcmp(codes[i].name.c_str(), codeName))
       return true;
+  }
+
+  return false;
+}
+
+// checks if a single full screen code exists based on the index
+static inline bool CheckIfGekkoCodeExists_SingleFullScreen(const std::vector<GeckoCode>& codes,
+                                                           const uint8_t fullScreenIndex)
+{
+  switch (fullScreenIndex)
+  {
+  case 0:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P1);
+    break;
+  case 1:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P2);
+    break;
+  case 2:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P3);
+    break;
+  case 3:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P4);
+    break;
+  }
+
+  return false;
+}
+
+// checks if a multi full screen code exists based on the index
+static inline bool CheckIfGekkoCodeExists_MultiFullScreen(const std::vector<GeckoCode>& codes,
+                                                          const uint8_t fullScreenIndex)
+{
+  switch (fullScreenIndex)
+  {
+  case 0:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P1_P2);
+    break;
+  case 1:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P3_P4);
+    break;
+  case 2:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P1_P2_P3);
+    break;
+  case 3:
+    return CheckIfGekkoCodeExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P2_P3_P4);
+    break;
   }
 
   return false;
@@ -101,97 +177,50 @@ inline bool CheckGeckoCodeActiveState(const std::vector<GeckoCode>& codes, const
   return false;
 }
 
-//gets the desired gecko code by name
-inline GeckoCode* GetDesiredGeckoCodeByName(std::vector<GeckoCode>& codes, const char* codeName)
+// checks if a single full screen code is active based on the index
+static inline bool CheckIfGekkoCodeIsActive_SingleFullScreen(const std::vector<GeckoCode>& codes,
+                                                             const uint8_t fullScreenIndex)
 {
-  for (size_t i = 0; i < codes.size(); ++i)
+  switch (fullScreenIndex)
   {
-    if (!strcmp(codes[i].name.c_str(), codeName))
-      return &codes[i];
+  case 0:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_SINGLE_P1);
+    break;
+  case 1:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_SINGLE_P2);
+    break;
+  case 2:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_SINGLE_P3);
+    break;
+  case 3:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_SINGLE_P4);
+    break;
   }
 
-  return nullptr;
+  return false;
 }
 
-//checks if P1 full screen code exists
-inline bool CheckIfGekkoCodeExists_P1FullScreen(const std::vector<GeckoCode>& codes)
+// checks if a multi full screen code is active based on the index
+static inline bool CheckIfGekkoCodeIsActive_MultiFullScreen(const std::vector<GeckoCode>& codes,
+                                                            const uint8_t fullScreenIndex)
 {
-  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[0]);
-}
+  switch (fullScreenIndex)
+  {
+  case 0:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_MULTI_P1_P2);
+    break;
+  case 1:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_MULTI_P3_P4);
+    break;
+  case 2:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_MULTI_P1_P2_P3);
+    break;
+  case 3:
+    return CheckGeckoCodeActiveState(codes, FULL_SCREEN_CODE_NAME_MULTI_P2_P3_P4);
+    break;
+  }
 
-// checks if P2 full screen code exists
-inline bool CheckIfGekkoCodeExists_P2FullScreen(const std::vector<GeckoCode>& codes)
-{
-  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[1]);
-}
-
-// checks if P3 full screen code exists
-inline bool CheckIfGekkoCodeExists_P3FullScreen(const std::vector<GeckoCode>& codes)
-{
-  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[2]);
-}
-
-// checks if P4 full screen code exists
-inline bool CheckIfGekkoCodeExists_P4FullScreen(const std::vector<GeckoCode>& codes)
-{
-  return CheckIfGekkoCodeExists(codes, fullscreenGekkoCodeNames[3]);
-}
-
-// checks if P1 full screen code is active
-inline bool CheckIfGekkoCodeIsActive_P1FullScreen(const std::vector<GeckoCode>& codes)
-{
-  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[0]);
-}
-
-// checks if P2 full screen code is active
-inline bool CheckIfGekkoCodeIsActive_P2FullScreen(const std::vector<GeckoCode>& codes)
-{
-  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[1]);
-}
-
-// checks if P3 full screen code is active
-inline bool CheckIfGekkoCodeIsActive_P3FullScreen(const std::vector<GeckoCode>& codes)
-{
-  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[2]);
-}
-
-// checks if P4 full screen code is active
-inline bool CheckIfGekkoCodeIsActive_P4FullScreen(const std::vector<GeckoCode>& codes)
-{
-  return CheckGeckoCodeActiveState(codes, fullscreenGekkoCodeNames[3]);
-}
-
-//loads one of KARphin's extra gecko codes
-inline GeckoCode LoadKARphinEmbededGeckkoCode(const std::string filename)
-{
-  Common::IniFile game_ini;
-  game_ini.Load(File::GetExeDirectory() + "/Sys/ExtraCodes/" + filename, true);
-
-  return LoadCodes(game_ini, Common::IniFile())[0];
-}
-
-//loads P1 full screen code
-inline GeckoCode LoadGeckkoCode_P1FullScreen()
-{
-  return LoadKARphinEmbededGeckkoCode("P1FullScreenCode.ini");
-}
-
-//loads P2 full screen code
-inline GeckoCode LoadGeckkoCode_P2FullScreen()
-{
-  return LoadKARphinEmbededGeckkoCode("P2FullScreenCode.ini");
-}
-
-//loads P3 full screen code
-inline GeckoCode LoadGeckkoCode_P3FullScreen()
-{
-  return LoadKARphinEmbededGeckkoCode("P3FullScreenCode.ini");
-}
-
-//loads P4 full screen code
-inline GeckoCode LoadGeckkoCode_P4FullScreen()
-{
-  return LoadKARphinEmbededGeckkoCode("P4FullScreenCode.ini");
+  return false;
 }
 
 //deletes a gecko code if it exists
@@ -207,141 +236,226 @@ inline void DeleteGeckkoCodeIfItExists(std::vector<GeckoCode>& codes, const char
   }
 }
 
-//deletes the P1 full screen code if it exists
-inline void DeleteGeckkoCode_P1FullScreen(std::vector<GeckoCode>& codes)
+// checks if a single full screen code exists, then deletes it, based on the index
+static inline void DeleteGeckkoCodeIfExists_SingleFullScreen(std::vector<GeckoCode>& codes,
+                                                             const uint8_t fullScreenIndex)
 {
-  DeleteGeckkoCodeIfItExists(codes, fullscreenGekkoCodeNames[0]);
-}
-
-// deletes the P2 full screen code if it exists
-inline void DeleteGeckkoCode_P2FullScreen(std::vector<GeckoCode>& codes)
-{
-  DeleteGeckkoCodeIfItExists(codes, fullscreenGekkoCodeNames[1]);
-}
-
-// deletes the P3 full screen code if it exists
-inline void DeleteGeckkoCode_P3FullScreen(std::vector<GeckoCode>& codes)
-{
-  DeleteGeckkoCodeIfItExists(codes, fullscreenGekkoCodeNames[2]);
-}
-
-// deletes the P1 full screen code if it exists
-inline void DeleteGeckkoCode_P4FullScreen(std::vector<GeckoCode>& codes)
-{
-  DeleteGeckkoCodeIfItExists(codes, fullscreenGekkoCodeNames[3]);
-}
-
-// checks if the full screen gecko codes exist, and if not, we load and add them
-void CheckAndLoadFullScreenGeckoCodesIfMissing(std::vector<Gecko::GeckoCode>& codes)
-{
-  //searches if the code exists
-  if (!CheckIfGekkoCodeExists_P1FullScreen(codes))
-    codes.emplace_back(LoadGeckkoCode_P1FullScreen());
-  if (!CheckIfGekkoCodeExists_P2FullScreen(codes))
-    codes.emplace_back(LoadGeckkoCode_P2FullScreen());
-  if (!CheckIfGekkoCodeExists_P3FullScreen(codes))
-    codes.emplace_back(LoadGeckkoCode_P3FullScreen());
-  if (!CheckIfGekkoCodeExists_P4FullScreen(codes))
-    codes.emplace_back(LoadGeckkoCode_P4FullScreen());
-}
-
-//returns if the gecko code is equal to our fullscreen code
-static inline bool IsOurDesiredFullScreenCode(const GeckoCode& code)
-{
-  return (code.name == fullscreenGekkoCodeNames[Config::FULL_SCREEN_INDEX] &&
-          fullscreenGekkoCodeEnabled[Config::FULL_SCREEN_INDEX]);
-}
-
-//returns if it's one of our NOT DESIRED full screen codes
-static inline bool IsFullScreenCodeButNotTheFuckerWeWant(const GeckoCode& code)
-{
-  for (uint8_t i = 0; i < 4; ++i)
+  switch (fullScreenIndex)
   {
-    if (code.name == fullscreenGekkoCodeNames[i] && !fullscreenGekkoCodeEnabled[i])
-      return true;
+  case 0:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P1);
+    break;
+  case 1:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P2);
+    break;
+  case 2:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P3);
+    break;
+  case 3:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_SINGLE_P4);
+    break;
+  }
+}
+
+// checks if a multi full screen code exists, then deletes it, based on the index
+static inline void DeleteGeckkoCodeIfExists_MultiFullScreen(std::vector<GeckoCode>& codes,
+                                                            const uint8_t fullScreenIndex)
+{
+  switch (fullScreenIndex)
+  {
+  case 0:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P1_P2);
+    break;
+  case 1:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P3_P4);
+    break;
+  case 2:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P1_P2_P3);
+    break;
+  case 3:
+    DeleteGeckkoCodeIfItExists(codes, FULL_SCREEN_CODE_NAME_MULTI_P2_P3_P4);
+    break;
+  }
+}
+
+// loads one of KARphin's extra gecko codes
+inline GeckoCode LoadKARphinEmbededGeckkoCode(const std::string filename)
+{
+  Common::IniFile game_ini;
+  game_ini.Load(File::GetExeDirectory() + "/Sys/ExtraCodes/" + filename + ".ini", true);
+
+  return LoadCodes(game_ini, Common::IniFile())[0];
+}
+
+//loads one of the single full screen codes, by index
+static inline void LoadGeckoCode_SingleFullScreen(std::vector<GeckoCode>& codes,
+                                                            const uint8_t fullScreenIndex, bool isEnabled = true)
+{
+  GeckoCode code;
+
+  switch (fullScreenIndex)
+  {
+  case 0:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_SINGLE_P1);
+    break;
+  case 1:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_SINGLE_P2);
+    break;
+  case 2:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_SINGLE_P3);
+    break;
+  case 3:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_SINGLE_P4);
+    break;
+
+    default: //given code wasn't valid
+    return;
   }
 
-  return false;
+  code.enabled = isEnabled;
+  codes.emplace_back(code);
 }
 
-//enables the specific player code and disables all others
+// loads one of the multi full screen codes, by index
+static inline void LoadGeckoCode_MultiFullScreen(std::vector<GeckoCode>& codes,
+                                                               const uint8_t fullScreenIndex,
+                                                               bool isEnabled = true)
+{
+  GeckoCode code;
+
+  switch (fullScreenIndex)
+  {
+  case 0:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_MULTI_P1_P2);
+    break;
+  case 1:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_MULTI_P3_P4);
+    break;
+  case 2:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_MULTI_P1_P2_P3);
+    break;
+  case 3:
+    code = LoadKARphinEmbededGeckkoCode(FULL_SCREEN_CODE_FILE_NAME_MULTI_P2_P3_P4);
+    break;
+
+  default:  // given code wasn't valid
+    return;
+  }
+
+  code.enabled = isEnabled;
+  codes.emplace_back(code);
+}
+
+// gets the desired gecko code by name
+inline GeckoCode* GetDesiredGeckoCodeByName(std::vector<GeckoCode>& codes, const char* codeName)
+{
+  for (size_t i = 0; i < codes.size(); ++i)
+  {
+    if (!strcmp(codes[i].name.c_str(), codeName))
+      return &codes[i];
+  }
+
+  return nullptr;
+}
+
+//enables the specific full screen player code and disables all others
 static inline void SetFullScreenCodes(const std::span<const GeckoCode> gcodes)
 {
-  Core::DisplayMessage("GCPort: " + std::to_string( Config::FULL_SCREEN_INDEX), 9000);
-  Core::DisplayMessage("User: " + Config::NETPLAY_NICKNAME.GetCachedValue().value, 9000);
-  Core::DisplayMessage("Mode: " + Config::NETPLAY_TRAVERSAL_CHOICE.GetCachedValue().value,
-                       9000);
-
-  memset(fullscreenGekkoCodeEnabled, false, sizeof(fullscreenGekkoCodeEnabled));
-
-  fullscreenGekkoCodeEnabled[Config::FULL_SCREEN_INDEX] = true;
-
-  //copies the active codes
-  std::vector<GeckoCode> _gcodes;
+  // copies the active codes into a struct we can use
+  std::vector<GeckoCode> codes;
   for (size_t i = 0; i < gcodes.size(); ++i)
   {
     if (gcodes[i].enabled)
-        _gcodes.emplace_back(gcodes[i]);
+      codes.emplace_back(gcodes[i]);
   }
 
-  //if any full screen codes exist besides the one we want, we strip it out
-  //otherwise we load and enable the one we do want
-  switch (Config::FULL_SCREEN_INDEX)
-  {
-    case 0: //P1
-      DeleteGeckkoCode_P2FullScreen(_gcodes);
-      DeleteGeckkoCode_P3FullScreen(_gcodes);
-      DeleteGeckkoCode_P4FullScreen(_gcodes);
-      if (!CheckIfGekkoCodeExists_P1FullScreen(_gcodes))
-      {
-        GeckoCode FS = LoadGeckkoCode_P1FullScreen();
-        FS.enabled = true;
-        _gcodes.emplace_back(FS);
-      }
-      break;
+  //deletes all currently enabled full screen codes
+  DeleteGeckkoCodeIfExists_SingleFullScreen(codes, 0);
+  DeleteGeckkoCodeIfExists_SingleFullScreen(codes, 1);
+  DeleteGeckkoCodeIfExists_SingleFullScreen(codes, 2);
+  DeleteGeckkoCodeIfExists_SingleFullScreen(codes, 3);
 
-      case 1:  // P2
-      DeleteGeckkoCode_P1FullScreen(_gcodes);
-      DeleteGeckkoCode_P3FullScreen(_gcodes);
-      DeleteGeckkoCode_P4FullScreen(_gcodes);
-      if (!CheckIfGekkoCodeExists_P2FullScreen(_gcodes))
-      {
-        GeckoCode FS = LoadGeckkoCode_P2FullScreen();
-        FS.enabled = true;
-        _gcodes.emplace_back(FS);
-      }
-      break;
+  DeleteGeckkoCodeIfExists_MultiFullScreen(codes, 0);
+  DeleteGeckkoCodeIfExists_MultiFullScreen(codes, 1);
+  DeleteGeckkoCodeIfExists_MultiFullScreen(codes, 2);
+  DeleteGeckkoCodeIfExists_MultiFullScreen(codes, 3);
 
-      case 2:  // P3
-        DeleteGeckkoCode_P1FullScreen(_gcodes);
-        DeleteGeckkoCode_P2FullScreen(_gcodes);
-        DeleteGeckkoCode_P4FullScreen(_gcodes);
-        if (!CheckIfGekkoCodeExists_P3FullScreen(_gcodes))
-        {
-          GeckoCode FS = LoadGeckkoCode_P3FullScreen();
-          FS.enabled = true;
-          _gcodes.emplace_back(FS);
-        }
-        break;
+  //if we are set up to use no full screen codes we are done here
+  if (Config::NO_FULL_SCREEN_CODES_ENABLED)
+    return;
 
-        case 3:  // P4
-        DeleteGeckkoCode_P1FullScreen(_gcodes);
-        DeleteGeckkoCode_P2FullScreen(_gcodes);
-        DeleteGeckkoCode_P3FullScreen(_gcodes);
-        if (!CheckIfGekkoCodeExists_P4FullScreen(_gcodes))
-        {
-          GeckoCode FS = LoadGeckkoCode_P4FullScreen();
-          FS.enabled = true;
-          _gcodes.emplace_back(FS);
-        }
-        break;
-  }
+  //if we're using a single or auto mod is enabled
+  if (Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED || Config::ARE_WE_USING_A_SINGLE_FULL_SCREEN_CODE)
+    LoadGeckoCode_SingleFullScreen(codes, Config::FULL_SCREEN_INDEX);
 
-  //enabled our full screen code
-  GetDesiredGeckoCodeByName(_gcodes, fullscreenGekkoCodeNames[Config::FULL_SCREEN_INDEX])->enabled = true;
+  //if we're using a multi code
+  else
+    LoadGeckoCode_MultiFullScreen(codes, Config::FULL_SCREEN_INDEX);
+
+  //memset(fullscreenGekkoCodeEnabled, false, sizeof(fullscreenGekkoCodeEnabled));
+
+  //fullscreenGekkoCodeEnabled[Config::FULL_SCREEN_INDEX] = true;
+
+  //
+
+  ////if any full screen codes exist besides the one we want, we strip it out
+  ////otherwise we load and enable the one we do want
+  //switch (Config::FULL_SCREEN_INDEX)
+  //{
+  //  case 0: //P1
+  //    DeleteGeckkoCode_P2FullScreen(_gcodes);
+  //    DeleteGeckkoCode_P3FullScreen(_gcodes);
+  //    DeleteGeckkoCode_P4FullScreen(_gcodes);
+  //    if (!CheckIfGekkoCodeExists_P1FullScreen(_gcodes))
+  //    {
+  //      GeckoCode FS = LoadGeckkoCode_P1FullScreen();
+  //      FS.enabled = true;
+  //      _gcodes.emplace_back(FS);
+  //    }
+  //    break;
+
+  //    case 1:  // P2
+  //    DeleteGeckkoCode_P1FullScreen(_gcodes);
+  //    DeleteGeckkoCode_P3FullScreen(_gcodes);
+  //    DeleteGeckkoCode_P4FullScreen(_gcodes);
+  //    if (!CheckIfGekkoCodeExists_P2FullScreen(_gcodes))
+  //    {
+  //      GeckoCode FS = LoadGeckkoCode_P2FullScreen();
+  //      FS.enabled = true;
+  //      _gcodes.emplace_back(FS);
+  //    }
+  //    break;
+
+  //    case 2:  // P3
+  //      DeleteGeckkoCode_P1FullScreen(_gcodes);
+  //      DeleteGeckkoCode_P2FullScreen(_gcodes);
+  //      DeleteGeckkoCode_P4FullScreen(_gcodes);
+  //      if (!CheckIfGekkoCodeExists_P3FullScreen(_gcodes))
+  //      {
+  //        GeckoCode FS = LoadGeckkoCode_P3FullScreen();
+  //        FS.enabled = true;
+  //        _gcodes.emplace_back(FS);
+  //      }
+  //      break;
+
+  //      case 3:  // P4
+  //      DeleteGeckkoCode_P1FullScreen(_gcodes);
+  //      DeleteGeckkoCode_P2FullScreen(_gcodes);
+  //      DeleteGeckkoCode_P3FullScreen(_gcodes);
+  //      if (!CheckIfGekkoCodeExists_P4FullScreen(_gcodes))
+  //      {
+  //        GeckoCode FS = LoadGeckkoCode_P4FullScreen();
+  //        FS.enabled = true;
+  //        _gcodes.emplace_back(FS);
+  //      }
+  //      break;
+  //}
+
+  ////enabled our full screen code
+  //GetDesiredGeckoCodeByName(_gcodes, fullscreenGekkoCodeNames[Config::FULL_SCREEN_INDEX])->enabled = true;
 
   //copies the codes into active
-  std::copy(_gcodes.begin(), _gcodes.end(), std::back_inserter(s_active_codes));
+  std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
 }
 
 void SetActiveCodes(std::span<const GeckoCode> gcodes)
@@ -351,16 +465,19 @@ void SetActiveCodes(std::span<const GeckoCode> gcodes)
   s_active_codes.clear();
   s_active_codes.reserve(gcodes.size());
 
-  //if auto inject full screen is active
-  if (Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED)
-    SetFullScreenCodes(gcodes);
+  //sets the full screen code, if we are using one, making sure it's enabled
+  SetFullScreenCodes(gcodes);
 
-  //otherwise we don't care whatever, just add em
-  else
-  {
-    std::copy_if(gcodes.begin(), gcodes.end(), std::back_inserter(s_active_codes),
-                 [](const GeckoCode& code) { return code.enabled; });
-  }
+  ////if auto inject full screen is active
+  //if (Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED)
+  //  SetFullScreenCodes(gcodes);
+
+  ////otherwise we don't care whatever, just add em
+  //else
+  //{
+  //  std::copy_if(gcodes.begin(), gcodes.end(), std::back_inserter(s_active_codes),
+  //               [](const GeckoCode& code) { return code.enabled; });
+  //}
   
   //if (Config::AreCheatsEnabled())
   //{
@@ -377,12 +494,15 @@ void SetSyncedCodesAsActive()
   s_active_codes.clear();
   s_active_codes.reserve(s_synced_codes.size());
 
-  // if we have enabled auto-full screen, we strip out any other full screen codes but ours
-  if (Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED)
-    SetFullScreenCodes(s_synced_codes);
+  //since we're syncing, we want to strip out any of their full screen codes, and only replace it with our own
+  SetFullScreenCodes(s_synced_codes);
 
-  else
-    s_active_codes = s_synced_codes;
+  //// if we have enabled auto-full screen, we strip out any other full screen codes but ours
+  //if (Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED)
+  //  SetFullScreenCodes(s_synced_codes);
+
+  //else
+  //  s_active_codes = s_synced_codes;
 }
 
 void UpdateSyncedCodes(std::span<const GeckoCode> gcodes)

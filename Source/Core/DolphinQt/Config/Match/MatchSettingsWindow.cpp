@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QTabWidget>
 #include <QVBoxLayout>
+#include <qcheckbox.h>
 
 #include "Common/Config/Config.h"
 #include "Core/Config/MainSettings.h"
@@ -28,48 +29,49 @@ MatchSettingsWindow::MatchSettingsWindow(MainWindow* parent)
 
   setWindowTitle(tr("Match Settings"));
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-  //OnBackendChanged(QString::fromStdString(Config::Get(Config::MAIN_GFX_BACKEND)));
 }
 
 void MatchSettingsWindow::CreateMainLayout()
 {
   auto* const main_layout = new QVBoxLayout();
-  auto* const tab_widget = new QTabWidget();
+
+  //auto select fullscreen code
+  autoFullScreen_CheckBox = new QCheckBox(tr("Auto Full Screen"));
+  autoFullScreen_CheckBox->setToolTip(tr(
+      "This is the default option, this will select the right full screen for you.\nIf you are "
+      "using multiable people on the same machine, and want to play with someone over Netplay.\nYou "
+      "will have to de-select this and use one of the multi-person codes.\nIf unsure leave this "
+      "enabled and or go to the discord for clarity, or questions about the multi-person codes."));
+
+  main_layout->addWidget(autoFullScreen_CheckBox);
+
+  //manual single person screen
+  singlePersonFSCodes_Group = new QGroupBox(tr("Full Screen"));
+  QVBoxLayout* singlePersonFSCodes_Layout = new QVBoxLayout;
+  singlePersonFSCodes_Group->setLayout(singlePersonFSCodes_Layout);
+  singlePersonFSCodes_Group->setDisabled(true);
+  singlePersonFSCodes_Group->setToolTip(
+      tr("Theses codes are for if you want full screen of a specific player on a specific port.\nNormally you can leave the automatic option enabled to sort theses out.\nThey are only manually set for spectating another person's game 90% of the time."));
+
+  main_layout->addWidget(singlePersonFSCodes_Group);
+
+  //manual multi-person screen code
+  multiPersonFSCodes_Group = new QGroupBox(tr("Multi-Person Full Screen"));
+  QVBoxLayout* multiPersonFSCodes_Layout = new QVBoxLayout;
+  multiPersonFSCodes_Group->setLayout(multiPersonFSCodes_Layout);
+  multiPersonFSCodes_Group->setDisabled(true);
+  multiPersonFSCodes_Group->setToolTip(
+      tr("Theses codes are only if you have multiable people using your machine local.\nIe have "
+         "someone on port 1 and port 3. Who still want to play with someone over netplay who is "
+         "using a regular Full Screen code.\nIf unsure ask for help on the discord in the Discord's Support "
+         "channel."));
+
+  main_layout->addWidget(multiPersonFSCodes_Group);
+
+  //close button
   auto* const button_box = new QDialogButtonBox(QDialogButtonBox::Close);
-
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
-  main_layout->addWidget(tab_widget);
   main_layout->addWidget(button_box);
 
-  //auto* const general_widget = new GeneralWidget(this);
-  //auto* const enhancements_widget = new EnhancementsWidget(this);
-  //auto* const hacks_widget = new HacksWidget(this);
-  //auto* const advanced_widget = new AdvancedWidget(this);
-  //
-  //connect(general_widget, &GeneralWidget::BackendChanged, this,
-  //        &MatchSettingsWindow::OnBackendChanged);
-
-  //QWidget* const wrapped_general = GetWrappedWidget(general_widget, this, 50, 100);
-  //QWidget* const wrapped_enhancements = GetWrappedWidget(enhancements_widget, this, 50, 100);
-  //QWidget* const wrapped_hacks = GetWrappedWidget(hacks_widget, this, 50, 100);
-  //QWidget* const wrapped_advanced = GetWrappedWidget(advanced_widget, this, 50, 100);
-
- // tab_widget->addTab(wrapped_general, tr("General"));
- // tab_widget->addTab(wrapped_enhancements, tr("Enhancements"));
- // tab_widget->addTab(wrapped_hacks, tr("Hacks"));
- // tab_widget->addTab(wrapped_advanced, tr("Advanced"));
- //
   setLayout(main_layout);
 }
-
-//void MatchSettingsWindow::OnBackendChanged(const QString& backend_name)
-//{
-//  VideoBackendBase::PopulateBackendInfoFromUI(m_main_window->GetWindowSystemInfo());
-//
-//  setWindowTitle(
-//      tr("%1 Graphics Configuration").arg(tr(g_video_backend->GetDisplayName().c_str())));
-//
-//  emit BackendChanged(backend_name);
-//}

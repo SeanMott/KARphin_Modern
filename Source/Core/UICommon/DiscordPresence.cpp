@@ -112,14 +112,14 @@ std::string ArtworkForGameId()
 
   // if Backside
   if (gameID == KAR::GAME_ID_BACKSIDE)
-    return "https://github.com/SeanMott/KARphin_Modern/releases/download/disDaa/KARphin_Cursor.png";
+    return "https://github.com/SeanMott/KARphin_Modern/releases/download/disDaa/Backside_DiscordImage.png";
 
   // if Ignition
   if (gameID == KAR::GAME_ID_IGNITION)
-    return "https://github.com/SeanMott/KARphin_Modern/releases/download/disDaa/kaaby.jpg";
+    return "https://github.com/SeanMott/KARphin_Modern/releases/download/disDaa/Ignition_DiscordImage.png";
 
   //default
-  return "https://github.com/SeanMott/KARphin_Modern/releases/download/disDaa/KAR_Online.png";
+  return "https://github.com/SeanMott/KARphin_Modern/releases/download/disDaa/HP_DiscordImage.png";
 }
 
 }  // namespace

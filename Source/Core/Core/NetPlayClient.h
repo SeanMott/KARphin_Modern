@@ -180,6 +180,10 @@ public:
   static SyncIdentifier GetSDCardIdentifier();
 
 protected:
+
+  //stores the check for the fullscreen codes
+  bool hideFirstDesyncFromFullScreenCodes = false;
+
   struct AsyncQueueEntry
   {
     sf::Packet packet;

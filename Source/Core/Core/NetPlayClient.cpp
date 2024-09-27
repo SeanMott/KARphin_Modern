@@ -989,6 +989,13 @@ void NetPlayClient::OnDesyncDetected(sf::Packet& packet)
   packet >> pid_to_blame;
   packet >> frame;
 
+  // if the frame is above 60 and is the first one
+  if (frame > 0 && !hideFirstDesyncFromFullScreenCodes)
+  {
+    hideFirstDesyncFromFullScreenCodes = true;
+    return;
+  }
+
   std::string player = "??";
   std::lock_guard lkp(m_crit.players);
   {

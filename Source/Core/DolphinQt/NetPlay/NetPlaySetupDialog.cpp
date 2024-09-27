@@ -330,7 +330,7 @@ void NetPlaySetupDialog::OnBackendTypeChanged(int index)
   //if they try to change it
   if (index != 0) //if it's not Dolphin, panic
   {
-    ModalMessageBox::critical(this, tr("Not Authorized"), tr("The Warp Relay Backend is not authorized for public use! As this backend is developed, Jas will roll out updates. But for now this option is here for the sake of the beta builds."));
+    ModalMessageBox::critical(this, tr("Not Authorized"), tr("The Warp Relay Backend is not authorized for public use! As this backend is developed, Jas will roll out updates. But for now this option is here for the sake of very specific testers.\n\n\n\nDo not bug Jas for access......."));
 
     m_backend_type->setCurrentIndex(0);
   }

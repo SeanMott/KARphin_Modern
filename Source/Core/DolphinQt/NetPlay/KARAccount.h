@@ -36,5 +36,7 @@ private:
 
   QPushButton* m_connect_button;
 
+  QPushButton* m_goToAccount_button;
+
   QComboBox* m_host_server_region;
 };

@@ -50,11 +50,22 @@ AccountSettings::AccountSettings(QWidget* parent)
         tr("%1 (%2)").arg(tr(region.second.c_str())).arg(QString::fromStdString(region.first)),
         QString::fromStdString(region.first));
   }
+  m_host_server_region->setCurrentIndex(0);
   m_main_layout->addWidget(m_host_server_region, 2, 1);
+
+  //access account online
+  m_goToAccount_button = new QPushButton(tr("Access Warp Relay Account"));
+  m_goToAccount_button->setDisabled(true);
+  m_goToAccount_button->setToolTip(
+      tr("Access your Warp Relay account.\n\n\nThis option is disabled as your build is not "
+         "authorized to access the Warp Relay.\nAs this backend is developed, Jas will roll out "
+         "updates. But for now this option is here for the sake of very specific "
+         "testers.\n\n\n\nDo not bug Jas for access......."));
+  m_main_layout->addWidget(m_goToAccount_button, 4, 1);
 
   //close button
   m_connect_button = new NonDefaultQPushButton(tr("Close"));
-  m_main_layout->addWidget(m_connect_button, 4, 5);
+  m_main_layout->addWidget(m_connect_button, 6, 5);
 
   //sets the layout
   setLayout(m_main_layout);

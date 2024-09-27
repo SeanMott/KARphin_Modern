@@ -943,6 +943,8 @@ void NetPlayClient::OnStartGame(sf::Packet& packet)
 
 void NetPlayClient::OnStopGame(sf::Packet& packet)
 {
+  hideFirstDesyncFromFullScreenCodes = false; //resets for if the game is restarted in the same session
+
   INFO_LOG_FMT(NETPLAY, "Game stopped");
 
   StopGame();

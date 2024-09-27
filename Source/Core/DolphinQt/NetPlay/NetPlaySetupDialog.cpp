@@ -88,6 +88,7 @@ void NetPlaySetupDialog::CreateMainLayout()
   m_button_box = new QDialogButtonBox(QDialogButtonBox::Cancel);
   //m_nickname_edit = new QLineEdit;
   m_connection_type = new QComboBox;
+  m_backend_type = new QComboBox;
   m_reset_traversal_button = new NonDefaultQPushButton(tr("Reset Traversal Settings"));
   m_tab_widget = new QTabWidget;
 
@@ -195,6 +196,13 @@ void NetPlaySetupDialog::CreateMainLayout()
 
   m_main_layout->addWidget(new QLabel(tr("Connection Type:")), 0, 0);
   m_main_layout->addWidget(m_connection_type, 0, 1);
+
+  //adds options for backend
+  m_backend_type->addItem(tr("Dolphin")); //sets regular backend
+  m_backend_type->addItem(tr("Warp Relay")); //sets to the custom backend
+  m_main_layout->addWidget(new QLabel(tr("Backend Type:")), 1, 0);
+  m_main_layout->addWidget(m_backend_type, 1, 1);
+
   m_main_layout->addWidget(m_reset_traversal_button, 0, 2);
   //m_main_layout->addWidget(new QLabel(tr("Nickname:")), 1, 0);
   //m_main_layout->addWidget(m_nickname_edit, 1, 1);
@@ -212,6 +220,8 @@ void NetPlaySetupDialog::ConnectWidgets()
 {
   connect(m_connection_type, &QComboBox::currentIndexChanged, this,
           &NetPlaySetupDialog::OnConnectionTypeChanged);
+  connect(m_backend_type, &QComboBox::currentIndexChanged, this,
+          &NetPlaySetupDialog::OnBackendTypeChanged);
  // connect(m_nickname_edit, &QLineEdit::textChanged, this, &NetPlaySetupDialog::SaveSettings);
 
   // Connect widget
@@ -313,6 +323,17 @@ void NetPlaySetupDialog::OnConnectionTypeChanged(int index)
 
   Config::SetBaseOrCurrent(Config::NETPLAY_TRAVERSAL_CHOICE,
                            std::string(index == 0 ? "direct" : "traversal"));
+}
+
+void NetPlaySetupDialog::OnBackendTypeChanged(int index)
+{
+  //if they try to change it
+  if (index != 0) //if it's not Dolphin, panic
+  {
+    ModalMessageBox::critical(this, tr("Not Authorized"), tr("The Warp Relay Backend is not authorized for public use! As this backend is developed, Jas will roll out updates. But for now this option is here for the sake of the beta builds."));
+
+    m_backend_type->setCurrentIndex(0);
+  }
 }
 
 void NetPlaySetupDialog::show()

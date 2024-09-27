@@ -93,6 +93,9 @@ MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent)
   AddSymbolsMenu();
   AddHelpMenu();
 
+  //adds KAR
+  AddKARMenu();
+
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
           [=, this](Core::State state) { OnEmulationStateChanged(state); });
   connect(Host::GetInstance(), &Host::UpdateDisasmDialog, this,
@@ -216,6 +219,33 @@ void MenuBar::OnWriteJitBlockLogDump()
     if (button_pressed == QMessageBox::Ignore)
       ignore = true;
   }
+}
+
+//adds KAR menu specific stuff
+void MenuBar::AddKARMenu()
+{
+  QMenu* KAR_menu = addMenu(tr("&KAR"));
+
+  KAR_ModLoader_Action = KAR_menu->addAction(tr("Mod Loader"), this, [this] { emit ShowResourcePackManager(); });
+
+  KAR_WatchReplays_Action = KAR_menu->addAction(tr("Replays"));
+
+  KAR_menu->addSeparator();
+
+  KAR_StandalonePackageDownloads_Action = KAR_menu->addAction(tr("Download Standalone Packages"));
+  connect(KAR_StandalonePackageDownloads_Action, &QAction::triggered, this,
+          []() { QDesktopServices::openUrl(QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/"))); });
+
+  KAR_SkinPackagesDownloads_Action = KAR_menu->addAction(tr("Download Skin Packs"));
+  //connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
+  //  QDesktopServices::openUrl(
+  //      QUrl(QStringLiteral("https://karworkshop.sean-mott.com/SkinPacks/")));
+  //});
+  KAR_ThemePackagesDownloads_Action = KAR_menu->addAction(tr("Download KARphin Theme Packs"));
+  // connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
+  //   QDesktopServices::openUrl(
+  //       QUrl(QStringLiteral("https://karworkshop.sean-mott.com/ThemePacks/")));
+  // });
 }
 
 void MenuBar::AddFileMenu()
@@ -612,29 +642,29 @@ void MenuBar::AddHelpMenu()
 {
   QMenu* help_menu = addMenu(tr("&Help"));
 
-  QAction* website = help_menu->addAction(tr("&Website"));
+  /*QAction* website = help_menu->addAction(tr("&Website"));
   connect(website, &QAction::triggered, this,
-          []() { QDesktopServices::openUrl(QUrl(QStringLiteral("https://dolphin-emu.org/"))); });
-  QAction* documentation = help_menu->addAction(tr("Online &Documentation"));
+          []() { QDesktopServices::openUrl(QUrl(QStringLiteral("https://dolphin-emu.org/"))); });*/
+ /* QAction* documentation = help_menu->addAction(tr("Online &Documentation"));
   connect(documentation, &QAction::triggered, this, []() {
     QDesktopServices::openUrl(QUrl(QStringLiteral("https://dolphin-emu.org/docs/guides")));
-  });
+  });*/
   QAction* github = help_menu->addAction(tr("&GitHub Repository"));
   connect(github, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/dolphin-emu/dolphin")));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/SeanMott/KARphin_Modern")));
   });
-  QAction* bugtracker = help_menu->addAction(tr("&Bug Tracker"));
+  /*QAction* bugtracker = help_menu->addAction(tr("&Bug Tracker"));
   connect(bugtracker, &QAction::triggered, this, []() {
     QDesktopServices::openUrl(
         QUrl(QStringLiteral("https://bugs.dolphin-emu.org/projects/emulator")));
-  });
+  });*/
 
-  if (AutoUpdateChecker::SystemSupportsAutoUpdates())
+  /*if (AutoUpdateChecker::SystemSupportsAutoUpdates())
   {
     help_menu->addSeparator();
 
     help_menu->addAction(tr("&Check for Updates..."), this, &MenuBar::InstallUpdateManually);
-  }
+  }*/
 
 #ifndef __APPLE__
   help_menu->addSeparator();

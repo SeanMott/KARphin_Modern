@@ -128,6 +128,9 @@ signals:
 private:
   void OnEmulationStateChanged(Core::State state);
 
+  //adds KAR Menu
+  void AddKARMenu();
+
   void AddFileMenu();
 
   void AddEmulationMenu();
@@ -191,6 +194,13 @@ private:
 
   static QPointer<MenuBar> s_menu_bar;
 
+  //KAR
+  QAction* KAR_ModLoader_Action;
+  QAction* KAR_WatchReplays_Action;
+  QAction* KAR_StandalonePackageDownloads_Action;
+  QAction* KAR_SkinPackagesDownloads_Action;
+  QAction* KAR_ThemePackagesDownloads_Action;
+
   // File
   QAction* m_open_action;
   QAction* m_exit_action;
@@ -221,7 +231,7 @@ private:
   QAction* m_reset_action;
   QAction* m_fullscreen_action;
   QAction* m_frame_advance_action;
-  //QAction* m_donate_action;
+
   QAction* m_boot_sysmenu;
   QMenu* m_state_load_menu;
   QMenu* m_state_save_menu;

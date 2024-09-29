@@ -50,6 +50,9 @@ enum class HSPDeviceType : int;
 
 namespace Config
 {
+// the KARphin version
+extern std::string KARPHIN_BUILD_VERSION;
+
 //full screen code settings
 extern bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED;  // if true, a single full screen code will be enabled, does not support multi-fullscreen codes
 extern bool NO_FULL_SCREEN_CODES_ENABLED; //if true, no full screen codes single or multi will be used

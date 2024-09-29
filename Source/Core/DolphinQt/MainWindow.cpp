@@ -333,6 +333,13 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
     m_pending_boot.reset();
   }
 
+  //generates a version file so the update system can auto-update
+  if (File::Exists(File::GetExeDirectory() + "/../KARBuildData.txt"))
+    File::Delete(File::GetExeDirectory() + "/../KARBuildData.txt");
+  File::CreateEmptyFile(File::GetExeDirectory() + "/../KARBuildData.txt");
+  std::fstream f(File::GetExeDirectory() + "/../KARBuildData.txt");
+  f.write(Config::KARPHIN_BUILD_VERSION.c_str(), Config::KARPHIN_BUILD_VERSION.size());
+
   // open the server browser if Host is selected
   if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
     m_tool_bar->PlayPressed();

@@ -236,12 +236,12 @@ void MenuBar::AddKARMenu()
   connect(KAR_StandalonePackageDownloads_Action, &QAction::triggered, this,
           []() { QDesktopServices::openUrl(QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/"))); });
 
-  KAR_SkinPackagesDownloads_Action = KAR_menu->addAction(tr("Download Skin Packs"));
-  connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(
-        QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/")));
-  });
-  KAR_ThemePackagesDownloads_Action = KAR_menu->addAction(tr("Download KARphin Theme Packs"));
+  //KAR_SkinPackagesDownloads_Action = KAR_menu->addAction(tr("Download Skin Packs"));
+  //connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
+  //  QDesktopServices::openUrl(
+  //      QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/")));
+  //});
+  //KAR_ThemePackagesDownloads_Action = KAR_menu->addAction(tr("Download KARphin Theme Packs"));
   // connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
   //   QDesktopServices::openUrl(
   //       QUrl(QStringLiteral("https://karworkshop.sean-mott.com/ThemePacks/")));

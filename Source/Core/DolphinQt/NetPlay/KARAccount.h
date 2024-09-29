@@ -26,6 +26,8 @@ public:
 
 private:
 
+  void OnBackendTypeChanged(int index);
+
   void SaveSettings();
 
 
@@ -36,7 +38,7 @@ private:
 
   QPushButton* m_connect_button;
 
-  QPushButton* m_goToAccount_button;
+  QComboBox* m_backend_type;
 
   QComboBox* m_host_server_region;
 };

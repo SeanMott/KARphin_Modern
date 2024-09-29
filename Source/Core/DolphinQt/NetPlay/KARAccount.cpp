@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QPushButton>
+#include <QComboBox>
 #include <QSignalBlocker>
 #include <QSpinBox>
 #include <QTabWidget>
@@ -34,6 +35,7 @@ AccountSettings::AccountSettings(QWidget* parent)
   m_main_layout = new QGridLayout;
   m_button_box = new QDialogButtonBox(QDialogButtonBox::Cancel);
   m_nickname_edit = new QLineEdit;
+  m_backend_type = new QComboBox;
 
   //the name
   m_nickname_edit->setValidator(
@@ -53,15 +55,13 @@ AccountSettings::AccountSettings(QWidget* parent)
   m_host_server_region->setCurrentIndex(0);
   m_main_layout->addWidget(m_host_server_region, 2, 1);
 
-  //access account online
-  m_goToAccount_button = new QPushButton(tr("Access Warp Relay Account"));
-  m_goToAccount_button->setDisabled(true);
-  m_goToAccount_button->setToolTip(
-      tr("Access your Warp Relay account.\n\n\nThis option is disabled as your build is not "
-         "authorized to access the Warp Relay.\nAs this backend is developed, Jas will roll out "
-         "updates. But for now this option is here for the sake of very specific "
-         "testers.\n\n\n\nDo not bug Jas for access......."));
-  m_main_layout->addWidget(m_goToAccount_button, 4, 1);
+  // adds options for backend
+  m_backend_type->addItem(tr("Dolphin"));     // sets regular backend
+  m_backend_type->addItem(tr("Warp Relay"));  // sets to the custom backend
+  m_main_layout->addWidget(new QLabel(tr("Backend Type:")), 4, 0);
+  m_main_layout->addWidget(m_backend_type, 4, 1);
+  m_backend_type->setToolTip(
+      tr("Set which Network backend you would like to use."));
 
   //close button
   m_connect_button = new NonDefaultQPushButton(tr("Close"));
@@ -82,8 +82,24 @@ AccountSettings::AccountSettings(QWidget* parent)
           static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this,
           &AccountSettings::SaveSettings);
   connect(m_connect_button, &QPushButton::clicked, this, &QDialog::accept);
+  connect(m_backend_type, &QComboBox::currentIndexChanged, this,
+          &AccountSettings::OnBackendTypeChanged);
 }
 
+void AccountSettings::OnBackendTypeChanged(int index)
+{
+  // if they try to change it
+  if (index != 0)  // if it's not Dolphin, panic
+  {
+    ModalMessageBox::critical(
+        this, tr("Not Authorized"),
+        tr("The Warp Relay Backend is not authorized for public use! As this backend is/or IF developed, "
+           "Jas will roll out updates. But for now this option is here for the sake of very "
+           "specific testers."));
+
+    m_backend_type->setCurrentIndex(0);
+  }
+}
 
 void AccountSettings::SaveSettings()
 {

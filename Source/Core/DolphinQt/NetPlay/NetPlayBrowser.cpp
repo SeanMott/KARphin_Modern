@@ -81,6 +81,7 @@ void NetPlayBrowser::CreateWidgets()
         tr("%1 (%2)").arg(tr(region.second.c_str())).arg(QString::fromStdString(region.first)),
         QString::fromStdString(region.first));
   }
+  m_region_combo->setCurrentIndex(0);
 
   m_region_combo->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
 

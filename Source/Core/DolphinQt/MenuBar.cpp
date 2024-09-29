@@ -228,7 +228,7 @@ void MenuBar::AddKARMenu()
 
   KAR_ModLoader_Action = KAR_menu->addAction(tr("Mod Loader"), this, [this] { emit ShowResourcePackManager(); });
 
-  KAR_WatchReplays_Action = KAR_menu->addAction(tr("Replays"));
+  //KAR_WatchReplays_Action = KAR_menu->addAction(tr("Replays"));
 
   KAR_menu->addSeparator();
 
@@ -237,10 +237,10 @@ void MenuBar::AddKARMenu()
           []() { QDesktopServices::openUrl(QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/"))); });
 
   KAR_SkinPackagesDownloads_Action = KAR_menu->addAction(tr("Download Skin Packs"));
-  //connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
-  //  QDesktopServices::openUrl(
-  //      QUrl(QStringLiteral("https://karworkshop.sean-mott.com/SkinPacks/")));
-  //});
+  connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(
+        QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/")));
+  });
   KAR_ThemePackagesDownloads_Action = KAR_menu->addAction(tr("Download KARphin Theme Packs"));
   // connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
   //   QDesktopServices::openUrl(

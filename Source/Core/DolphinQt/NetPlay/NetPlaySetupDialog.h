@@ -45,12 +45,12 @@ private:
   void SaveSettings();
 
   void OnConnectionTypeChanged(int index);
-  void OnBackendTypeChanged(int index);
+  
 
   // Main Widget
   QDialogButtonBox* m_button_box;
   QComboBox* m_connection_type;
-  QComboBox* m_backend_type;
+  
   //QLineEdit* m_nickname_edit;
   QGridLayout* m_main_layout;
   QTabWidget* m_tab_widget;

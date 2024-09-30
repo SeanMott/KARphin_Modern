@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <libevdev.h>
+#include <libevdev/libevdev.h>
 #include <string>
 #include <vector>
 

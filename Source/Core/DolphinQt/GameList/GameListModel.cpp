@@ -336,6 +336,10 @@ std::string GameListModel::GetNetPlayName(const UICommon::GameFile& game) const
   return game.GetNetPlayName(m_title_database);
 }
 
+#include <qprocess.h>
+
+#include "Common/FileUtil.h"
+
 void GameListModel::AddGame(const std::shared_ptr<const UICommon::GameFile>& game)
 {
   beginInsertRows(QModelIndex(), m_games.size(), m_games.size());

@@ -84,6 +84,9 @@ public:
   bool IsTwoDiscGame() const { return m_is_two_disc_game; }
   std::string GetNetPlayName(const Core::TitleDatabase& title_database) const;
 
+  //sets the filepath
+  //inline void SetFilePath(const std::string& p) { m_file_path = p; }
+
   // This function is slow
   std::array<u8, 20> GetSyncHash() const;
   // This function is slow
@@ -124,6 +127,8 @@ public:
   bool CustomCoverChanged();
   void CustomCoverCommit();
 
+  bool IsElfOrDol() const;
+
 private:
   DiscIO::Language GetConfigLanguage() const;
   static const std::string& Lookup(DiscIO::Language language,
@@ -131,7 +136,7 @@ private:
   const std::string&
   LookupUsingConfigLanguage(const std::map<DiscIO::Language, std::string>& strings) const;
   std::string GetExtension() const;
-  bool IsElfOrDol() const;
+  
   bool ReadXMLMetadata(const std::string& path);
   bool ReadPNGBanner(const std::string& path);
   bool TryLoadGameModDescriptorBanner();

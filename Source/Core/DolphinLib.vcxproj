@@ -73,6 +73,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KAR\GameIDs.hpp" />
+    <ClInclude Include="KAR\ModLoader.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="KAR\ModLoader.cpp" />
   </ItemGroup>
   <UsingTask TaskName="GetProductVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>

@@ -131,6 +131,11 @@ private:
   //adds KAR Menu
   void AddKARMenu();
 
+  //when the user patches their ROMs
+  void OnROMPatchForModding();
+  // when the user un-patches their ROMs
+  void OnROM_UNPATCH_ForModding();
+
   void AddFileMenu();
 
   void AddEmulationMenu();
@@ -196,7 +201,9 @@ private:
 
   //KAR
   QAction* KAR_ModLoader_Action;
-  QAction* KAR_WatchReplays_Action;
+  QAction* KAR_PatchROMs_Action;
+  QAction* KAR_UnpatchROMs_Action;
+
   QAction* KAR_StandalonePackageDownloads_Action;
   QAction* KAR_SkinPackagesDownloads_Action;
   QAction* KAR_ThemePackagesDownloads_Action;

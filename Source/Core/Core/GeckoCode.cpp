@@ -14,7 +14,7 @@
 #include "Common/CommonTypes.h"
 #include "Common/Config/Config.h"
 #include "Common/FileUtil.h"
-#include "common/IniFile.h"
+#include "Common/IniFile.h"
 
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/NetplaySettings.h"

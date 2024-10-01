@@ -1138,7 +1138,7 @@ void NetPlayDialog::LoadSettings()
   const bool savedata_load = Config::Get(Config::NETPLAY_SAVEDATA_LOAD);
   const bool savedata_write = Config::Get(Config::NETPLAY_SAVEDATA_WRITE);
   const bool sync_all_wii_saves = Config::Get(Config::NETPLAY_SAVEDATA_SYNC_ALL_WII);
-  const bool sync_codes = false; //Config::Get(Config::NETPLAY_SYNC_CODES); //we temp override
+  const bool sync_codes =Config::Get(Config::NETPLAY_SYNC_CODES); //we temp override
   //const bool record_inputs = true;  // Config::Get(Config::NETPLAY_RECORD_INPUTS);
   const bool strict_settings_sync = false; // Config::Get(Config::NETPLAY_STRICT_SETTINGS_SYNC); //we temp override
   const bool golf_mode_overlay = false; //Config::Get(Config::NETPLAY_GOLF_MODE_OVERLAY); //

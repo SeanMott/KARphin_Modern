@@ -311,8 +311,8 @@ void MenuBar::AddKARMenu()
 
   KAR_ModLoader_Action = KAR_menu->addAction(tr("Mod Loader"), this, [this] { emit ShowResourcePackManager(); });
 
-  KAR_PatchROMs_Action = KAR_menu->addAction(tr("Patch ROMs For Modding"), this,
-                                                &MenuBar::OnROMPatchForModding);
+  //KAR_PatchROMs_Action = KAR_menu->addAction(tr("Patch ROMs For Modding"), this,
+    //                                            &MenuBar::OnROMPatchForModding);
   //KAR_UnpatchROMs_Action =
    //   KAR_menu->addAction(tr("UN-PATCH All ROMs"), this, &MenuBar::OnROM_UNPATCH_ForModding);
 

@@ -72,6 +72,8 @@
     <Text Include="$(BuildInfoTemplate)" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="KAR\ASM\ASMHandler.hpp" />
+    <ClInclude Include="KAR\ASM\FullScreenASM.hpp" />
     <ClInclude Include="KAR\GameIDs.hpp" />
     <ClInclude Include="KAR\ModLoader.hpp" />
   </ItemGroup>

@@ -100,17 +100,21 @@ inline bool CheckGeckoCodeActiveState(const std::vector<GeckoCode>& codes, const
   return false;
 }
 
-//enables the specific full screen player code and disables all others
-static inline void SetFullScreenCodes(const std::span<const GeckoCode> gcodes)
+//copies the codes into a useable struct
+static inline void CopyCodesIntoUseableStruct(const std::span<const GeckoCode> gcodes,
+                                              std::vector<GeckoCode>& codes)
 {
   // copies the active codes into a struct we can use
-  std::vector<GeckoCode> codes;
   for (size_t i = 0; i < gcodes.size(); ++i)
   {
     if (gcodes[i].enabled)
       codes.emplace_back(gcodes[i]);
   }
+}
 
+//enables the specific full screen player code and disables all others
+static inline void SetFullScreenCodes(std::vector<GeckoCode>& codes)
+{
   //deletes all currently enabled full screen codes
   KAR::ASM::DeleteGeckkoCodeIfItExists(codes, KAR::ASM::FS::EXTRA_GECKO_CODE_NAME_FULL_SCREEN_CODE_SINGLE[0]);
   KAR::ASM::DeleteGeckkoCodeIfItExists(codes, KAR::ASM::FS::EXTRA_GECKO_CODE_NAME_FULL_SCREEN_CODE_SINGLE[1]);
@@ -138,9 +142,12 @@ static inline void SetFullScreenCodes(const std::span<const GeckoCode> gcodes)
     codes.emplace_back(KAR::ASM::LoadKARphinEmbededGeckkoCodes(
         KAR::ASM::FS::EXTRA_GECKO_FOLDER_STRUCTURE,
         KAR::ASM::FS::EXTRA_GECKO_FILE_NAME_MULTI_FULL_SCREEN)[Config::FULL_SCREEN_INDEX]);
+}
 
-  //copies the codes into active
-  std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
+//injects core netplay codes
+static inline void InjectCodes_CoreNetplay()
+{
+  
 }
 
 void SetActiveCodes(std::span<const GeckoCode> gcodes)
@@ -150,8 +157,15 @@ void SetActiveCodes(std::span<const GeckoCode> gcodes)
   s_active_codes.clear();
   s_active_codes.reserve(gcodes.size());
 
+  //copies codes into a useable struct
+  std::vector<GeckoCode> codes;
+  CopyCodesIntoUseableStruct(gcodes, codes);
+
   //sets the full screen code, if we are using one, making sure it's enabled
-  SetFullScreenCodes(gcodes);
+  SetFullScreenCodes(codes);
+
+  // copies the codes into active
+  std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
 
   s_active_codes.shrink_to_fit();
 
@@ -163,8 +177,15 @@ void SetSyncedCodesAsActive()
   s_active_codes.clear();
   s_active_codes.reserve(s_synced_codes.size());
 
-  //since we're syncing, we want to strip out any of their full screen codes, and only replace it with our own
-  SetFullScreenCodes(s_synced_codes);
+  // copies codes into a useable struct
+  std::vector<GeckoCode> codes;
+  CopyCodesIntoUseableStruct(s_synced_codes, codes);
+
+  // since we're syncing, we want to strip out any of their full screen codes, and only replace it with our own
+  SetFullScreenCodes(codes);
+
+  // copies the codes into active
+  std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
 }
 
 void UpdateSyncedCodes(std::span<const GeckoCode> gcodes)

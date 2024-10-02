@@ -76,6 +76,7 @@
     <ClInclude Include="KAR\ASM\FullScreenASM.hpp" />
     <ClInclude Include="KAR\GameIDs.hpp" />
     <ClInclude Include="KAR\ModLoader.hpp" />
+    <ClInclude Include="KAR\Players.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KAR\ModLoader.cpp" />

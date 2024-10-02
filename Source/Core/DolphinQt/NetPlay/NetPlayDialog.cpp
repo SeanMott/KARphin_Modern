@@ -914,9 +914,45 @@ void NetPlayDialog::OnMsgPowerButton()
   QueueOnObject(this, [] { UICommon::TriggerSTMPowerEvent(); });
 }
 
+#include <KAR/Players.hpp>
+
+#include <random>
+
 void NetPlayDialog::OnPlayerConnect(const std::string& player)
 {
-  DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
+  // Create a random device
+  std::random_device rd;
+
+  // Seed the random number generator
+  std::mt19937 gen(rd());
+
+  //load custom player names
+  if (player == KAR::CustomPlayer::TACO_CUSTOM_PLAYER_NAME)
+  {
+    // Define the distribution range (for integers)
+    std::uniform_int_distribution<> distrib(
+        0, TACO_CUSTOM_PLAYER_MESSAGES_COUNT);
+
+    DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
+    int n = distrib(gen);
+    DisplayMessage(tr(KAR::CustomPlayer::TACO_CUSTOM_PLAYER_ENTRANCE_MESSAGEs[n]).arg(QString::fromStdString(player)), (n == 0 ? "darkred" : "cyan"));
+  }
+  else if (player == KAR::CustomPlayer::SUPPORT_PVP_CUSTOM_PLAYER_NAME ||
+           player == KAR::CustomPlayer::SUPPORT_PVPS_CUSTOM_PLAYER_NAME)
+  {
+    DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
+    DisplayMessage(tr(KAR::CustomPlayer::SUPPORT_CUSTOM_PLAYER_ENTRANCE_MESSAGEs[0]), "darkcyan");
+  }
+  else if (player == KAR::CustomPlayer::PLANTT_CUSTOM_PLAYER_NAME_1 ||
+           player == KAR::CustomPlayer::PLANTT_CUSTOM_PLAYER_NAME_2)
+  {
+    DisplayMessage(tr("%1 has FDFSFSDFDSDFVFDGFDHFHDGG--------*&^*%&*$^$^$&#%").arg(QString::fromStdString(player)), "darkcyan");
+    DisplayMessage(tr("tHE ELO Reaper has come forth!"), "darkpurple");
+  }
+
+  //regular
+  else
+    DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
 }
 
 void NetPlayDialog::OnPlayerDisconnect(const std::string& player)

@@ -73,12 +73,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KAR\ASM\ASMHandler.hpp" />
+    <ClInclude Include="KAR\ASM\ASMInclude.hpp" />
     <ClInclude Include="KAR\ASM\FullScreenASM.hpp" />
     <ClInclude Include="KAR\GameIDs.hpp" />
     <ClInclude Include="KAR\ModLoader.hpp" />
     <ClInclude Include="KAR\Players.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="KAR\ASM\FullScreenASM.cpp" />
     <ClCompile Include="KAR\ModLoader.cpp" />
   </ItemGroup>
   <UsingTask TaskName="GetProductVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">

@@ -943,6 +943,8 @@ void NetPlayDialog::OnPlayerConnect(const std::string& player)
     DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
     if (n < SUPPORT_CUSTOM_PLAYER_MESSAGES_COUNT)
       DisplayMessage(tr(KAR::CustomPlayer::SUPPORT_CUSTOM_PLAYER_ENTRANCE_MESSAGEs[0]), "darkcyan");
+
+    DisplayMessage(tr("System Announcement: This Player has a ELO Bounty on them!\nPlease destroy them in Ranked for all that ELO Goodness. May the odds be in your favor."), "yellow");
   }
   else if (player == KAR::CustomPlayer::PLANTT_CUSTOM_PLAYER_NAME_1 ||
            player == KAR::CustomPlayer::PLANTT_CUSTOM_PLAYER_NAME_2)

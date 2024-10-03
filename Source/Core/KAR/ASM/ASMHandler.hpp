@@ -22,6 +22,12 @@ inline void DeleteGeckkoCodeIfItExists(std::vector<Gecko::GeckoCode>& codes, con
   }
 }
 
+//validate file is there
+inline bool ValidateFilePath(const std::string dir, const std::string filename)
+{
+  return File::Exists(File::GetExeDirectory() + "/Sys/ExtraCodes/" + dir + "/" + filename + ".ini");
+}
+
 	//loads a gecko code from KARphin's embedded codes
 inline Gecko::GeckoCode LoadKARphinEmbededGeckkoCode(const std::string dir, const std::string filename)
 {

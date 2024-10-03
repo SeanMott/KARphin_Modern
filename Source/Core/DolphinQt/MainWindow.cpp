@@ -220,6 +220,8 @@ static std::vector<std::string> StringListToStdVector(QStringList list)
   return result;
 }
 
+#include <KAR/ASM/ASMInclude.hpp>
+
 MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
                        const std::string& movie_path)
     : QMainWindow(nullptr)
@@ -331,6 +333,13 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   {
     StartGame(std::move(m_pending_boot));
     m_pending_boot.reset();
+  }
+
+  //validate that the gecko codes are there
+  if (!KAR::ASM::FS::ValidateCodes())
+  {
+    ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
+                              tr("As more Gecko Codes are embeded in KARphin, you might have to Reset your Client Deps. This will NOT delete your controller settings. As thoses are stored in Account.\n\nThis can be done by opening KAR Launcher, going to Netplay, and clicking \"Reset Client Data\""));
   }
 
   //generates a version file so the update system can auto-update

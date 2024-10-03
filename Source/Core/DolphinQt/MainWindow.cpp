@@ -335,8 +335,12 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
     m_pending_boot.reset();
   }
 
+  //ModalMessageBox::critical(
+  //    this, tr("NO Vannilla KAR!"),
+  //    tr("Please provide a North American Kirby Air Ride ROM in the \"ROMs\" folder. This folder can be found next to the KAR Launcher.\n\nWe are not allowed to distribute ROMs/ISOs, so you will need your own before you can play. Sorry for the inconviance, thank you."));
+
   //validate that the gecko codes are there
-  if (!KAR::ASM::FS::ValidateCodes())
+  if (!KAR::ASM::FS::ValidateCodes() || !KAR::ASM::Core::ValidateCodes())
   {
     ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
                               tr("As more Gecko Codes are embeded in KARphin, you might have to Reset your Client Deps. This will NOT delete your controller settings. As thoses are stored in Account.\n\nThis can be done by opening KAR Launcher, going to Netplay, and clicking \"Reset Client Data\""));

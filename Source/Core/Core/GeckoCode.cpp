@@ -73,8 +73,7 @@ std::vector<GeckoCode>& GetActiveCodes() { return s_active_codes; }
 static std::vector<GeckoCode> s_synced_codes;
 static std::mutex s_active_codes_lock;
 
-#include <KAR/ASM/ASMHandler.hpp>
-#include <KAR/ASM/FullScreenASM.hpp>
+#include <KAR/ASM/ASMInclude.hpp>
 
 //checks if a gecko code exists
 inline bool CheckIfGekkoCodeExists(const std::vector<GeckoCode>& codes, const char* codeName)
@@ -145,9 +144,12 @@ static inline void SetFullScreenCodes(std::vector<GeckoCode>& codes)
 }
 
 //injects core netplay codes
-static inline void InjectCodes_CoreNetplay()
+static inline void InjectCodes_CoreNetplay(std::vector<GeckoCode>& codes)
 {
-  
+  std::vector<GeckoCode> c = KAR::ASM::LoadKARphinEmbededGeckkoCodes(
+      KAR::ASM::Core::EXTRA_GECKO_FOLDER_STRUCTURE, KAR::ASM::Core::EXTRA_GECKO_FILE_NAME_CORE);
+  for (size_t i = 0; i < c.size(); ++i)
+    codes.emplace_back(c[i]);
 }
 
 void SetActiveCodes(std::span<const GeckoCode> gcodes)
@@ -163,6 +165,9 @@ void SetActiveCodes(std::span<const GeckoCode> gcodes)
 
   //sets the full screen code, if we are using one, making sure it's enabled
   SetFullScreenCodes(codes);
+
+  //injects the core netplay codes
+  InjectCodes_CoreNetplay(codes);
 
   // copies the codes into active
   std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
@@ -183,6 +188,9 @@ void SetSyncedCodesAsActive()
 
   // since we're syncing, we want to strip out any of their full screen codes, and only replace it with our own
   SetFullScreenCodes(codes);
+
+  // injects the core netplay codes
+  InjectCodes_CoreNetplay(codes);
 
   // copies the codes into active
   std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));

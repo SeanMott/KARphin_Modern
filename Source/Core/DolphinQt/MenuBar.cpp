@@ -228,91 +228,107 @@ void MenuBar::OnWriteJitBlockLogDump()
 // when the user patches their ROMs
 void MenuBar::OnROMPatchForModding()
 {
-  std::string KARphin = std::filesystem::current_path().string(), ROMs = KARphin + "/../ROMs";
+  auto& settings = Settings::Instance().GetQSettings();
+  QStringList paths = DolphinFileDialog::getOpenFileNames(
+      this, tr("Select your North American KAR ISO"),
+      settings.value(QStringLiteral("mainwindow/lastdir"), QString{}).toString(),
+      QStringLiteral("%1 (*.elf *.dol *.gcm *.iso *.tgc *.wbfs *.ciso *.gcz *.wia *.rvz "
+                     "hif_000000.nfs *.wad *.dff *.m3u *.json);;%2 (*)")
+          .arg(tr("All GC/Wii files"))
+          .arg(tr("All Files")));
 
-  //stores all the patch names
-  //std::string patchList = "";
-  //std::ifstream r(ROMs + "/Patches.txt");
-  //if (r.is_open())
-  //{
-  //}
-
-  // gets all the current games
-  for (const auto& entry :
-       std::filesystem::directory_iterator(ROMs))
+  if (!paths.isEmpty())
   {
-    if (std::filesystem::is_regular_file(entry))
-    {
-      UICommon::GameFile game(entry.path().string());
-      game.GetApploaderDate();
+    settings.setValue(QStringLiteral("mainwindow/lastdir"),
+                      QFileInfo(paths.front()).absoluteDir().absolutePath());
 
-      std::string outputFolder = KARphin + "/../ROMs/" +
-                                 game.GetGameID();  // std::to_string(i);
-
-      // creates the directory for storing raw assets
-      if (std::filesystem::exists(outputFolder))
-        std::filesystem::remove_all(outputFolder);
-      std::filesystem::create_directory(outputFolder);
-
-      // run the extraction data
-      QProcess process;
-      process.start(QString::fromStdString(KARphin + "/") + tr("KARphinTool"),
-                    {tr("extract"), tr("-i"), QString::fromStdString(entry.path().string()), tr("-o"),
-                     QString::fromStdString(outputFolder)});
-      process.waitForFinished();
-
-      // creates the directory for storing the ISOs
-       outputFolder = KARphin + "/../UnpatchedROMs";
-       std::filesystem::create_directory(outputFolder);
-
-      // move the ISO
-       std::filesystem::copy(entry.path(), outputFolder + "/" + game.GetGameID() + ".iso",
-                             std::filesystem::copy_options::overwrite_existing);
-       std::filesystem::remove(entry.path());
-      //}
-    }
+    // invoke xdelta
+    std::string delta = std::filesystem::absolute(File::GetExeDirectory() + "/../Tools/Windows/xdelta.exe").string();
+    QProcess process;
+    process.start(
+        QString::fromStdString(delta),
+        {tr("-d"), tr("-s"), paths[0],
+         QString::fromStdString(std::filesystem::absolute(File::GetExeDirectory() +
+                                                          "/../Mods/Patches/KAR_NA_HP_101.xdelta")
+                                    .string()),
+         QString::fromStdString(
+             std::filesystem::absolute(File::GetExeDirectory() + "/../ROMs/HP_101.iso").string())});
+    process.waitForFinished();
   }
 }
 
 // when the user un-patches their ROMs
-void MenuBar::OnROM_UNPATCH_ForModding()
-{
-  std::string KARphin = File::GetExeDirectory(), ROMs = KARphin + "/../ROMs",
-              UnpatchedROMs = KARphin + "/../UnpatchedROMs";
-
-  // gets all the current games
-  for (const auto& entry : std::filesystem::directory_iterator(ROMs))
-  {
-    if (std::filesystem::is_directory(entry))  // if it's a folder containing our
-    {
-      // the folder with the game ID we want
-      std::string gameID = entry.path().stem().string();
-
-      // searches the un-patched ROMs folder and copy it over here
-      for (const auto& unpatchedROM : std::filesystem::directory_iterator(UnpatchedROMs))
-      {
-        if (gameID != unpatchedROM.path().stem())
-          continue;
-
-        // move the ISO
-        std::filesystem::copy(unpatchedROM.path(),
-                              ROMs + "/" + unpatchedROM.path().stem().string() + ".iso",
-                              std::filesystem::copy_options::overwrite_existing);
-        std::filesystem::remove(entry.path());
-      }
-    }
-  }
-}
+//void MenuBar::OnROM_UNPATCH_ForModding()
+//{
+//  auto& settings = Settings::Instance().GetQSettings();
+//  QStringList paths = DolphinFileDialog::getOpenFileNames(
+//      this, tr("Select your North American KAR ISO"),
+//      settings.value(QStringLiteral("mainwindow/lastdir"), QString{}).toString(),
+//      QStringLiteral("%1 (*.elf *.dol *.gcm *.iso *.tgc *.wbfs *.ciso *.gcz *.wia *.rvz "
+//                     "hif_000000.nfs *.wad *.dff *.m3u *.json);;%2 (*)")
+//          .arg(tr("All GC/Wii files"))
+//          .arg(tr("All Files")));
+//
+//  if (!paths.isEmpty())
+//  {
+//    settings.setValue(QStringLiteral("mainwindow/lastdir"),
+//                      QFileInfo(paths.front()).absoluteDir().absolutePath());
+//
+//    //invoke xdelta
+//    std::string delta = File::GetExeDirectory() + "../Tools/Windows/xdelta.exe";
+//    QProcess process;
+//    process.setProgram(QString::fromStdString(delta));
+//    process.setArguments(
+//        {tr("-d"), tr("-s"), paths[0],
+//         QString::fromStdString(File::GetExeDirectory() + "../Mods/Patches/KAR_NA_HP_101.xdelta"),
+//         QString::fromStdString(File::GetExeDirectory() + "../ROMs/HP_101.iso")});
+//    process.start();
+//    process.waitForFinished();
+//  }
+//
+//  //QStringList files = PromptFileNames();
+//  //if (!files.isEmpty())
+//  //  StartGame(StringListToStdVector(files));
+//
+// // std::string KARphin = File::GetExeDirectory(), ROMs = KARphin + "/../ROMs",
+// //             UnpatchedROMs = KARphin + "/../UnpatchedROMs";
+// //
+// // // gets all the current games
+// // for (const auto& entry : std::filesystem::directory_iterator(ROMs))
+// // {
+// //   if (std::filesystem::is_directory(entry))  // if it's a folder containing our
+// //   {
+// //     // the folder with the game ID we want
+// //     std::string gameID = entry.path().stem().string();
+// //
+// //     // searches the un-patched ROMs folder and copy it over here
+// //     for (const auto& unpatchedROM : std::filesystem::directory_iterator(UnpatchedROMs))
+// //     {
+// //       if (gameID != unpatchedROM.path().stem())
+// //         continue;
+// //
+// //       // move the ISO
+// //       std::filesystem::copy(unpatchedROM.path(),
+// //                             ROMs + "/" + unpatchedROM.path().stem().string() + ".iso",
+// //                             std::filesystem::copy_options::overwrite_existing);
+// //       std::filesystem::remove(entry.path());
+// //     }
+// //   }
+// // }
+//}
 
 //adds KAR menu specific stuff
 void MenuBar::AddKARMenu()
 {
   QMenu* KAR_menu = addMenu(tr("&KAR"));
 
+  KAR_PatchROMs_Action = KAR_menu->addAction(tr("Patch Vanilla KAR [NA] to Hack Pack"), this, &MenuBar::OnROMPatchForModding);
+
+  KAR_menu->addSeparator();
+
   KAR_ModLoader_Action = KAR_menu->addAction(tr("Mod Loader"), this, [this] { emit ShowResourcePackManager(); });
 
-  //KAR_PatchROMs_Action = KAR_menu->addAction(tr("Patch ROMs For Modding"), this,
-    //                                            &MenuBar::OnROMPatchForModding);
+  
   //KAR_UnpatchROMs_Action =
    //   KAR_menu->addAction(tr("UN-PATCH All ROMs"), this, &MenuBar::OnROM_UNPATCH_ForModding);
 

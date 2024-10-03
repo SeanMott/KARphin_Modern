@@ -926,28 +926,34 @@ void NetPlayDialog::OnPlayerConnect(const std::string& player)
   // Seed the random number generator
   std::mt19937 gen(rd());
 
+  // Define the distribution range (for integers)
+  std::uniform_int_distribution<> distrib(0, 10);
+  int n = distrib(gen);
+
   //load custom player names
   if (player == KAR::CustomPlayer::TACO_CUSTOM_PLAYER_NAME)
   {
-    // Define the distribution range (for integers)
-    std::uniform_int_distribution<> distrib(
-        0, TACO_CUSTOM_PLAYER_MESSAGES_COUNT);
-
     DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
-    int n = distrib(gen);
-    DisplayMessage(tr(KAR::CustomPlayer::TACO_CUSTOM_PLAYER_ENTRANCE_MESSAGEs[n]).arg(QString::fromStdString(player)), (n == 0 ? "darkred" : "cyan"));
+    if (n < TACO_CUSTOM_PLAYER_MESSAGES_COUNT)
+      DisplayMessage(tr(KAR::CustomPlayer::TACO_CUSTOM_PLAYER_ENTRANCE_MESSAGEs[n]).arg(QString::fromStdString(player)), (n == 0 ? "darkred" : "cyan"));
   }
   else if (player == KAR::CustomPlayer::SUPPORT_PVP_CUSTOM_PLAYER_NAME ||
            player == KAR::CustomPlayer::SUPPORT_PVPS_CUSTOM_PLAYER_NAME)
   {
     DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
-    DisplayMessage(tr(KAR::CustomPlayer::SUPPORT_CUSTOM_PLAYER_ENTRANCE_MESSAGEs[0]), "darkcyan");
+    if (n < SUPPORT_CUSTOM_PLAYER_MESSAGES_COUNT)
+      DisplayMessage(tr(KAR::CustomPlayer::SUPPORT_CUSTOM_PLAYER_ENTRANCE_MESSAGEs[0]), "darkcyan");
   }
   else if (player == KAR::CustomPlayer::PLANTT_CUSTOM_PLAYER_NAME_1 ||
            player == KAR::CustomPlayer::PLANTT_CUSTOM_PLAYER_NAME_2)
   {
-    DisplayMessage(tr("%1 has FDFSFSDFDSDFVFDGFDHFHDGG--------*&^*%&*$^$^$&#%").arg(QString::fromStdString(player)), "darkcyan");
-    DisplayMessage(tr("tHE ELO Reaper has come forth!"), "darkpurple");
+    if (n < PLANTT_CUSTOM_PLAYER_MESSAGES_COUNT)
+    {
+      DisplayMessage(tr("p-plafdsfdFDFSFSDFDSDFVFDGFDHFHDGG--------*&^*%&*$^$^$&#%"), "darkcyan");
+      DisplayMessage(tr("tHE ELO ReapEr hh #####  hhas come forth!"), "darkred");
+    }
+    else
+      DisplayMessage(tr("%1 has joined").arg(QString::fromStdString(player)), "darkcyan");
   }
 
   //regular

@@ -272,6 +272,11 @@ void PowerPCManager::Init(CPUCore cpu_core)
   m_ppc_state.dCache.Init(memory);
 }
 
+void vmcall_noop(PowerPCState& ppc_state, u32 param)
+{
+  WARN_LOG_FMT(POWERPC, "Executed unhandled vmcall, PC={:#x} VMFP={}", ppc_state.pc, param);
+}
+
 void PowerPCManager::Reset()
 {
   m_ppc_state.pagetable_base = 0;
@@ -281,6 +286,11 @@ void PowerPCManager::Reset()
   ResetRegisters();
   m_ppc_state.iCache.Reset(m_system.GetJitInterface());
   m_ppc_state.dCache.Reset();
+
+  for (vm_call& fn : m_ppc_state.vmcall_table)
+  {
+    fn = vmcall_noop;
+  }
 }
 
 void PowerPCManager::ScheduleInvalidateCacheThreadSafe(u32 address)

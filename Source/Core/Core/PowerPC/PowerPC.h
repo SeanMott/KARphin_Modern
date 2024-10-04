@@ -184,6 +184,8 @@ struct PowerPCState
   bool m_enable_dcache = false;
   Cache dCache;
 
+  std::array<vm_call, 1024> vmcall_table;
+
   // Reservation monitor for lwarx and its friend stwcxd.
   bool reserve;
   u32 reserve_address;
@@ -231,6 +233,8 @@ struct PowerPCState
   void UpdateFPRFSingle(float fvalue);
 };
 
+typedef void (*vm_call)(PowerPCState&, u32);
+
 #ifdef _M_X86_64
 #ifdef __GNUC__
 #pragma GCC diagnostic push
@@ -261,6 +265,10 @@ public:
   void Shutdown();
   void DoState(PointerWrap& p);
   void ScheduleInvalidateCacheThreadSafe(u32 address);
+
+  void RegisterVmcallWithIndex(int index, vm_call pfn);
+  int RegisterVmcall(vm_call pfn);
+  void VmcallDefaultFn(u32 param);
 
   CoreMode GetMode() const;
   // [NOT THREADSAFE] CPU Thread or CPU::PauseAndLock or Core::State::Uninitialized

@@ -166,6 +166,13 @@ void Interpreter::rfi(Interpreter& interpreter, UGeckoInstruction inst)
   interpreter.m_end_block = true;
 }
 
+// Added this to Dolphin, this is a major security breach
+void Interpreter::vmcall(Interpreter& interpreter, UGeckoInstruction inst)
+{
+  interpreter.m_ppc_state.vmcall_table[inst.VMFI](interpreter.m_ppc_state, inst.VMFP);
+  interpreter.m_end_block = true;
+}
+
 // sc isn't really used for anything important in GameCube games (just for a write barrier) so we
 // really don't have to emulate it.
 // We do it anyway, though :P

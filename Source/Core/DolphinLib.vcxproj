@@ -75,6 +75,7 @@
     <ClInclude Include="KAR\ASM\ASMHandler.hpp" />
     <ClInclude Include="KAR\ASM\ASMInclude.hpp" />
     <ClInclude Include="KAR\ASM\FullScreenASM.hpp" />
+    <ClInclude Include="KAR\ASM\MatchSettingsASM.hpp" />
     <ClInclude Include="KAR\ASM\NetCoreASM.hpp" />
     <ClInclude Include="KAR\GameIDs.hpp" />
     <ClInclude Include="KAR\ModLoader.hpp" />

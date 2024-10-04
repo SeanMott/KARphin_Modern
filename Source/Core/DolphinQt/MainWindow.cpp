@@ -342,7 +342,7 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   //    tr("Please provide a North American Kirby Air Ride ROM in the \"ROMs\" folder. This folder can be found next to the KAR Launcher.\n\nWe are not allowed to distribute ROMs/ISOs, so you will need your own before you can play. Sorry for the inconviance, thank you."));
 
   //validate that the gecko codes are there
-  if (!KAR::ASM::FS::ValidateCodes() || !KAR::ASM::Core::ValidateCodes())
+  if (!KAR::ASM::ValidateGeckoCodes())
   {
     ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
                               tr("KARphin needs to reset your Client Dependencies. This WILL NOT delete your controller settings, those are stored in the Accounts folder.\n\nKARphin will reset your dependencies after this prompt closes. After KARphin shutsdown, give it a moment or two to finish unpacking everything."));

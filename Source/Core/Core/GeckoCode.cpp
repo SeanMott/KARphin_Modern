@@ -74,6 +74,7 @@ static std::vector<GeckoCode> s_synced_codes;
 static std::mutex s_active_codes_lock;
 
 #include <KAR/ASM/ASMInclude.hpp>
+#include <KAR/GameIDs.hpp>
 
 //checks if a gecko code exists
 inline bool CheckIfGekkoCodeExists(const std::vector<GeckoCode>& codes, const char* codeName)
@@ -152,7 +153,15 @@ static inline void InjectCodes_CoreNetplay(std::vector<GeckoCode>& codes)
     codes.emplace_back(c[i]);
 }
 
-//in
+//inject match settings
+static inline void InjectCodes_MatchSettings(std::vector<GeckoCode>& codes)
+{
+ codes.emplace_back(KAR::ASM::LoadKARphinEmbededGeckkoCode(
+      KAR::ASM::MatchSettings::EXTRA_GECKO_FOLDER_STRUCTURE, KAR::ASM::MatchSettings::EXTRA_GECKO_FILE_NAME_HIGH_ITEM_FREQ));
+  codes.emplace_back(KAR::ASM::LoadKARphinEmbededGeckkoCode(
+      KAR::ASM::MatchSettings::EXTRA_GECKO_FOLDER_STRUCTURE,
+      KAR::ASM::MatchSettings::EXTRA_GECKO_FILE_NAME_HIGH_ITEM_FREQ_STADIUM));
+}
 
 void SetActiveCodes(std::span<const GeckoCode> gcodes)
 {
@@ -165,11 +174,16 @@ void SetActiveCodes(std::span<const GeckoCode> gcodes)
   std::vector<GeckoCode> codes;
   CopyCodesIntoUseableStruct(gcodes, codes);
 
+  //if using Pal or JP version, don't inject codes
+
   //sets the full screen code, if we are using one, making sure it's enabled
   SetFullScreenCodes(codes);
 
   //injects the core netplay codes
   InjectCodes_CoreNetplay(codes);
+
+  //match settings
+  InjectCodes_MatchSettings(codes);
 
   // copies the codes into active
   std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
@@ -192,10 +206,12 @@ void SetSyncedCodesAsActive()
   SetFullScreenCodes(codes);
 
   // injects the core netplay codes
-  InjectCodes_CoreNetplay(codes);
+  //InjectCodes_CoreNetplay(codes);
 
   // copies the codes into active
-  std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
+  s_active_codes.reserve(codes.size());
+    std::copy_if(codes.begin(), codes.end(), std::back_inserter(s_active_codes),
+                [](const GeckoCode& code) { return code.enabled; });
 }
 
 void UpdateSyncedCodes(std::span<const GeckoCode> gcodes)
@@ -210,18 +226,19 @@ void UpdateSyncedCodes(std::span<const GeckoCode> gcodes)
 
 std::vector<GeckoCode> SetAndReturnActiveCodes(std::span<const GeckoCode> gcodes)
 {
-  std::lock_guard lk(s_active_codes_lock);
+  //std::lock_guard lk(s_active_codes_lock);
 
-  s_active_codes.clear();
-  if (Config::AreCheatsEnabled())
-  {
-    s_active_codes.reserve(gcodes.size());
-    std::copy_if(gcodes.begin(), gcodes.end(), std::back_inserter(s_active_codes),
-                 [](const GeckoCode& code) { return code.enabled; });
-  }
-  s_active_codes.shrink_to_fit();
+  //s_active_codes.clear();
+  //if (Config::AreCheatsEnabled())
+  //{
+  //  s_active_codes.reserve(gcodes.size());
+  //  std::copy_if(gcodes.begin(), gcodes.end(), std::back_inserter(s_active_codes),
+  //               [](const GeckoCode& code) { return code.enabled; });
+  //}
+  //s_active_codes.shrink_to_fit();
 
-  s_code_handler_installed = Installation::Uninstalled;
+  //s_code_handler_installed = Installation::Uninstalled;
+  SetActiveCodes(gcodes);
 
   return s_active_codes;
 }

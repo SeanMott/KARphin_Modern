@@ -31,6 +31,12 @@ MatchSettingsWindow::MatchSettingsWindow(MainWindow* parent)
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
+// on match settin property change
+void MatchSettingsWindow::OnMatchSettingChange()
+{
+
+}
+
 // when the user clicks the automatic fullscreen code
 void MatchSettingsWindow::OnAutomaticFSClicked()
 {
@@ -170,7 +176,38 @@ void MatchSettingsWindow::OnMultiPersonFSClicked()
 
 void MatchSettingsWindow::CreateMainLayout()
 {
-  auto* const main_layout = new QVBoxLayout();
+  m_tab_widget = new QTabWidget;
+  main_layout = new QVBoxLayout();
+
+  //---EVENTS SETTINGS---------//
+
+  auto* events_widget = new QWidget;
+  auto* events_layout = new QGridLayout;
+
+  events_widget->setLayout(events_layout);
+  m_tab_widget->addTab(events_widget, tr("Events"));
+
+  //---STADIUM SETTINGS---------//
+
+  auto* stadium_widget = new QWidget;
+  auto* stadium_layout = new QGridLayout;
+
+  stadium_widget->setLayout(stadium_layout);
+  m_tab_widget->addTab(stadium_widget, tr("Stadium"));
+
+  //---MATCH SETTINGS---------//
+
+  auto* match_widget = new QWidget;
+  auto* match_layout = new QGridLayout;
+
+  
+  match_widget->setLayout(match_layout);
+  m_tab_widget->addTab(match_widget, tr("Match"));
+
+  //----FULL SCREEEN CODES------//
+
+  auto* fullscreen_widget = new QWidget;
+  auto* fullscreen_layout = new QGridLayout;
 
   //auto select fullscreen code
   autoFullScreen_CheckBox = new QCheckBox(tr("Auto Full Screen"));
@@ -182,7 +219,7 @@ void MatchSettingsWindow::CreateMainLayout()
       "enabled and or go to the discord for clarity, or questions about the multi-person codes."));
   ((QAbstractButton*)autoFullScreen_CheckBox)
       ->setChecked(Config::AUTO_INJECT_FULL_SCREEN_CODE_ENABLED);
-  main_layout->addWidget(autoFullScreen_CheckBox);
+  fullscreen_layout->addWidget(autoFullScreen_CheckBox);
 
   connect(autoFullScreen_CheckBox, &QCheckBox::clicked, this, &MatchSettingsWindow::OnAutomaticFSClicked);
 
@@ -211,7 +248,7 @@ void MatchSettingsWindow::CreateMainLayout()
   singlePersonFSCodes_Layout->addWidget(singleFSP4_CheckBox);
   
 
-  main_layout->addWidget(singlePersonFSCodes_Group);
+  fullscreen_layout->addWidget(singlePersonFSCodes_Group);
 
   //manual multi-person screen code
   multiPersonFSCodes_Group = new QGroupBox(tr("Multi-Person Full Screen"));
@@ -237,7 +274,11 @@ void MatchSettingsWindow::CreateMainLayout()
   connect(singleFSP2_P3_P4_CheckBox, &QCheckBox::clicked, this, &MatchSettingsWindow::OnMultiPersonFSClicked);
   multiPersonFSCodes_Layout->addWidget(singleFSP2_P3_P4_CheckBox);
 
-  main_layout->addWidget(multiPersonFSCodes_Group);
+  fullscreen_layout->addWidget(multiPersonFSCodes_Group);
+  fullscreen_widget->setLayout(fullscreen_layout);
+  m_tab_widget->addTab(fullscreen_widget, tr("Full Screen"));
+
+  main_layout->addWidget(m_tab_widget);
 
   //close button
   auto* const button_box = new QDialogButtonBox(QDialogButtonBox::Close);

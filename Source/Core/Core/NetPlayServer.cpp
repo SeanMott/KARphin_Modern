@@ -2054,6 +2054,13 @@ bool NetPlayServer::SyncCodes()
   for (const std::string& filename : ConfigLoaders::GetGameIniFilenames(game_id, revision))
     localIni.Load(File::GetUserPath(D_GAMESETTINGS_IDX) + filename, true);
 
+    //loads the codes generate by KARphin
+  globalIni.Load(File::GetSysDirectory() + "/ExtraCodes/KARphinGeneratedCodes", true);
+
+   // Create a Gecko Code Vector with just the active codes
+  std::vector<Gecko::GeckoCode> s_active_codes =
+      Gecko::SetAndReturnActiveCodes(Gecko::LoadCodes(globalIni, localIni));
+
   // Initialize Number of Synced Players
   m_codes_synced_players = 0;
 
@@ -2066,9 +2073,7 @@ bool NetPlayServer::SyncCodes()
   }
   // Sync Gecko Codes
   {
-    // Create a Gecko Code Vector with just the active codes
-    std::vector<Gecko::GeckoCode> s_active_codes =
-        Gecko::SetAndReturnActiveCodes(Gecko::LoadCodes(globalIni, localIni));
+   
 
     // injects all the extra full screen codes if they don't exist
 
@@ -2120,12 +2125,14 @@ bool NetPlayServer::SyncCodes()
   // Sync AR Codes
   {
     // Create an AR Code Vector with just the active codes
-    std::vector<ActionReplay::ARCode> s_active_codes =
-        ActionReplay::ApplyAndReturnCodes(ActionReplay::LoadCodes(globalIni, localIni));
+    //std::vector<ActionReplay::ARCode> s_active_codes =
+    //    ActionReplay::ApplyAndReturnCodes(ActionReplay::LoadCodes(globalIni, localIni));
+
+    std::vector<ActionReplay::ARCode> s_active_codes_AR;
 
     // Determine Codelist Size
     u16 codelines = 0;
-    for (const ActionReplay::ARCode& active_code : s_active_codes)
+    for (const ActionReplay::ARCode& active_code : s_active_codes_AR)
     {
       INFO_LOG_FMT(NETPLAY, "Indexing {}", active_code.name);
       for (const ActionReplay::AREntry& op : active_code.ops)
@@ -2153,7 +2160,7 @@ bool NetPlayServer::SyncCodes()
       pac << MessageID::SyncCodes;
       pac << SyncCodeID::ARData;
       // Iterate through the active code vector and send each codeline
-      for (const ActionReplay::ARCode& active_code : s_active_codes)
+      for (const ActionReplay::ARCode& active_code : s_active_codes_AR)
       {
         INFO_LOG_FMT(NETPLAY, "Sending {}", active_code.name);
         for (const ActionReplay::AREntry& op : active_code.ops)

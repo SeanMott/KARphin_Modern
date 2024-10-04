@@ -26,6 +26,29 @@ public:
 private:
   void CreateMainLayout();
 
+  //-----STADIUM SETTINGS----//
+
+  //checkbox for stadium weight shift
+
+  //-----STAR SETTINGS----//
+
+  //check box for no swerve star
+
+  //-----MATCH SETTINGS----//
+
+  //on match settin property change
+  void OnMatchSettingChange();
+
+  //check box for high item frequency
+
+  //timer (in minutes) for the starting time in City Trial
+
+  //check box for machine select at city trial
+
+  //check box for dedeee and metaknight are playable
+
+  //------FULL SCREEN----///
+
   //when the user clicks the automatic fullscreen code
   void OnAutomaticFSClicked();
 
@@ -56,5 +79,7 @@ private:
   QCheckBox* singleFSP2_P3_P4_CheckBox;
   bool multiCodeLastFrame[4];
 
+  QTabWidget* m_tab_widget;
+  QVBoxLayout* main_layout;
   MainWindow* const m_main_window;
 };

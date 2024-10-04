@@ -345,7 +345,7 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   if (!KAR::ASM::FS::ValidateCodes() || !KAR::ASM::Core::ValidateCodes())
   {
     ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
-                              tr("As more Gecko Codes are embeded in KARphin, you might have to Reset your Client Deps. This will NOT delete your controller settings. As thoses are stored in Account.\n\nKARphin will reset your dependicies after you close this prompt."));
+                              tr("KARphin needs to reset your Client Dependencies. This WILL NOT delete your controller settings, those are stored in the Accounts folder.\n\nKARphin will reset your dependencies after this prompt closes. After KARphin shutsdown, give it a moment or two to finish unpacking everything."));
 
     //resets the deps if needed
     std::string bootUpdater = std::filesystem::absolute(File::GetExeDirectory() + "/../KAR_BootUpdate.exe").string();

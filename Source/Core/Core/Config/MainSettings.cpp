@@ -33,7 +33,7 @@
 namespace Config
 {
   //the KARphin version
-std::string KARPHIN_BUILD_VERSION = "V2.8";
+std::string KARPHIN_BUILD_VERSION = "V2.9";
 
 //full screen code settings
 bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED = true; //if true, a single full screen code will be enabled, does not support multi-fullscreen codes

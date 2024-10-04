@@ -228,6 +228,40 @@ void MenuBar::OnWriteJitBlockLogDump()
 // when the user patches their ROMs
 void MenuBar::OnROMPatchForModding()
 {
+  // validates we have the tools and patches
+  std::string delta = std::filesystem::absolute(File::GetExeDirectory() + "/../Tools/Windows/xdelta.exe").string();
+  if (!File::Exists(delta))
+  {
+
+  ModalMessageBox::critical(
+      this, tr("No xDelta"),
+      tr("Your version is lacking xDelta, your Tools will be reset after closing this."));
+
+  // resets the deps if needed
+  std::string bootUpdater =
+      std::filesystem::absolute(File::GetExeDirectory() + "/../KAR_BootUpdate.exe").string();
+  QProcess process;
+  process.setWorkingDirectory(
+      QString::fromStdString(std::filesystem::absolute(File::GetExeDirectory() + "/../").string()));
+  process.start(QString::fromStdString(bootUpdater), {tr("-tools")});
+  process.waitForFinished();
+
+  ModalMessageBox::information(
+      this, tr("Tools Downloaded"),
+      tr("xDelta has been gotten now. You may patch :3"));
+  return;
+  }
+
+  std::string HPPatch = std::filesystem::absolute(File::GetExeDirectory() + "/../Mods/Patches/KAR_NA_HP_101.xdelta").string();
+  if (!File::Exists(HPPatch))
+  {
+    ModalMessageBox::critical(
+        this, tr("No HP Patch"),
+        tr("Your version is lacking Hack Pack Patch, please reinstall with the latest download at the KAR Workshop website."));
+
+   return;
+  }
+
   auto& settings = Settings::Instance().GetQSettings();
   QStringList paths = DolphinFileDialog::getOpenFileNames(
       this, tr("Select your North American KAR ISO"),
@@ -243,7 +277,6 @@ void MenuBar::OnROMPatchForModding()
                       QFileInfo(paths.front()).absoluteDir().absolutePath());
 
     // invoke xdelta
-    std::string delta = std::filesystem::absolute(File::GetExeDirectory() + "/../Tools/Windows/xdelta.exe").string();
     QProcess process;
     process.start(
         QString::fromStdString(delta),

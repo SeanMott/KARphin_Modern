@@ -222,6 +222,8 @@ static std::vector<std::string> StringListToStdVector(QStringList list)
 
 #include <KAR/ASM/ASMInclude.hpp>
 
+#include <qprocess.h>
+
 MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
                        const std::string& movie_path)
     : QMainWindow(nullptr)
@@ -343,7 +345,15 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   if (!KAR::ASM::FS::ValidateCodes() || !KAR::ASM::Core::ValidateCodes())
   {
     ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
-                              tr("As more Gecko Codes are embeded in KARphin, you might have to Reset your Client Deps. This will NOT delete your controller settings. As thoses are stored in Account.\n\nThis can be done by opening KAR Launcher, going to Netplay, and clicking \"Reset Client Data\""));
+                              tr("As more Gecko Codes are embeded in KARphin, you might have to Reset your Client Deps. This will NOT delete your controller settings. As thoses are stored in Account.\n\nKARphin will reset your dependicies after you close this prompt."));
+
+    //resets the deps if needed
+    std::string bootUpdater = std::filesystem::absolute(File::GetExeDirectory() + "/../KAR_BootUpdate.exe").string();
+    QProcess process;
+    process.startDetached(QString::fromStdString(bootUpdater),
+                          {tr("-resetClient")}, QString::fromStdString(
+            std::filesystem::absolute(File::GetExeDirectory() + "/../").string()));
+    return;
   }
 
   //generates a version file so the update system can auto-update

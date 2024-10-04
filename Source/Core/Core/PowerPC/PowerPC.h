@@ -21,6 +21,8 @@
 #include "Core/PowerPC/PPCCache.h"
 #include "Core/PowerPC/PPCSymbolDB.h"
 
+struct PowerPCState;
+
 class CPUCoreBase;
 class PointerWrap;
 namespace CoreTiming
@@ -104,6 +106,8 @@ struct PairedSingle
 };
 // Paired single must be standard layout in order for offsetof to work, which is used by the JITs
 static_assert(std::is_standard_layout<PairedSingle>(), "PairedSingle must be standard layout");
+
+typedef void (*vm_call)(PowerPCState&, u32);
 
 // This contains the entire state of the emulated PowerPC "Gekko" CPU.
 //
@@ -232,8 +236,6 @@ struct PowerPCState
   void UpdateFPRFDouble(double dvalue);
   void UpdateFPRFSingle(float fvalue);
 };
-
-typedef void (*vm_call)(PowerPCState&, u32);
 
 #ifdef _M_X86_64
 #ifdef __GNUC__

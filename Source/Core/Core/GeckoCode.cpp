@@ -177,13 +177,13 @@ void SetActiveCodes(std::span<const GeckoCode> gcodes)
   //if using Pal or JP version, don't inject codes
 
   //sets the full screen code, if we are using one, making sure it's enabled
-  SetFullScreenCodes(codes);
-
-  //injects the core netplay codes
-  InjectCodes_CoreNetplay(codes);
-
-  //match settings
-  InjectCodes_MatchSettings(codes);
+  //SetFullScreenCodes(codes);
+  //
+  ////injects the core netplay codes
+  //InjectCodes_CoreNetplay(codes);
+  //
+  ////match settings
+  //InjectCodes_MatchSettings(codes);
 
   // copies the codes into active
   std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
@@ -199,18 +199,18 @@ void SetSyncedCodesAsActive()
   s_active_codes.reserve(s_synced_codes.size());
 
   // copies codes into a useable struct
-  std::vector<GeckoCode> codes;
-  CopyCodesIntoUseableStruct(s_synced_codes, codes);
-
-  // since we're syncing, we want to strip out any of their full screen codes, and only replace it with our own
-  SetFullScreenCodes(codes);
+  //std::vector<GeckoCode> codes;
+ // CopyCodesIntoUseableStruct(s_synced_codes, codes);
+ //
+ // // since we're syncing, we want to strip out any of their full screen codes, and only replace it with our own
+ // SetFullScreenCodes(codes);
 
   // injects the core netplay codes
   //InjectCodes_CoreNetplay(codes);
 
   // copies the codes into active
-  s_active_codes.reserve(codes.size());
-    std::copy_if(codes.begin(), codes.end(), std::back_inserter(s_active_codes),
+  s_active_codes.reserve(s_synced_codes.size());
+  std::copy_if(s_synced_codes.begin(), s_synced_codes.end(), std::back_inserter(s_active_codes),
                 [](const GeckoCode& code) { return code.enabled; });
 }
 

@@ -342,43 +342,43 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   //    tr("Please provide a North American Kirby Air Ride ROM in the \"ROMs\" folder. This folder can be found next to the KAR Launcher.\n\nWe are not allowed to distribute ROMs/ISOs, so you will need your own before you can play. Sorry for the inconviance, thank you."));
 
   //validate that the gecko codes are there
-  if (!KAR::ASM::ValidateGeckoCodes())
-  {
-    ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
-                              tr("KARphin needs to reset your Client Dependencies. This WILL NOT delete your controller settings, those are stored in the Accounts folder.\n\nKARphin will reset your dependencies after this prompt closes. After KARphin shutsdown, give it a moment or two to finish unpacking everything."));
-
-    //resets the deps if needed
-    std::string bootUpdater = std::filesystem::absolute(File::GetExeDirectory() + "/../KAR_BootUpdate.exe").string();
-    QProcess process;
-    process.startDetached(QString::fromStdString(bootUpdater),
-                          {tr("-resetClient")}, QString::fromStdString(
-            std::filesystem::absolute(File::GetExeDirectory() + "/../").string()));
-    return;
-  }
+  //if (!KAR::ASM::ValidateGeckoCodes())
+  //{
+  //  ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
+  //                            tr("KARphin needs to reset your Client Dependencies. This WILL NOT delete your controller settings, those are stored in the Accounts folder.\n\nKARphin will reset your dependencies after this prompt closes. After KARphin shutsdown, give it a moment or two to finish unpacking everything."));
+  //
+  //  //resets the deps if needed
+  //  std::string bootUpdater = std::filesystem::absolute(File::GetExeDirectory() + "/../KAR_BootUpdate.exe").string();
+  //  QProcess process;
+  //  process.startDetached(QString::fromStdString(bootUpdater),
+  //                        {tr("-resetClient")}, QString::fromStdString(
+  //          std::filesystem::absolute(File::GetExeDirectory() + "/../").string()));
+  //  return;
+  //}
 
   //generates a version file so the update system can auto-update
-  if (File::Exists(File::GetExeDirectory() + "/../KARBuildData.txt"))
-    File::Delete(File::GetExeDirectory() + "/../KARBuildData.txt");
-  File::CreateEmptyFile(File::GetExeDirectory() + "/../KARBuildData.txt");
-  std::fstream f(File::GetExeDirectory() + "/../KARBuildData.txt");
-  f.write(Config::KARPHIN_BUILD_VERSION.c_str(), Config::KARPHIN_BUILD_VERSION.size());
-
-  // open the server browser if Host is selected
-  if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
-    m_tool_bar->PlayPressed();
-
-  // open the host menu if the Host is selected
-  if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
-    m_tool_bar->StartNetPlayPressed();
-
-  // starts to replay of a Warp Record
-  if (Config::PLAY_KARPHIN_REPLAY_AT_START)
-    PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
-  else // if we're not in a warp record, clear the warp record features just to be safe
-  {  
-    Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES, false);
-    Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO, false);
-  }
+  //if (File::Exists(File::GetExeDirectory() + "/../KARBuildData.txt"))
+  //  File::Delete(File::GetExeDirectory() + "/../KARBuildData.txt");
+  //File::CreateEmptyFile(File::GetExeDirectory() + "/../KARBuildData.txt");
+  //std::fstream f(File::GetExeDirectory() + "/../KARBuildData.txt");
+  //f.write(Config::KARPHIN_BUILD_VERSION.c_str(), Config::KARPHIN_BUILD_VERSION.size());
+  //
+  //// open the server browser if Host is selected
+  //if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
+  //  m_tool_bar->PlayPressed();
+  //
+  //// open the host menu if the Host is selected
+  //if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
+  //  m_tool_bar->StartNetPlayPressed();
+  //
+  //// starts to replay of a Warp Record
+  //if (Config::PLAY_KARPHIN_REPLAY_AT_START)
+  //  PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
+  //else // if we're not in a warp record, clear the warp record features just to be safe
+  //{  
+  //  Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES, false);
+  //  Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO, false);
+  //}
 }
 
 MainWindow::~MainWindow()

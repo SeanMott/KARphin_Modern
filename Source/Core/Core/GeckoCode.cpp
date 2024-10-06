@@ -183,7 +183,7 @@ void SetActiveCodes(std::span<const GeckoCode> gcodes)
   InjectCodes_CoreNetplay(codes);
 
   //match settings
-  InjectCodes_MatchSettings(codes);
+  //InjectCodes_MatchSettings(codes);
 
   // copies the codes into active
   std::copy(codes.begin(), codes.end(), std::back_inserter(s_active_codes));
@@ -206,7 +206,7 @@ void SetSyncedCodesAsActive()
   SetFullScreenCodes(codes);
 
   // injects the core netplay codes
-  //InjectCodes_CoreNetplay(codes);
+  InjectCodes_CoreNetplay(codes);
 
   // copies the codes into active
   s_active_codes.reserve(codes.size());

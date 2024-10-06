@@ -411,20 +411,20 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
    // else
    // {
       //if it was a regular NA ROM
-      if (KAR::GameIDs::IsNA_Vanilla(gameID))
-      {
-        ModalMessageBox::information(this, tr("How To Patch"),
-                                     tr("In order to get one of our community versions. You "
-                                        "must patch them, as we can't provide one. To patch your NA ROM, under the KAR tab, press \"Patch NA KAR To Hack Pack\" after closing this prompt."));
-      }
-
-      //if it was EU or JP
-      else if (KAR::GameIDs::IsJP_Vanilla(gameID) || KAR::GameIDs::IsPAL_Vanilla(gameID))
-      {
-        ModalMessageBox::information(
-            this, tr("EU and JP limited support"),
-            tr("KARphin doesn't support patching EU and JP ROMs into the Hack Pack at the moment. But you can still use them, just KARphin lacks offical support for them at the moment. If you wish to help develop the modding scene for theses specific versions. Please come to the discord and help us learn more about them."));
-      }
+     // if (KAR::GameIDs::IsNA_Vanilla(gameID))
+     // {
+     //   ModalMessageBox::information(this, tr("How To Patch"),
+     //                                tr("In order to get one of our community versions. You "
+     //                                   "must patch them, as we can't provide one. To patch your NA ROM, under the KAR tab, press \"Patch NA KAR To Hack Pack\" after closing this prompt."));
+     // }
+     //
+     // //if it was EU or JP
+     // else if (KAR::GameIDs::IsJP_Vanilla(gameID) || KAR::GameIDs::IsPAL_Vanilla(gameID))
+     // {
+     //   ModalMessageBox::information(
+     //       this, tr("EU and JP limited support"),
+     //       tr("KARphin doesn't support patching EU and JP ROMs into the Hack Pack at the moment. But you can still use them, just KARphin lacks offical support for them at the moment. If you wish to help develop the modding scene for theses specific versions. Please come to the discord and help us learn more about them."));
+     // }
    // }
 
   }

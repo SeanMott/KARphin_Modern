@@ -111,7 +111,7 @@ std::string ArtworkForGameId()
   //if Hack Pack
 
   // if Backside
-  if (gameID == KAR::GAME_ID_BACKSIDE)
+  if (gameID == KAR::GameIDs::GAME_ID_BACKSIDE)
     return "https://github.com/SeanMott/KARphin_Modern/releases/download/disDaa/KARphin_Cursor.png";
 
   // if Ignition

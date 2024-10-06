@@ -220,6 +220,8 @@ static std::vector<std::string> StringListToStdVector(QStringList list)
   return result;
 }
 
+#include <KAR/GameIDs.hpp>
+
 MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
                        const std::string& movie_path)
     : QMainWindow(nullptr)
@@ -356,10 +358,74 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
       m_tool_bar->StartNetPlayPressed();
 
     // checks what games are accesable || if they don't have one of our modded ROMs or the vanilla NA KAR, throw a error
-    bool validROMFound = false;
-    for (auto game : m_game_list->GetGameListModel().GetGames())
-    {
-    }
+    //bool validROMFound = false;
+    //bool isModded = false;
+    //bool wasJPOrEU = false;
+    //std::string gameID = "";
+    //for (auto game : m_game_list->GetGameListModel().GetGames())
+    //{
+    //  //if it's one of our modded ROMs
+    //  if (KAR::GameIDs::IsModded(game->GetGameID()))
+    //  {
+    //    validROMFound = true;
+    //    isModded = true;
+    //    gameID = game->GetGameID();
+    //    break;
+    //  }
+    //
+    //  //if it's a NA ROM
+    //  else if (KAR::GameIDs::IsNA_Vanilla(game->GetGameID()))
+    //  {
+    //    validROMFound = true;
+    //    gameID = game->GetGameID();
+    //    //break;
+    //  }
+    //
+    //  //if it's JP or EU
+    //  else if (KAR::GameIDs::IsJP_Vanilla(game->GetGameID()) ||
+    //           KAR::GameIDs::IsPAL_Vanilla(game->GetGameID()))
+    //  {
+    //    validROMFound = true;
+    //    wasJPOrEU = true;
+    //    gameID = game->GetGameID();
+    //    //break;
+    //  }
+    //}
+
+    //if we didn't find a valid ROM
+    //if (!validROMFound)
+    //{
+    //  ModalMessageBox::critical(this, tr("Error"),
+    //                            tr("KARphin did not find a valid ROM in your \"ROMs\" folder. Please place either a \"North American Kirby Air Ride (%1)\" ROM in the \"ROMs\" folder."
+    //                              " Or one of our community modded variants. (%2, %3, %4, ect).\n\nIf you wish to use a PAL (%5) or JP (%6) version of KAR, KARphin will allow you but the features are not built for Netplay, with thoses versions yet.\n\n"
+    //                              "We can not provide you with one of our community modded variants directly. You must patch a exisitng NA ROM. Once you provide one in the \"ROMs\" folder and boot KARphin, you will be instructed on how to Patch.")
+    //                                .arg(QString::fromStdString(KAR::GameIDs::GAME_ID_NA))
+    //                                .arg(QString::fromStdString(KAR::GameIDs::GAME_ID_HACK_PACK))
+    //                                .arg(QString::fromStdString(KAR::GameIDs::GAME_ID_BACKSIDE))
+    //                                .arg(QString::fromStdString(KAR::GameIDs::GAME_ID_IGNITION))
+    //                                .arg(QString::fromStdString(KAR::GameIDs::GAME_ID_PAL))
+    //                                .arg(QString::fromStdString(KAR::GameIDs::GAME_ID_JP)));
+    //}
+
+    //if we found a valid ROM
+   // else
+   // {
+      //if it was a regular NA ROM
+      if (KAR::GameIDs::IsNA_Vanilla(gameID))
+      {
+        ModalMessageBox::information(this, tr("How To Patch"),
+                                     tr("In order to get one of our community versions. You "
+                                        "must patch them, as we can't provide one. To patch your NA ROM, under the KAR tab, press \"Patch NA KAR To Hack Pack\" after closing this prompt."));
+      }
+
+      //if it was EU or JP
+      else if (KAR::GameIDs::IsJP_Vanilla(gameID) || KAR::GameIDs::IsPAL_Vanilla(gameID))
+      {
+        ModalMessageBox::information(
+            this, tr("EU and JP limited support"),
+            tr("KARphin doesn't support patching EU and JP ROMs into the Hack Pack at the moment. But you can still use them, just KARphin lacks offical support for them at the moment. If you wish to help develop the modding scene for theses specific versions. Please come to the discord and help us learn more about them."));
+      }
+   // }
 
   }
 

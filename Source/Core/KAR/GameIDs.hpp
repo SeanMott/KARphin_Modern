@@ -12,10 +12,8 @@ namespace KAR
 
 	static const std::string GAME_ID_IGNITION = "SLAV01";  // defines the Ignition game ID
 
-	/*
-  GKYE01 - NA
-	GKYJ01 - JP
-	GKYP01 - PAL
-	*/
+	static const std::string GAME_ID_NA = "GKYE01";  // defines the North America game ID
+  static const std::string GAME_ID_JP = "GKYJ01";  // defines the Japanease game ID
+  static const std::string GAME_ID_PAL = "GKYP01";  // defines the Europe game ID
 
   }

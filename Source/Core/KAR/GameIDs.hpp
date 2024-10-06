@@ -11,4 +11,11 @@ namespace KAR
 	static const std::string GAME_ID_BACKSIDE = "KBSE01";  // defines the Backside game ID
 
 	static const std::string GAME_ID_IGNITION = "SLAV01";  // defines the Ignition game ID
+
+	/*
+  GKYE01 - NA
+	GKYJ01 - JP
+	GKYP01 - PAL
+	*/
+
   }

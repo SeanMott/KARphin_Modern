@@ -333,29 +333,39 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
     m_pending_boot.reset();
   }
 
-  //generates a version file so the update system can auto-update
-  if (File::Exists(File::GetExeDirectory() + "/../KARBuildData.txt"))
-    File::Delete(File::GetExeDirectory() + "/../KARBuildData.txt");
-  File::CreateEmptyFile(File::GetExeDirectory() + "/../KARBuildData.txt");
-  std::fstream f(File::GetExeDirectory() + "/../KARBuildData.txt");
-  f.write(Config::KARPHIN_BUILD_VERSION.c_str(), Config::KARPHIN_BUILD_VERSION.size());
-
-  // open the server browser if Host is selected
-  if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
-    m_tool_bar->PlayPressed();
-
-  // open the host menu if the Host is selected
-  if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
-    m_tool_bar->StartNetPlayPressed();
-
-  // starts to replay of a Warp Record
-  if (Config::PLAY_KARPHIN_REPLAY_AT_START)
-    PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
-  else // if we're not in a warp record, clear the warp record features just to be safe
-  {  
+  //if we're not doing a playback
+  if (!Config::PLAY_KARPHIN_REPLAY_AT_START)
+  {
+    // if we're not in a warp record, clear the warp record features just to be safe
     Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES, false);
     Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO, false);
+
+    // generates a version file so the update system can auto-update
+    if (File::Exists(File::GetExeDirectory() + "/../KARBuildData.txt"))
+      File::Delete(File::GetExeDirectory() + "/../KARBuildData.txt");
+    File::CreateEmptyFile(File::GetExeDirectory() + "/../KARBuildData.txt");
+    std::fstream f(File::GetExeDirectory() + "/../KARBuildData.txt");
+    f.write(Config::KARPHIN_BUILD_VERSION.c_str(), Config::KARPHIN_BUILD_VERSION.size());
+
+    // open the server browser if Host is selected
+    if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
+      m_tool_bar->PlayPressed();
+
+    // open the host menu if the Host is selected
+    if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
+      m_tool_bar->StartNetPlayPressed();
+
+    // checks what games are accesable || if they don't have one of our modded ROMs or the vanilla NA KAR, throw a error
+    bool validROMFound = false;
+    for (auto game : m_game_list->GetGameListModel().GetGames())
+    {
+    }
+
   }
+
+  ///------PLAYBACK ONLY------///
+  else //perform a playback
+    PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
 }
 
 MainWindow::~MainWindow()

@@ -21,9 +21,6 @@
 #include "Core/PowerPC/PPCCache.h"
 #include "Core/PowerPC/PPCSymbolDB.h"
 
-
-struct PowerPCState;
-
 class CPUCoreBase;
 class PointerWrap;
 namespace CoreTiming
@@ -108,8 +105,9 @@ struct PairedSingle
 // Paired single must be standard layout in order for offsetof to work, which is used by the JITs
 static_assert(std::is_standard_layout<PairedSingle>(), "PairedSingle must be standard layout");
 
-typedef void (*vm_call)(PowerPCState&, u32);
-
+struct PowerPCState;
+class MMU;
+typedef void (*vm_call)(PowerPCState&, MMU&, u32);
 
 // This contains the entire state of the emulated PowerPC "Gekko" CPU.
 //
@@ -190,7 +188,7 @@ struct PowerPCState
   bool m_enable_dcache = false;
   Cache dCache;
 
-    std::array<vm_call, 1024> vmcall_table;
+  std::array<vm_call, 1024> vmcall_table;
 
 
   // Reservation monitor for lwarx and its friend stwcxd.

@@ -13,6 +13,6 @@ namespace KAR::ASM
 	//validates the gecko codes exist
 	inline bool ValidateGeckoCodes()
 	{
-    return (FS::ValidateCodes() && Core::ValidateCodes() && MatchSettings::ValidateCodes());
+    return (FS::ValidateCodes());// && Core::ValidateCodes() && MatchSettings::ValidateCodes());
   }
 }

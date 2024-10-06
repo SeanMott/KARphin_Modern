@@ -249,7 +249,7 @@ void MenuBar::OnROMPatchForModding()
   ModalMessageBox::information(
       this, tr("Tools Downloaded"),
       tr("xDelta has been gotten now. You may patch :3"));
-  return;
+ // return;
   }
 
   std::string HPPatch = std::filesystem::absolute(File::GetExeDirectory() + "/../Mods/Patches/KAR_NA_HP_101.xdelta").string();
@@ -276,17 +276,24 @@ void MenuBar::OnROMPatchForModding()
     settings.setValue(QStringLiteral("mainwindow/lastdir"),
                       QFileInfo(paths.front()).absoluteDir().absolutePath());
 
+    ModalMessageBox::information(this, tr("Patching Started"),
+                                 tr("Once you close this prompt, the patching process will begin. Even if KARphin doesn't respond, it is still working in the background.\n\nYou will be notified when the process is done."));
+
     // invoke xdelta
     QProcess process;
     process.start(
         QString::fromStdString(delta),
-        {tr("-d"), tr("-s"), paths[0],
+        {tr("-d"), tr("-f"), tr("-s"), paths[0],
          QString::fromStdString(std::filesystem::absolute(File::GetExeDirectory() +
                                                           "/../Mods/Patches/KAR_NA_HP_101.xdelta")
                                     .string()),
          QString::fromStdString(
              std::filesystem::absolute(File::GetExeDirectory() + "/../ROMs/HP_101.iso").string())});
     process.waitForFinished();
+
+    ModalMessageBox::information(
+        this, tr("Patching Done"),
+        tr("The patching process has finished."));
   }
 }
 

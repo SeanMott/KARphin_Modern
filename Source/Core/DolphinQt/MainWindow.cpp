@@ -345,14 +345,14 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   if (!KAR::ASM::ValidateGeckoCodes())
   {
     ModalMessageBox::critical(this, tr("Out Of Date Client Deps"),
-                              tr("KARphin needs to reset your Client Dependencies. This WILL NOT delete your controller settings, those are stored in the Accounts folder.\n\nKARphin will reset your dependencies after this prompt closes. After KARphin shutsdown, give it a moment or two to finish unpacking everything."));
+                              tr("You need to update your Client Deps. This WILL NOT delete your controller settings, those are stored in the Accounts folder.\n\nAfter you close this prompt, go into the KAR Launcher. Go to the Netplay menu and click \"Reset Client Data\". This will gather the latest dependicies for KARphin. Afterwards you are free to open KARphin again."));
 
-    //resets the deps if needed
-    std::string bootUpdater = std::filesystem::absolute(File::GetExeDirectory() + "/../KAR_BootUpdate.exe").string();
-    QProcess process;
-    process.startDetached(QString::fromStdString(bootUpdater),
-                          {tr("-resetClient")}, QString::fromStdString(
-            std::filesystem::absolute(File::GetExeDirectory() + "/../").string()));
+    ////resets the deps if needed
+    //std::string bootUpdater = std::filesystem::absolute(File::GetExeDirectory() + "/../KAR_BootUpdate.exe").string();
+    //QProcess process;
+    //process.startDetached(QString::fromStdString(bootUpdater),
+    //                      {tr("-resetClient")}, QString::fromStdString(
+    //        std::filesystem::absolute(File::GetExeDirectory() + "/../").string()));
     return;
   }
 

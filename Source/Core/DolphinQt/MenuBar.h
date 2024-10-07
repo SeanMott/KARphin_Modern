@@ -131,10 +131,8 @@ private:
   //adds KAR Menu
   void AddKARMenu();
 
-  //when the user patches their ROMs
-  void OnROMPatchForModding();
-  // when the user un-patches their ROMs
-  void OnROM_UNPATCH_ForModding();
+  //when the user patches their US ROM into a Hack Pack
+  void OnROMPatch_NAToHP();
 
   void AddFileMenu();
 
@@ -202,7 +200,7 @@ private:
   //KAR
   QAction* KAR_ModLoader_Action;
   QAction* KAR_PatchROMs_Action;
-  QAction* KAR_UnpatchROMs_Action;
+  //QAction* KAR_UnpatchROMs_Action;
 
   QAction* KAR_StandalonePackageDownloads_Action;
   QAction* KAR_SkinPackagesDownloads_Action;

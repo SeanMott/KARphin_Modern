@@ -7,6 +7,8 @@
 #include "Common/FileUtil.h"
 #include <UICommon/GameFile.h>
 
+#include <qprocess.h>
+
 namespace KAR::Mod::Patch
 {
 	//returns the working directory for where tools and mod shit is kept
@@ -46,7 +48,22 @@ namespace KAR::Mod::Patch
 		return false;
 	}
 
-	//validates a Hack Pack ROM exists
-
 	//defines a ROM Patch manifest for use when modding
+
+	//applies a patch
+	static inline bool Patch_ApplyToROM(const std::string& base, const std::string& patch, const std::string outputROM, bool shouldBlockTillDone = true)
+	{
+    // xdelta3.exe -d -s old_file delta_file decoded_new_file
+    QProcess process;
+    QString prog = QString::fromStdString(GetWorkingDirectoryForToolsAndMods() + "/Tools/Windows/xdelta.exe");
+    process.start(prog, {QString::fromStdString("-d"), QString::fromStdString("-s"),
+                         QString::fromStdString(base), QString::fromStdString(patch),
+                         QString::fromStdString(outputROM)});
+    if (shouldBlockTillDone)
+			process.waitForFinished();
+
+		return true;
+	}
+
+	//creates a patch from two ROMs
 }

@@ -239,11 +239,11 @@ void MenuBar::OnROMPatch_NAToHP()
     QProcess process;
     QString prog = QString::fromStdString(KAR::Mod::Patch::GetWorkingDirectoryForToolsAndMods() +
                                           "/KAR_BootUpdate.exe");
-    process.start(prog, {tr("-tools")});
+    process.start(prog, {QString::fromStdString("-installDir"), QString::fromStdString(KAR::Mod::Patch::GetWorkingDirectoryForToolsAndMods()), tr("-tools")});
     process.waitForFinished();
 
     ModalMessageBox::information(this, tr("Tools updated"),
-                             tr("Your installation has been updated. KARphin will "
+                             tr("Your installation's tools has been updated. KARphin will "
                                 "continue patching after you close this prompt."));
   }
 
@@ -258,11 +258,11 @@ void MenuBar::OnROMPatch_NAToHP()
 
   //validate a NA ROM
   std::string ROM = "";
-  if (!KAR::Mod::Patch::Validate_BaseROM_NorthAmericanKAR(std::filesystem::absolute(KAR::Mod::Patch::GetWorkingDirectoryForToolsAndMods() +"/..").string(), ROM))
+  if (!KAR::Mod::Patch::Validate_BaseROM_NorthAmericanKAR(std::filesystem::absolute(KAR::Mod::Patch::GetWorkingDirectoryForToolsAndMods() + "/ROMs").string(), ROM))
   {
     const std::string str = "Please place a Kirby Air Ride North American (" + KAR::GameIDs::GAME_ID_NA +
         ") ROM in your "
-        "\"ROMs\" folder. This version required for patching.\nOnce you place it in the \ROMs\" folder, start this process again.";
+        "\"ROMs\" folder. This version is required for patching.\nOnce you place it in the \ROMs\" folder, start this process again.";
     ModalMessageBox::critical(this, tr("Lacking NA ROM"), QString::fromStdString(str));
 
     return;
@@ -271,55 +271,17 @@ void MenuBar::OnROMPatch_NAToHP()
   //begin patching
   ModalMessageBox::information(
       this, tr("Patching will begin"),
-      tr("Your NA ROM will be patched into the Hack Pack after closing this prompt."));
+      tr("Your NA ROM will be patched into the Hack Pack. This process can take a bit, so even if KARphin stops responding, don't close it. The patching is still happening.\n\nThe patching process will begin when you close this prompt, you will be notified when this is done."));
+
+  KAR::Mod::Patch::Patch_ApplyToROM(
+      ROM,
+      KAR::Mod::Patch::GetWorkingDirectoryForToolsAndMods() + "/Mods/Patches/KAR_NA_HP_101.xdelta",
+      KAR::Mod::Patch::GetWorkingDirectoryForToolsAndMods() + "/ROMs/HP_101.iso");
 
   // begin patching
   ModalMessageBox::information(
       this, tr("Patching has finished :3"),
       tr("The Hack Pack has been created, welcome to The City! Your NA ROM is perserved, so it can still be used. But the Hack Pack is the standard for KAR Netplay. For furthur instructions on Netplay check the Discord."));
-
-  ////stores all the patch names
-  ////std::string patchList = "";
-  ////std::ifstream r(ROMs + "/Patches.txt");
-  ////if (r.is_open())
-  ////{
-  ////}
-
-  //// gets all the current games
-  //for (const auto& entry :
-  //     std::filesystem::directory_iterator(ROMs))
-  //{
-  //  if (std::filesystem::is_regular_file(entry))
-  //  {
-  //    UICommon::GameFile game(entry.path().string());
-  //    game.GetApploaderDate();
-
-  //    std::string outputFolder = KARphin + "/../ROMs/" +
-  //                               game.GetGameID();  // std::to_string(i);
-
-  //    // creates the directory for storing raw assets
-  //    if (std::filesystem::exists(outputFolder))
-  //      std::filesystem::remove_all(outputFolder);
-  //    std::filesystem::create_directory(outputFolder);
-
-  //    // run the extraction data
-  //    QProcess process;
-  //    process.start(QString::fromStdString(KARphin + "/") + tr("KARphinTool"),
-  //                  {tr("extract"), tr("-i"), QString::fromStdString(entry.path().string()), tr("-o"),
-  //                   QString::fromStdString(outputFolder)});
-  //    process.waitForFinished();
-
-  //    // creates the directory for storing the ISOs
-  //     outputFolder = KARphin + "/../UnpatchedROMs";
-  //     std::filesystem::create_directory(outputFolder);
-
-  //    // move the ISO
-  //     std::filesystem::copy(entry.path(), outputFolder + "/" + game.GetGameID() + ".iso",
-  //                           std::filesystem::copy_options::overwrite_existing);
-  //     std::filesystem::remove(entry.path());
-  //    //}
-  //  }
-  //}
 }
 
 //adds KAR menu specific stuff

@@ -324,6 +324,9 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
 
   Host::GetInstance()->SetMainWindowHandle(reinterpret_cast<void*>(winId()));
 
+  //initalize the mod loader
+  KARCodeModLoader.Init();
+
   if (m_pending_boot != nullptr)
   {
     StartGame(std::move(m_pending_boot));

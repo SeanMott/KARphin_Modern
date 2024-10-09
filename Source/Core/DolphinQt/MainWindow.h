@@ -13,6 +13,8 @@
 
 #include "Core/Boot/Boot.h"
 
+#include <KAR/Mods/CodeModLoader.hpp>
+
 class QMenu;
 class QStackedWidget;
 class QString;
@@ -221,6 +223,9 @@ private:
 #ifdef HAVE_XRANDR
   std::unique_ptr<X11Utils::XRRConfiguration> m_xrr_config;
 #endif
+
+  //KAR Mod Loader
+  KAR::Mod::Scripting::CodeModLoader KARCodeModLoader;
 
   QStackedWidget* m_stack;
   ToolBar* m_tool_bar;

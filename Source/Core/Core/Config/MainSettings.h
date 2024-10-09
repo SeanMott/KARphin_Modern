@@ -50,6 +50,12 @@ enum class HSPDeviceType : int;
 
 namespace Config
 {
+  //KARphin settings
+static const std::string KARPHIN_VERSION_STRING = "1.0";
+
+//are we in playback mode
+bool KARPHIN_IS_IN_PLAYBACK_MODE = false;
+
 // Main.Core
 
 extern const Info<bool> MAIN_SKIP_IPL;

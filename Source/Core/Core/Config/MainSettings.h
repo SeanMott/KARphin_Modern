@@ -54,7 +54,7 @@ namespace Config
 static const std::string KARPHIN_VERSION_STRING = "1.0";
 
 //are we in playback mode
-bool KARPHIN_IS_IN_PLAYBACK_MODE = false;
+static bool KARPHIN_IS_IN_PLAYBACK_MODE = false;
 
 // Main.Core
 

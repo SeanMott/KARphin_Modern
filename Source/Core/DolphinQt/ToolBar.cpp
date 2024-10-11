@@ -122,8 +122,21 @@ void ToolBar::MakeActions()
   m_pause_play_action = addAction(tr("Play"), this, &ToolBar::PlayPressed);
 
   m_stop_action = addAction(tr("Stop"), this, &ToolBar::StopPressed);
+
+  sessionBrowser_action = addAction(tr("Netplay Browser"));
+
+  hostConnectSession_action = addAction(tr("Host Netplay"));
+
+  addSeparator();
+
   m_fullscreen_action = addAction(tr("FullScr"), this, &ToolBar::FullScreenPressed);
   m_screenshot_action = addAction(tr("ScrShot"), this, &ToolBar::ScreenShotPressed);
+
+  addSeparator();
+
+  KWSite_action = addAction(tr("Site"));
+  KAROnlineSite_action = addAction(tr("Discord"));
+  KWDonate_action = addAction(tr("Donate"));
 
   addSeparator();
 
@@ -134,7 +147,9 @@ void ToolBar::MakeActions()
   // Ensure every button has about the same width
   std::vector<QWidget*> items;
   for (const auto& action :
-       {m_open_action, m_pause_play_action, m_stop_action, m_stop_action, m_fullscreen_action,
+       {m_open_action, m_pause_play_action, m_stop_action, m_stop_action, sessionBrowser_action,
+        hostConnectSession_action, m_fullscreen_action, KWSite_action, KAROnlineSite_action,
+        KWDonate_action,
         m_screenshot_action, m_config_action, m_graphics_action, m_controllers_action,
         m_step_action, m_step_over_action, m_step_out_action, m_skip_action, m_show_pc_action,
         m_set_pc_action})

@@ -50,10 +50,20 @@ private:
 
   QAction* m_open_action;
   QAction* m_refresh_action;
+
   QAction* m_pause_play_action;
   QAction* m_stop_action;
+
+  QAction* sessionBrowser_action;
+  QAction* hostConnectSession_action;
+
   QAction* m_fullscreen_action;
   QAction* m_screenshot_action;
+
+  QAction* KWSite_action;
+  QAction* KAROnlineSite_action;
+  QAction* KWDonate_action;
+
   QAction* m_config_action;
   QAction* m_controllers_action;
   QAction* m_graphics_action;

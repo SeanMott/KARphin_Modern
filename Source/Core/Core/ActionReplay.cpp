@@ -43,6 +43,8 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/PowerPC/MMU.h"
 
+#include "KAR/Mods/CodeModLoader.hpp"
+
 namespace ActionReplay
 {
 enum
@@ -988,8 +990,17 @@ static bool RunCodeLocked(const Core::CPUThreadGuard& guard, const ARCode& arcod
   return true;
 }
 
+
+
+// KAR Mod Loader
+//KAR::Mod::Scripting::CodeModLoader KARCodeModLoader;
+
 void RunAllActive(const Core::CPUThreadGuard& cpu_guard)
 {
+  // initalize the mod loader
+  //KARCodeModLoader.Init();
+  KAR::Mod::Scripting::UpdateBatRegisters();
+
   if (!Config::AreCheatsEnabled())
     return;
 

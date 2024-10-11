@@ -75,6 +75,9 @@
     <ClInclude Include="KAR\GameIDs.hpp" />
     <ClInclude Include="KAR\Mods\CodeModLoader.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="KAR\Mods\CodeModLoader.cpp" />
+  </ItemGroup>
   <UsingTask TaskName="GetProductVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <Path ParameterType="System.String" Required="true" />

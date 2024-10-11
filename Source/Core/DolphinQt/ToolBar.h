@@ -56,6 +56,7 @@ private:
 
   QAction* sessionBrowser_action;
   QAction* hostConnectSession_action;
+  QAction* netplayAccount_action;
 
   QAction* m_fullscreen_action;
   QAction* m_screenshot_action;

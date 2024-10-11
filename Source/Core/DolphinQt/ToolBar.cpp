@@ -124,8 +124,8 @@ void ToolBar::MakeActions()
   m_stop_action = addAction(tr("Stop"), this, &ToolBar::StopPressed);
 
   sessionBrowser_action = addAction(tr("Netplay Browser"));
-
   hostConnectSession_action = addAction(tr("Host Netplay"));
+  netplayAccount_action = addAction(tr("Account"));
 
   addSeparator();
 
@@ -204,8 +204,18 @@ void ToolBar::UpdateIcons()
     m_pause_play_action->setIcon(Resources::GetThemeIcon("pause"));
 
   m_stop_action->setIcon(Resources::GetThemeIcon("stop"));
+
   m_fullscreen_action->setIcon(Resources::GetThemeIcon("fullscreen"));
   m_screenshot_action->setIcon(Resources::GetThemeIcon("screenshot"));
+
+  sessionBrowser_action->setIcon(Resources::GetThemeIcon("sessisonBrowser"));
+  hostConnectSession_action->setIcon(Resources::GetThemeIcon("wifi"));
+  netplayAccount_action->setIcon(Resources::GetThemeIcon("screenshot"));
+
+  KWSite_action->setIcon(Resources::GetThemeIcon("screenshot"));
+  KAROnlineSite_action->setIcon(Resources::GetThemeIcon("screenshot"));
+  KWDonate_action->setIcon(Resources::GetThemeIcon("screenshot"));
+
   m_config_action->setIcon(Resources::GetThemeIcon("config"));
   m_controllers_action->setIcon(Resources::GetThemeIcon("classic"));
   m_graphics_action->setIcon(Resources::GetThemeIcon("graphics"));

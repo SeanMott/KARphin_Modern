@@ -210,11 +210,11 @@ void ToolBar::UpdateIcons()
 
   sessionBrowser_action->setIcon(Resources::GetThemeIcon("sessisonBrowser"));
   hostConnectSession_action->setIcon(Resources::GetThemeIcon("wifi"));
-  netplayAccount_action->setIcon(Resources::GetThemeIcon("screenshot"));
+  netplayAccount_action->setIcon(Resources::GetThemeIcon("account"));
 
-  KWSite_action->setIcon(Resources::GetThemeIcon("screenshot"));
-  KAROnlineSite_action->setIcon(Resources::GetThemeIcon("screenshot"));
-  KWDonate_action->setIcon(Resources::GetThemeIcon("screenshot"));
+  KWSite_action->setIcon(Resources::GetThemeIcon("donate"));
+  KAROnlineSite_action->setIcon(Resources::GetThemeIcon("donate"));
+  KWDonate_action->setIcon(Resources::GetThemeIcon("donate"));
 
   m_config_action->setIcon(Resources::GetThemeIcon("config"));
   m_controllers_action->setIcon(Resources::GetThemeIcon("classic"));

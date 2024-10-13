@@ -8,7 +8,6 @@
 
 #include <QAction>
 #include <QIcon>
-#include <QDesktopServices>
 
 #include "Core/Core.h"
 #include "Core/NetPlayProto.h"
@@ -60,9 +59,9 @@ ToolBar::ToolBar(QWidget* parent) : QToolBar(parent)
 void ToolBar::OnEmulationStateChanged(Core::State state)
 {
   bool running = state != Core::State::Uninitialized;
-  //m_stop_action->setEnabled(running);
-  //m_fullscreen_action->setEnabled(running);
-  //m_donate_action->setEnabled(running);
+  m_stop_action->setEnabled(running);
+  m_fullscreen_action->setEnabled(running);
+  m_screenshot_action->setEnabled(running);
 
   bool playing = running && state != Core::State::Paused;
   UpdatePausePlayButtonState(playing);
@@ -114,38 +113,30 @@ void ToolBar::MakeActions()
   // i18n: Here, PC is an acronym for program counter, not personal computer.
   m_set_pc_action = addAction(tr("Set PC"), this, &ToolBar::SetPCPressed);
 
+  m_open_action = addAction(tr("Open"), this, &ToolBar::OpenPressed);
   m_refresh_action = addAction(tr("Refresh"), [this] { emit RefreshPressed(); });
   m_refresh_action->setEnabled(false);
 
   addSeparator();
 
-  m_open_action = addAction(tr("Match Settings"), this, &ToolBar::OnMatchSettingsPressed);
+  m_pause_play_action = addAction(tr("Play"), this, &ToolBar::PlayPressed);
 
-  m_pause_play_action = addAction(tr("Server Browser"), this, &ToolBar::PlayPressed);
-  m_start_netplay_action = addAction(tr("Host/Connect"), this, &ToolBar::StartNetPlayPressed);
+  m_stop_action = addAction(tr("Stop"), this, &ToolBar::StopPressed);
 
-  m_fullscreen_action = addAction(tr("Account"), this, &ToolBar::AccountPressed);
+  sessionBrowser_action = addAction(tr("Netplay Browser"), this, &ToolBar::OnSessionBrowserPressed);
+  hostConnectSession_action = addAction(tr("Host Netplay"), this, &ToolBar::OnHostConnectPressed);
+  netplayAccount_action = addAction(tr("Account"), this, &ToolBar::OnAccountPressed);
 
   addSeparator();
 
-   m_karOnlineWebsite_action = addAction(tr("KAR Online"));
-  connect(m_karOnlineWebsite_action, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://www.kirbyairrideonline.com/home")));
-  });
+  m_fullscreen_action = addAction(tr("FullScr"), this, &ToolBar::FullScreenPressed);
+  m_screenshot_action = addAction(tr("ScrShot"), this, &ToolBar::ScreenShotPressed);
 
-  m_discord_action = addAction(tr("Discord"));
-  connect(m_discord_action, &QAction::triggered, this,
-          []() { QDesktopServices::openUrl(QUrl(QStringLiteral("http://discord.gg/p3rGrcr"))); });
+  addSeparator();
 
-  m_website_action = addAction(tr("KAR Workshop"));
-  connect(m_website_action, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://karworkshop.sean-mott.com/")));
-  });
-
-  m_donate_action = addAction(tr("Donate"));
-  connect(m_donate_action, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://ko-fi.com/jas_kar_workshop")));
-  });
+  KWSite_action = addAction(tr("Site"));
+  KAROnlineSite_action = addAction(tr("Discord"));
+  KWDonate_action = addAction(tr("Donate"));
 
   addSeparator();
 
@@ -155,12 +146,13 @@ void ToolBar::MakeActions()
 
   // Ensure every button has about the same width
   std::vector<QWidget*> items;
-  for (const auto& action :
-       {m_open_action, m_pause_play_action, /*m_stop_action,*/ m_fullscreen_action, m_donate_action,
-        m_website_action, m_discord_action, m_karOnlineWebsite_action, m_config_action, m_graphics_action,
-        m_controllers_action,
-        m_step_action, m_step_over_action, m_step_out_action, m_skip_action, m_show_pc_action,
-        m_set_pc_action})
+  for (const auto& action : {m_open_action,       m_pause_play_action,   m_stop_action,
+                             m_stop_action,       sessionBrowser_action, hostConnectSession_action, netplayAccount_action,
+                             m_fullscreen_action, KWSite_action,         KAROnlineSite_action,
+                             KWDonate_action,     m_screenshot_action,   m_config_action,
+                             m_graphics_action,   m_controllers_action,  m_step_action,
+                             m_step_over_action,  m_step_out_action,     m_skip_action,
+                             m_show_pc_action,    m_set_pc_action})
   {
     items.emplace_back(widgetForAction(action));
   }
@@ -186,7 +178,7 @@ void ToolBar::UpdatePausePlayButtonState(const bool playing_state)
   else
   {
     disconnect(m_pause_play_action, nullptr, nullptr, nullptr);
-    m_pause_play_action->setText(tr("Server Browser"));
+    m_pause_play_action->setText(tr("Play"));
     m_pause_play_action->setIcon(Resources::GetThemeIcon("play"));
     connect(m_pause_play_action, &QAction::triggered, this, &ToolBar::PlayPressed);
   }
@@ -211,16 +203,20 @@ void ToolBar::UpdateIcons()
   else
     m_pause_play_action->setIcon(Resources::GetThemeIcon("pause"));
 
- // m_stop_action->setIcon(Resources::GetThemeIcon("stop"));
+  m_stop_action->setIcon(Resources::GetThemeIcon("stop"));
+
   m_fullscreen_action->setIcon(Resources::GetThemeIcon("fullscreen"));
-  
+  m_screenshot_action->setIcon(Resources::GetThemeIcon("screenshot"));
+
+  sessionBrowser_action->setIcon(Resources::GetThemeIcon("sessisonBrowser"));
+  hostConnectSession_action->setIcon(Resources::GetThemeIcon("wifi"));
+  netplayAccount_action->setIcon(Resources::GetThemeIcon("account"));
+
+  KWSite_action->setIcon(Resources::GetThemeIcon("donate"));
+  KAROnlineSite_action->setIcon(Resources::GetThemeIcon("donate"));
+  KWDonate_action->setIcon(Resources::GetThemeIcon("donate"));
+
   m_config_action->setIcon(Resources::GetThemeIcon("config"));
   m_controllers_action->setIcon(Resources::GetThemeIcon("classic"));
   m_graphics_action->setIcon(Resources::GetThemeIcon("graphics"));
-  m_start_netplay_action->setIcon(Resources::GetThemeIcon("wifi"));
-
-  m_donate_action->setIcon(Resources::GetThemeIcon("donate"));
-  m_website_action->setIcon(Resources::GetThemeIcon("donate"));
-  m_karOnlineWebsite_action->setIcon(Resources::GetThemeIcon("donate"));
-  m_discord_action->setIcon(Resources::GetThemeIcon("donate"));
 }

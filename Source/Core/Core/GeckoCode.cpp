@@ -15,6 +15,7 @@
 #include "Common/Config/Config.h"
 #include "Common/FileUtil.h"
 #include "common/IniFile.h"
+#include <VideoCommon/OnScreenDisplay.h>
 
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/NetplaySettings.h"
@@ -282,7 +283,25 @@ static inline void DeleteGeckkoCodeIfExists_MultiFullScreen(std::vector<GeckoCod
 inline GeckoCode LoadKARphinEmbededGeckkoCode(const std::string filename)
 {
   Common::IniFile game_ini;
-  game_ini.Load(File::GetExeDirectory() + "/Sys/ExtraCodes/" + filename + ".ini", true);
+  if (!game_ini.Load(File::GetExeDirectory() + "/Sys/ExtraCodes/" + filename + ".ini", true))
+  {
+    OSD::AddMessage(std::string("Failed to load embeded Gekko Code at \"") +
+                        File::GetExeDirectory() + "/Sys/ExtraCodes/" + filename + ".ini\"",
+                    2000U, OSD::Color::RED);
+    OSD::AddMessage("", 2000U, OSD::Color::RED);
+    OSD::AddMessage("", 2000U, OSD::Color::RED);
+    OSD::AddMessage(
+        "Make sure your Client Data is up to date, go into the KAR Launcher->Netplay and click "
+        "\"Reset Client Data\". This WILL NOT delete your controls.",
+        2000U, OSD::Color::RED);
+    OSD::AddMessage("If KARphin continues to show errors, show this error and go to the Support "
+                    "channel in the Discord.",
+                    2000U, OSD::Color::RED);
+    OSD::AddMessage("The Discord can be jumped to via the Discord button inside KARphin.", 2000U,
+                    OSD::Color::RED);
+
+    return GeckoCode();
+  }
 
   return LoadCodes(game_ini, Common::IniFile())[0];
 }

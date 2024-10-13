@@ -333,29 +333,32 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
     m_pending_boot.reset();
   }
 
-  //generates a version file so the update system can auto-update
-  if (File::Exists(File::GetExeDirectory() + "/../KARBuildData.txt"))
-    File::Delete(File::GetExeDirectory() + "/../KARBuildData.txt");
-  File::CreateEmptyFile(File::GetExeDirectory() + "/../KARBuildData.txt");
-  std::fstream f(File::GetExeDirectory() + "/../KARBuildData.txt");
-  f.write(Config::KARPHIN_BUILD_VERSION.c_str(), Config::KARPHIN_BUILD_VERSION.size());
-
-  // open the server browser if Host is selected
-  if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
-    m_tool_bar->PlayPressed();
-
-  // open the host menu if the Host is selected
-  if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
-    m_tool_bar->StartNetPlayPressed();
-
-  // starts to replay of a Warp Record
-  if (Config::PLAY_KARPHIN_REPLAY_AT_START)
-    PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
-  else // if we're not in a warp record, clear the warp record features just to be safe
-  {  
+  //if we're not doing a replay
+  if (!Config::PLAY_KARPHIN_REPLAY_AT_START)
+  {
+    // if we're not in a warp record, clear the warp record features just to be safe
     Config::SetBaseOrCurrent(Config::MAIN_MOVIE_DUMP_FRAMES, false);
     Config::SetBaseOrCurrent(Config::MAIN_DUMP_AUDIO, false);
+
+    // generates a version file so the update system can auto-update
+    if (File::Exists(File::GetExeDirectory() + "/../KARBuildData.txt"))
+      File::Delete(File::GetExeDirectory() + "/../KARBuildData.txt");
+    File::CreateEmptyFile(File::GetExeDirectory() + "/../KARBuildData.txt");
+    std::fstream f(File::GetExeDirectory() + "/../KARBuildData.txt");
+    f.write(Config::KARPHIN_BUILD_VERSION.c_str(), Config::KARPHIN_BUILD_VERSION.size());
+
+    // open the server browser if Host is selected
+    if (Config::BOOT_MENU_NETPLAY_HOST_AT_START)
+      ShowNetPlaySetupDialog();
+
+    // open the host menu if the Host is selected
+    if (Config::BOOT_MENU_NETPLAY_BROWSER_AT_START)
+      ShowNetPlayBrowser();
   }
+
+  // starts to replay of a Warp Record
+  else
+    PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
 }
 
 MainWindow::~MainWindow()
@@ -713,15 +716,20 @@ void MainWindow::ConnectToolBar()
 {
   addToolBar(m_tool_bar);
 
-  connect(m_tool_bar, &ToolBar::OnMatchSettingsPressed, this, &MainWindow::ShowMatchSettingsWindow);
+  connect(m_tool_bar, &ToolBar::OpenPressed, this, &MainWindow::Open);
   connect(m_tool_bar, &ToolBar::RefreshPressed, this, &MainWindow::RefreshGameList);
 
-  connect(m_tool_bar, &ToolBar::PlayPressed, this, &MainWindow::ShowNetPlayBrowser);
+  connect(m_tool_bar, &ToolBar::PlayPressed, this, [this]() { Play(); });
   connect(m_tool_bar, &ToolBar::PausePressed, this, &MainWindow::Pause);
-  connect(m_tool_bar, &ToolBar::StartNetPlayPressed, this, &MainWindow::ShowNetPlaySetupDialog);
   connect(m_tool_bar, &ToolBar::StopPressed, this, &MainWindow::RequestStop);
-  connect(m_tool_bar, &ToolBar::AccountPressed, this, &MainWindow::ShowAccountWindow);
+
+  connect(m_tool_bar, &ToolBar::OnSessionBrowserPressed, this, &MainWindow::ShowNetPlayBrowser);
+  connect(m_tool_bar, &ToolBar::OnHostConnectPressed, this, &MainWindow::ShowNetPlaySetupDialog);
+  connect(m_tool_bar, &ToolBar::OnAccountPressed, this, &MainWindow::ShowAccountWindow);
+
+  connect(m_tool_bar, &ToolBar::FullScreenPressed, this, &MainWindow::FullScreen);
   connect(m_tool_bar, &ToolBar::ScreenShotPressed, this, &MainWindow::ScreenShot);
+
   connect(m_tool_bar, &ToolBar::SettingsPressed, this, &MainWindow::ShowSettingsWindow);
   connect(m_tool_bar, &ToolBar::ControllersPressed, this, &MainWindow::ShowControllersWindow);
   connect(m_tool_bar, &ToolBar::GraphicsPressed, this, &MainWindow::ShowGraphicsWindow);

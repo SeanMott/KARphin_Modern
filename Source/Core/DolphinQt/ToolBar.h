@@ -23,27 +23,26 @@ public:
 signals:
   void OpenPressed();
   void RefreshPressed();
+
   void PlayPressed();
   void PausePressed();
   void StopPressed();
+
+  //when the session browser button is pressed
+  void OnSessionBrowserPressed();
+
+  //when the host/connect menu button is pressed
+  void OnHostConnectPressed();
+
+  //when the account menu button is pressed
+  void OnAccountPressed();
+
   void FullScreenPressed();
   void ScreenShotPressed();
 
   void SettingsPressed();
   void ControllersPressed();
   void GraphicsPressed();
-
-  //when Netplay is started via the button
-  void StartNetPlayPressed();
-
-  // when Netplay Browser
-  void StartNetPlayBrowserPressed();
-
-  //when the Match Settings button is open
-  void OnMatchSettingsPressed();
-
-  //when the show account is pressed
-  void AccountPressed();
 
   void StepPressed();
   void StepOverPressed();
@@ -62,14 +61,24 @@ private:
 
   QAction* m_open_action;
   QAction* m_refresh_action;
+
   QAction* m_pause_play_action;
   QAction* m_stop_action;
+
+  QAction* sessionBrowser_action;
+  QAction* hostConnectSession_action;
+  QAction* netplayAccount_action;
+
   QAction* m_fullscreen_action;
+  QAction* m_screenshot_action;
+
+  QAction* KWSite_action;
+  QAction* KAROnlineSite_action;
+  QAction* KWDonate_action;
+
   QAction* m_config_action;
   QAction* m_controllers_action;
   QAction* m_graphics_action;
-
-  QAction* m_start_netplay_action;
 
   QAction* m_step_action;
   QAction* m_step_over_action;
@@ -77,9 +86,4 @@ private:
   QAction* m_skip_action;
   QAction* m_show_pc_action;
   QAction* m_set_pc_action;
-
-  QAction* m_donate_action;
-  QAction* m_website_action;
-  QAction* m_karOnlineWebsite_action;
-  QAction* m_discord_action;
 };

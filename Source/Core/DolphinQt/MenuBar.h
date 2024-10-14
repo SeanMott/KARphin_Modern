@@ -131,10 +131,8 @@ private:
   //adds KAR Menu
   void AddKARMenu();
 
-  //when the user patches their ROMs
-  void OnROMPatchForModding();
-  // when the user un-patches their ROMs
-  void OnROM_UNPATCH_ForModding();
+  // opens the patcher
+  void OpenPatcher();
 
   void AddFileMenu();
 

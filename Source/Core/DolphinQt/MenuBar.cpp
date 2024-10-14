@@ -231,9 +231,18 @@ void MenuBar::OpenPatcher()
   p.startDetached(QString::fromStdString(File::GetExeDirectory() + "/../Tools/Windows/xdeltaUI.exe"));
 }
 
+// updates the launcher
+void MenuBar::KAR_UpdateLauncher()
+{
+  QProcess p;
+  p.startDetached(QString::fromStdString(File::GetExeDirectory() + "/../KAR_BootUpdate.exe"),
+                  { tr("-setVer"), tr("1"), tr("-launcher")}, QString::fromStdString(File::GetExeDirectory() + "/.."));
+}
+
 //adds KAR menu specific stuff
 void MenuBar::AddKARMenu()
 {
+  //patching menu
   QMenu* KAR_Patcher_menu = addMenu(tr("&KAR-Patcher"));
 
   QAction* patch_NA_ISO = KAR_Patcher_menu->addAction(tr("Get Patch: NA ISO"));
@@ -277,28 +286,20 @@ void MenuBar::AddKARMenu()
   QAction* openPatcher = KAR_Patcher_menu->addAction(tr("Open Patcher"));
   connect(openPatcher, &QAction::triggered, this, &MenuBar::OpenPatcher);
 
- // KAR_ModLoader_Action = KAR_menu->addAction(tr("Mod Loader"), this, [this] { emit ShowResourcePackManager(); });
+  //KAR Menu
+  QMenu* KAR_menu = addMenu(tr("&KAR"));
 
-  //KAR_PatchROMs_Action = KAR_menu->addAction(tr("Patch ROMs For Modding"), this,
-    //                                            &MenuBar::OnROMPatchForModding);
-  //KAR_UnpatchROMs_Action =
-   //   KAR_menu->addAction(tr("UN-PATCH All ROMs"), this, &MenuBar::OnROM_UNPATCH_ForModding);
+  //resets the client data
+  //QAction* resetClientData = KAR_Patcher_menu->addAction(tr("Reset Client Data"));
+  //connect(openPatcher, &QAction::triggered, this, &MenuBar::OpenPatcher);
 
-  KAR_Patcher_menu->addSeparator();
+  //updates the launcher
+  QAction* updateLauncher = KAR_menu->addAction(tr("Force Update Launcher"));
+  connect(updateLauncher, &QAction::triggered, this, &MenuBar::KAR_UpdateLauncher);
 
-  //KAR_StandalonePackageDownloads_Action = KAR_menu->addAction(tr("Download Standalone Packages")&QAction::triggered, this,
-  //        []() { QDesktopServices::openUrl(QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/"))); });
+  //updates the tools
 
-  //KAR_SkinPackagesDownloads_Action = KAR_menu->addAction(tr("Download Skin Packs"));
-  //connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
-  //  QDesktopServices::openUrl(
-  //      QUrl(QStringLiteral("https://karworkshop.sean-mott.com/StandalonePackages/")));
-  //});
-  //KAR_ThemePackagesDownloads_Action = KAR_menu->addAction(tr("Download KARphin Theme Packs"));
-  // connect(KAR_SkinPackagesDownloads_Action, &QAction::triggered, this, []() {
-  //   QDesktopServices::openUrl(
-  //       QUrl(QStringLiteral("https://karworkshop.sean-mott.com/ThemePacks/")));
-  // });
+  KAR_menu->addSeparator();
 }
 
 void MenuBar::AddFileMenu()

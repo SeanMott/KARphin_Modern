@@ -134,6 +134,9 @@ private:
   // opens the patcher
   void OpenPatcher();
 
+  //updates the launcher
+  void KAR_UpdateLauncher();
+
   void AddFileMenu();
 
   void AddEmulationMenu();

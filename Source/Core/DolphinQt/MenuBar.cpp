@@ -245,6 +245,19 @@ void MenuBar::KAR_UpdateLauncher()
       tr("Your KAR Launcher is now up to date"));
 }
 
+// updates the tools
+void MenuBar::KAR_UpdateTools()
+{
+  QProcess p;
+  p.setWorkingDirectory(QString::fromStdString(File::GetExeDirectory() + "/.."));
+  p.start(QString::fromStdString(File::GetExeDirectory() + "/../KAR_BootUpdate.exe"),
+          {tr("-tools")});
+  p.waitForFinished();
+
+  ModalMessageBox::information(this, tr("Tools Updated"),
+                               tr("Your Tools is now up to date"));
+}
+
 //adds KAR menu specific stuff
 void MenuBar::AddKARMenu()
 {
@@ -304,6 +317,8 @@ void MenuBar::AddKARMenu()
   connect(updateLauncher, &QAction::triggered, this, &MenuBar::KAR_UpdateLauncher);
 
   //updates the tools
+  QAction* updateTools = KAR_menu->addAction(tr("Force Update Tools"));
+  connect(updateTools, &QAction::triggered, this, &MenuBar::KAR_UpdateTools);
 
   KAR_menu->addSeparator();
 

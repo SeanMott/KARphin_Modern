@@ -141,6 +141,9 @@ private:
   //updates the launcher
   void KAR_UpdateLauncher();
 
+  //updates the tools
+  void KAR_UpdateTools();
+
   void AddFileMenu();
 
   void AddEmulationMenu();

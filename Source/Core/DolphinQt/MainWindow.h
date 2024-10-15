@@ -90,6 +90,10 @@ signals:
   void RecordingStatusChanged(bool recording);
 
 private:
+
+  //plays a KAR replay
+  void KAR_PlayReplay();
+
   void Open();
   void RefreshGameList();
   void Play(const std::optional<std::string>& savestate_path = {});

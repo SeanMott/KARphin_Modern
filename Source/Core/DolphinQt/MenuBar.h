@@ -50,6 +50,10 @@ public:
   void InstallUpdateManually();
 
 signals:
+
+  // plays the chosen replay
+  void KAR_PlayReplay();
+
   // File
   void Open();
   void Exit();

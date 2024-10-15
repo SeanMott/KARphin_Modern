@@ -33,7 +33,7 @@
 namespace Config
 {
   //the KARphin version
-std::string KARPHIN_BUILD_VERSION = "V2.5";
+std::string KARPHIN_BUILD_VERSION = "V2.15";
 
 //full screen code settings
 bool AUTO_INJECT_FULL_SCREEN_CODE_ENABLED = true; //if true, a single full screen code will be enabled, does not support multi-fullscreen codes
@@ -48,6 +48,7 @@ bool BOOT_MENU_NETPLAY_HOST_AT_START = false;
 //should we load a KARphin replay at runtime
 bool PLAY_KARPHIN_REPLAY_AT_START = false;
 std::string REPLAY_FOLDER_PATH = "";
+std::string REPLAY_GAME_ID = "";
 uint16_t FULL_SCREEN_INDEX_TO_USE_IN_PLAY_BACK = 0;
 bool IS_KARPHIN_PLAY_USING_A_FULL_SCREEN_INDEX = true; //if false, we're using split screen and no codes are injected
 

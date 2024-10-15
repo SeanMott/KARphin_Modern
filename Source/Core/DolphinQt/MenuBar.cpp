@@ -235,8 +235,14 @@ void MenuBar::OpenPatcher()
 void MenuBar::KAR_UpdateLauncher()
 {
   QProcess p;
-  p.startDetached(QString::fromStdString(File::GetExeDirectory() + "/../KAR_BootUpdate.exe"),
-                  { tr("-setVer"), tr("1"), tr("-launcher")}, QString::fromStdString(File::GetExeDirectory() + "/.."));
+  p.setWorkingDirectory(QString::fromStdString(File::GetExeDirectory() + "/.."));
+  p.start(QString::fromStdString(File::GetExeDirectory() + "/../KAR_BootUpdate.exe"),
+                  { tr("-setVer"), tr("1"), tr("-launcher")});
+  p.waitForFinished();
+
+  ModalMessageBox::information(
+      this, tr("Launcher Updated"),
+      tr("Your KAR Launcher is now up to date"));
 }
 
 //adds KAR menu specific stuff
@@ -290,8 +296,8 @@ void MenuBar::AddKARMenu()
   QMenu* KAR_menu = addMenu(tr("&KAR"));
 
   //resets the client data
-  //QAction* resetClientData = KAR_Patcher_menu->addAction(tr("Reset Client Data"));
-  //connect(openPatcher, &QAction::triggered, this, &MenuBar::OpenPatcher);
+  //QAction* resetClientData = KAR_menu->addAction(tr("Reset Client Data"));
+ // connect(resetClientData, &QAction::triggered, this, &MenuBar::KAR_ResetClientData);
 
   //updates the launcher
   QAction* updateLauncher = KAR_menu->addAction(tr("Force Update Launcher"));
@@ -300,6 +306,20 @@ void MenuBar::AddKARMenu()
   //updates the tools
 
   KAR_menu->addSeparator();
+
+  //plays the chosen replay
+  QAction* playReplay = KAR_menu->addAction(tr("Play Replay"));
+  playReplay->setDisabled(true);
+ // connect(playReplay, &QAction::triggered, this, &MenuBar::KAR_PlayReplay);
+
+  KAR_menu->addSeparator();
+
+  //gets the legacy build
+  QAction* getLegacy = KAR_menu->addAction(tr("Get Legacy/R10 Client"));
+  connect(getLegacy, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(
+        QUrl(QStringLiteral("https://github.com/SeanMott/KARphin_Modern/releases/download/Legacy/Legacy_R10.zip")));
+  });
 }
 
 void MenuBar::AddFileMenu()

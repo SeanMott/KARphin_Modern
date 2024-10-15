@@ -67,6 +67,7 @@ extern bool BOOT_MENU_NETPLAY_HOST_AT_START;
 // should we load a KARphin replay at runtime
 extern bool PLAY_KARPHIN_REPLAY_AT_START;
 extern std::string REPLAY_FOLDER_PATH;
+extern std::string REPLAY_GAME_ID;
 extern uint16_t FULL_SCREEN_INDEX_TO_USE_IN_PLAY_BACK;
 extern bool IS_KARPHIN_PLAY_USING_A_FULL_SCREEN_INDEX;  // if false, we're using split screen and no codes are injected
 

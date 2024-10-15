@@ -142,6 +142,8 @@
 #include "VideoCommon/NetPlayChatUI.h"
 #include "VideoCommon/VideoConfig.h"
 
+#include <qprocess.h>
+
 #ifdef HAVE_XRANDR
 #include "UICommon/X11Utils.h"
 // This #define within X11/X.h conflicts with our WiimoteSource enum.
@@ -551,9 +553,38 @@ void MainWindow::CreateComponents()
   connect(m_cheats_manager, &CheatsManager::RequestWatch, request_watch);
 }
 
+// plays a KAR replay
+void MainWindow::KAR_PlayReplay()
+{
+  // prompt the user to select one of their replay folders
+  //auto& settings = Settings::Instance().GetQSettings();
+  QString paths = DolphinFileDialog::getExistingDirectory(
+      this, tr("Select a Replay folder"),
+      QString::fromStdString(File::GetExeDirectory() + "/../Replays"));
+
+  if (!paths.isEmpty())
+  {
+  //  //sets it as the last dir
+  //  settings.setValue(QStringLiteral("mainwindow/lastdir"),
+      //                QFileInfo(paths.front()).absoluteDir().absolutePath());
+
+    // load the replay
+    Config::REPLAY_FOLDER_PATH = QFileInfo(paths.front()).absoluteDir().absolutePath().toStdString();
+   // PlayWarpRecord(Config::REPLAY_FOLDER_PATH);
+    QProcess process;
+    process.start(tr("KARphin.exe"),
+                  {tr("--playback"), QString::fromStdString(Config::REPLAY_FOLDER_PATH),
+                   tr("--playbackFullScreenIndex"), tr("0")});
+  }
+}
+
 void MainWindow::ConnectMenuBar()
 {
   setMenuBar(m_menu_bar);
+
+  //KAR
+  connect(m_menu_bar, &MenuBar::KAR_PlayReplay, this, &MainWindow::KAR_PlayReplay);
+
   // File
   connect(m_menu_bar, &MenuBar::Open, this, &MainWindow::Open);
   connect(m_menu_bar, &MenuBar::Exit, this, &MainWindow::close);
@@ -1968,13 +1999,28 @@ void MainWindow::PlayWarpRecord(const std::string replayFolderToConsume)
   }
 
   //loads the match data
-  std::string gameID = "SLAV01";
   std::vector<std::string> players;
+  std::string matchData = "";
+  File::ReadFileToString(replayFolderToConsume + "/matchData.txt", matchData);
+
+  //splits data
+  std::string rawData = "";
+  for (size_t i = 0; i < matchData.size(); ++i)
+  {
+    //goes till a new line
+    if (matchData[i] == '\n')
+    {
+      Config::REPLAY_GAME_ID = rawData;
+      break;
+    }
+
+    rawData += matchData[i]; //adds
+  }
 
   //sets the game to be played
   for (auto& game : m_game_list->GetGameListModel().GetGames())
   {
-    if (game->GetGameID() == gameID)
+    if (game->GetGameID() == Config::REPLAY_GAME_ID)
     {
       Config::SetBaseOrCurrent(Config::MAIN_DEFAULT_ISO, game->GetFilePath());
       break;
